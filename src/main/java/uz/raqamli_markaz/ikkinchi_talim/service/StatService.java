@@ -163,7 +163,6 @@ public class StatService {
             getAppByGender.ifPresent(appByGender -> statistic.setAllAppCount(appByGender.getCount()));
             list.add(statistic);
         });
-
         return list;
     }
 

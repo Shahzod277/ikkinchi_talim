@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoryMessageResponse {
+
     List<StoryM> app;
     List<StoryM> diploma;
 }

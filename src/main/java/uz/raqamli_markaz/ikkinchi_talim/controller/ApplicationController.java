@@ -3,14 +3,9 @@ package uz.raqamli_markaz.ikkinchi_talim.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.ApplicationResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.DirectionResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.FutureInstitutionResponse;
+import org.springframework.web.bind.annotation.*;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.ApplicationRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.service.ApplicationService;
 import uz.raqamli_markaz.ikkinchi_talim.service.DirectionService;
 import uz.raqamli_markaz.ikkinchi_talim.service.EduFormService;
@@ -29,7 +24,7 @@ public class ApplicationController {
     private final DirectionService directionService;
     private final EduFormService eduFormService;
 
-/*    @PostMapping
+    @PostMapping
     public ResponseEntity<?> createApplication(Principal principal, @RequestBody ApplicationRequest request) {
         Result result = applicationService.createApplication(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
@@ -39,7 +34,7 @@ public class ApplicationController {
     public ResponseEntity<?> updateApplication(Principal principal, @RequestBody ApplicationRequest request) {
         Result result = applicationService.updateApplication(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }*/
+    }
 
     @GetMapping
     public ResponseEntity<?> getApplicationPrincipal(Principal principal) {

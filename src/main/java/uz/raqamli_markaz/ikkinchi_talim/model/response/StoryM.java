@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoryM {
+
     private String message;
     private String status;
     private String createBy;
