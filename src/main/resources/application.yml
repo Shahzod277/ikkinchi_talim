@@ -1,0 +1,50 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+  ssl:
+    enabled: true
+    key-alias: qabul
+    key-store: classpath:qabul.p12
+    key-store-type: PKCS12
+    key-password: qabulkey
+    key-store-password: qabulkey
+    trust-store-password:
+  tomcat:
+    threads:
+      max: 400
+spring:
+  datasource:
+    username: seconddbadmin
+    password: seconddbadmin
+    url: jdbc:postgresql://localhost:5432/second_education
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: ENABLE_SELECTIVE
+  main:
+    banner-mode: OFF
+  servlet:
+    multipart:
+      max-file-size: 12MB
+      max-request-size: 12MB
+
+springdoc:
+  swagger-ui:
+    path: /docs/swagger-ui.html
+  api-docs:
+    path: /docs
+
+jwt:
+  secret: '[0-9.a-zA-z_]^+$TutorAcademy9891212skidU3AkjbgcNftrFbsdrxh^56409unjbgGfd528482'
+
+file:
+  storage:
+    location: /home/software/fileStorage
