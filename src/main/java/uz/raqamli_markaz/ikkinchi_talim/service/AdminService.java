@@ -212,7 +212,6 @@ public class AdminService {
         if (!data.getPhoto().isEmpty()) {
             imageResponse.setImage(data.getPhoto());
         }
-        EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.get().getEnrolleeInfo(), imageResponse);
         Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.get().getEnrolleeInfo().getId()).get();
 
         FileResponse fileResponse = getFileResponse(diploma.getId());
@@ -238,7 +237,6 @@ public class AdminService {
         if (!data.getPhoto().isEmpty()) {
             imageResponse.setImage(data.getPhoto());
         }
-        EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.get().getEnrolleeInfo(), imageResponse);
         Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.get().getEnrolleeInfo().getId()).get();
         Optional<University> university = universityRepository.findByInstitutionId(diploma.getInstitutionOldNameId(), diploma.getInstitutionId());
         if (university.isEmpty()) {
@@ -283,7 +281,6 @@ public class AdminService {
         return new Result("diploma", true, diplomResponseAdmin);
     }
 
-
     @Transactional(readOnly = true)
     public Page<GetDiplomasToExcel> getForeignDiplomasToAdmin(String status, int page, int size) {
         if (page > 0) page = page - 1;
@@ -310,14 +307,11 @@ public class AdminService {
         if (!data.getPhoto().isEmpty()) {
             imageResponse.setImage(data.getPhoto());
         }
-        EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.get().getEnrolleeInfo(), imageResponse);
         Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.get().getEnrolleeInfo().getId()).get();
-
         FileResponse fileResponse = getFileResponse(diploma.getId());
         DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
         diplomResponseAdmin.setEnrolleeResponse(enrolleeResponse);
         diplomResponseAdmin.setDiplomaStatus(String.valueOf(application.get().getDiplomaStatus()));
-
 
         return new Result("diploma", true, diplomResponseAdmin);
     }
@@ -456,7 +450,7 @@ public class AdminService {
                     case "false":
                         return new Result("bu arizaning diplomi rad etilgan", false);
                     case "null":
-                        return new Result("ariza diplomi hali tasdiqlanmagan ", false);
+                        return new Result("ariza diplomi hali tasdiqlanmagan", false);
                 }
             }
             return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
@@ -495,20 +489,10 @@ public class AdminService {
         String s = search.toUpperCase();
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-
         if (futureId == null) {
             return applicationRepository.searchAppByFirstnameAndLastnameByAdmin(status, s, pageable);
         } else {
             return applicationRepository.searchAppByFirstnameAndLastnameByAdminAndFutureId(status, futureId, s, pageable);
         }
-       /* allApp.forEach(application -> {
-            AppResponse appResponse = new AppResponse(application);
-
-            appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
-            Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
-            FileResponse fileResponse = getFileResponse(diploma.getId());
-            appResponse.setDiplomaResponse(new DiplomaResponse(diploma, fileResponse));
-            responses.add(appResponse);
-        });*/
     }
 }
