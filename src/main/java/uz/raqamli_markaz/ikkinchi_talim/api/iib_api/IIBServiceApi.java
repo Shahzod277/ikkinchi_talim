@@ -1,9 +1,9 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.iib_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.iib_api;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import uz.raqamli_markaz.ikkinchi_talim.api_model.ApiConstant;
+import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 
 @Service

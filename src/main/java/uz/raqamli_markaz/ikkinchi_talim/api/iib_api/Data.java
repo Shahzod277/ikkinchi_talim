@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.iib_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.iib_api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

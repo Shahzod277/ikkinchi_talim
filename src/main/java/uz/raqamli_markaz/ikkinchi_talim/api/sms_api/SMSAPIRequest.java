@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.sms_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.sms_api;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,10 +1,10 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.sms_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.sms_api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import uz.raqamli_markaz.ikkinchi_talim.api_model.ApiConstant;
+import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 
 @Service
 @RequiredArgsConstructor

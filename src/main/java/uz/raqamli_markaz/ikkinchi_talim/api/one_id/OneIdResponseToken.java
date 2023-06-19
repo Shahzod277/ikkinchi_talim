@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.one_id;
+package uz.raqamli_markaz.ikkinchi_talim.api.one_id;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

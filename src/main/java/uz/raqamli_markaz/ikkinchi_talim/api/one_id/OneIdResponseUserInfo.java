@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.one_id;
+package uz.raqamli_markaz.ikkinchi_talim.api.one_id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api_model.diplom_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.diplom_api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
