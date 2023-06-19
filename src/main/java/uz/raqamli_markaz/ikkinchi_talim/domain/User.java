@@ -12,7 +12,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Role;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", indexes = @Index(columnList = "phoneNumber"))
+@Table(name = "users", indexes = @Index(columnList = "pinfl"))
 public class User extends AbstractEntity {
 
     private String phoneNumber;
