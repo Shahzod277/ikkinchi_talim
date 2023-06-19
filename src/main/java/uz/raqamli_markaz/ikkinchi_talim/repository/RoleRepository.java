@@ -2,8 +2,7 @@ package uz.raqamli_markaz.ikkinchi_talim.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import second.education.domain.classificator.Role;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Role;
 import java.util.Optional;
 
 @Repository

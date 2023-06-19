@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import second.education.model.response.*;
-import second.education.service.*;
-
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ApplicationResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DirectionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.FutureInstitutionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.service.ApplicationService;
+import uz.raqamli_markaz.ikkinchi_talim.service.DirectionService;
+import uz.raqamli_markaz.ikkinchi_talim.service.EduFormService;
+import uz.raqamli_markaz.ikkinchi_talim.service.FutureInstitutionService;
 import java.security.Principal;
 import java.util.List;
 

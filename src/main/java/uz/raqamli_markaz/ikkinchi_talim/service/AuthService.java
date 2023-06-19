@@ -1,37 +1,31 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import second.education.api_model.iib_api.Data;
-import second.education.api_model.iib_api.IIBResponse;
-import second.education.api_model.one_id.OneIdResponseToken;
-import second.education.api_model.one_id.OneIdResponseUserInfo;
-import second.education.api_model.sms_api.SMSAPIRequest;
-import second.education.domain.AdminEntity;
-import second.education.domain.CheckSMSEntity;
-import second.education.domain.EnrolleeInfo;
-import second.education.domain.User;
-import second.education.domain.classificator.Role;
-import second.education.model.request.DefaultRole;
-import second.education.model.request.IIBRequest;
-import second.education.model.request.ValidateCodeRequest;
-import second.education.model.response.JwtResponse;
-import second.education.model.response.ResponseMessage;
-import second.education.model.response.Result;
-import second.education.repository.*;
-import second.education.security.JwtTokenProvider;
-import second.education.security.UserDetailsImpl;
-import second.education.service.api.IIBServiceApi;
-import second.education.service.api.OneIdServiceApi;
-import second.education.service.api.SmsServiceApi;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.Data;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.one_id.OneIdResponseToken;
+import uz.raqamli_markaz.ikkinchi_talim.api.one_id.OneIdResponseUserInfo;
+import uz.raqamli_markaz.ikkinchi_talim.api.one_id.OneIdServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.sms_api.SMSAPIRequest;
+import uz.raqamli_markaz.ikkinchi_talim.api.sms_api.SmsServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
+import uz.raqamli_markaz.ikkinchi_talim.domain.EnrolleeInfo;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DefaultRole;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.ValidateCodeRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.JwtResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.repository.AdminEntityRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.EnrolleInfoRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.RoleRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
+import uz.raqamli_markaz.ikkinchi_talim.security.JwtTokenProvider;
+import uz.raqamli_markaz.ikkinchi_talim.security.UserDetailsImpl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -43,24 +37,17 @@ public class AuthService {
 
     private final IIBServiceApi iibServiceApi;
     private final SmsServiceApi smsServiceApi;
-    private final CheckSMSRepository checkSMSRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final EnrolleInfoRepository enrolleInfoRepository;
     private final OneIdServiceApi oneIdServiceApi;
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final AdminEntityRepository adminEntityRepository;
 
     @Transactional
     public Result checkUser(IIBRequest iibRequest) {
         try {
-
-            List<User> users = userRepository.findAllByPhoneNumber(iibRequest.getPhoneNumber());
-            if (users.size() >= 1) {
-                return new Result(iibRequest.getPhoneNumber() + " " + ResponseMessage.ALREADY_EXISTS.getMessage(), false);
-            }
 
             Optional<EnrolleeInfo> byPinfl = enrolleInfoRepository.findByPinfl(iibRequest.getPinfl());
             if (byPinfl.isPresent()) {

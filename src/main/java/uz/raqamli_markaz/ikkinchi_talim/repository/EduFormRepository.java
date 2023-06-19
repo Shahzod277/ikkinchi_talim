@@ -5,10 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import second.education.domain.classificator.EduForm;
-import second.education.domain.classificator.Language;
-import second.education.model.response.StatisEduFormResponse;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.EduForm;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Language;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.StatisEduFormResponse;
 import java.util.List;
 import java.util.Optional;
 

@@ -6,10 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import second.education.model.request.*;
-import second.education.model.response.*;
-import second.education.service.*;
-
+import uz.raqamli_markaz.ikkinchi_talim.model.request.*;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
+import uz.raqamli_markaz.ikkinchi_talim.service.*;
 import java.security.Principal;
 import java.util.List;
 

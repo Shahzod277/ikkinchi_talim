@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import second.education.domain.AdminEntity;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
 import java.util.Optional;
 
 @Repository

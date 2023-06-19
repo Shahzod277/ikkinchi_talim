@@ -5,10 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import second.education.domain.classificator.Direction;
-import second.education.model.response.StatisDirectionResponse;
-import second.education.model.response.StatisDirectionResponseByFutureInst;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Direction;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.StatisDirectionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.StatisDirectionResponseByFutureInst;
 import java.util.List;
 
 @Repository
