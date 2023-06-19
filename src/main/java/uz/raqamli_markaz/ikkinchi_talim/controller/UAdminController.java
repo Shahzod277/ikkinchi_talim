@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.UpdateAppStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.UpdateDiplomaStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.service.UniversityAdminService;

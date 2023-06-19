@@ -13,7 +13,6 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
 import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.UpdateAppStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.UpdateDiplomaStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
