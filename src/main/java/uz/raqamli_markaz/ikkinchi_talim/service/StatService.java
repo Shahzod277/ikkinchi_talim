@@ -174,7 +174,6 @@ public class StatService {
         AcceptAndRejectAndCheckDiploma statistic = new AcceptAndRejectAndCheckDiploma();
         statistic.setAcceptAppCount(acceptAll.getCount());
         statistic.setRejectAppCount(rejectedAll.getCount());
-
         Optional<AcceptAndRejectApp> getcheckDiplomaAll = applicationRepository.getcheckDiplomaAll();
         getcheckDiplomaAll.ifPresent(andRejectApp -> statistic.setCheckDiplomaCount(andRejectApp.getCount()));
         Optional<AcceptAndRejectApp> acceptDiplomaAll = applicationRepository.getAcceptDiplomaAll();
@@ -220,7 +219,6 @@ public class StatService {
 
     @Transactional(readOnly = true)
     public List<GetAppByGender> getCountAppandGenderUAdmin() {
-
         return applicationRepository.getCounAppAndGenderAdmin();
     }
 
