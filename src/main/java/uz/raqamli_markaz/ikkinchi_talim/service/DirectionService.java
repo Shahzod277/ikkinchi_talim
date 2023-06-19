@@ -7,15 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import second.education.domain.classificator.Direction;
-import second.education.domain.classificator.FutureInstitution;
-import second.education.model.request.DirectionRequest;
-import second.education.model.response.DirectionResponse;
-import second.education.model.response.ResponseMessage;
-import second.education.model.response.Result;
-import second.education.repository.DirectionRepository;
-import second.education.repository.FutureInstitutionRepository;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Direction;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DirectionRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DirectionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DirectionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.FutureInstitutionRepository;
 import java.util.ArrayList;
 import java.util.List;
 

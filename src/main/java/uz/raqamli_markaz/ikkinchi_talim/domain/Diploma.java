@@ -33,5 +33,5 @@ public class Diploma extends AbstractEntity {
     private Boolean isActive = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private EnrolleeInfo enrolleeInfo;
+    private User user;
 }

@@ -23,10 +23,10 @@ public class FinishedEduInfo extends AbstractEntity {
     private String eduFormName;
     private String diplomaSerialAndNumber;
     private String eduFinishingDate;
+
     //Active diploma
     private boolean actualDiploma = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private EnrolleeInfo enrolleeInfo;
-
+    private User user;
 }

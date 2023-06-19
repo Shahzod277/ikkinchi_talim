@@ -34,5 +34,5 @@ public class Application extends AbstractEntity {
     private FutureInstitution futureInstitution;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private EnrolleeInfo enrolleeInfo;
+    private User user;
 }

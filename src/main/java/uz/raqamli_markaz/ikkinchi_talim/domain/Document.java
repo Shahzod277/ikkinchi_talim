@@ -18,6 +18,7 @@ public class Document extends AbstractEntity {
 
     @Column(length = 4096)
     private String fileName;
+
     @Column(length = 4096)
     private String url;
 
