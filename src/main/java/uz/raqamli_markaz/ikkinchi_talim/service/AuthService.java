@@ -20,10 +20,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final EnrolleInfoRepository enrolleInfoRepository;
     private final OneIdServiceApi oneIdServiceApi;
     private final JwtTokenProvider jwtTokenProvider;
     private final AdminEntityRepository adminEntityRepository;
-
 
 }

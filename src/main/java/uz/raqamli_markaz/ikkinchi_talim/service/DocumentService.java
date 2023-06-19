@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import second.education.domain.Diploma;
-import second.education.domain.Document;
-import second.education.model.response.*;
-import second.education.repository.DiplomaRepository;
-import second.education.repository.DocumentRepository;
-
+import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Document;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DocumentRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

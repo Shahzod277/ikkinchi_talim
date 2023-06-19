@@ -23,7 +23,7 @@ public class AdminController {
     private final EduFormService eduFormService;
     private final AdminService adminService;
     private final StatService statService;
-    private final EnrolleeService enrolleeService;
+    private final UserService userService;
 
     @PostMapping("futureInstitution")
     public ResponseEntity<?> createFutureInstitution(@RequestBody FutureInstitutionRequest request) {
@@ -320,7 +320,7 @@ public class AdminController {
                                            @RequestParam(value = "diploma", required = false) MultipartFile diploma,
                                            @RequestParam(value = "diplomaIlovaId", required = false) Integer diplomaIlovaId,
                                            @RequestParam(value = "diplomaIlova", required = false) MultipartFile diplomaIlova) {
-        Result result = enrolleeService.updateDiplomaByAdmin(diplomaId, countryName, institutionId, id, eduFormName, eduFinishingDate,
+        Result result = userService.updateDiplomaByAdmin(diplomaId, countryName, institutionId, id, eduFormName, eduFinishingDate,
                 speciality, diplomaNumberAndSerial, diplomaCopyId, diploma, diplomaIlovaId, diplomaIlova);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }

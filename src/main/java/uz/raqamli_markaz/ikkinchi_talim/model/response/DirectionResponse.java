@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import second.education.domain.classificator.Direction;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Direction;
 
 @Getter
 @Setter

@@ -7,13 +7,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import second.education.domain.*;
-import second.education.domain.classificator.Country;
-import second.education.model.request.DiplomaStatusRequest;
-import second.education.model.response.*;
-import second.education.repository.*;
-import second.education.service.api.DiplomaApi;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Country;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaStatusRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 import java.security.Principal;
 import java.util.List;
 
@@ -79,7 +84,6 @@ public class DiplomaService {
 
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaById(int diplomaId) {
-
         try {
             Diploma diploma = diplomaRepository.findById(diplomaId).get();
             return new DiplomaResponse(diploma);
@@ -96,10 +100,6 @@ public class DiplomaService {
         } catch (Exception ex) {
             return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
         }
-    }
-
-    private User getCurrentUser(Principal principal) {
-        return userRepository.findByPhoneNumber(principal.getName()).get();
     }
 
     @Transactional(readOnly = true)

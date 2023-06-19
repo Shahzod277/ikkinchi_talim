@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
-import uz.raqamli_markaz.ikkinchi_talim.service.EnrolleeService;
+import uz.raqamli_markaz.ikkinchi_talim.service.UserService;
 import java.security.Principal;
 import java.util.List;
 
@@ -15,11 +15,11 @@ import java.util.List;
 @SecurityRequirement(name = "second")
 public class EnrolleeInfoController {
 
-    private final EnrolleeService enrolleeService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<?> getEnrolleInfo(Principal principal) {
-        EnrolleeResponse enrolleeResponse = enrolleeService.getEnrolleeResponse(principal);
+        EnrolleeResponse enrolleeResponse = userService.getEnrolleeResponse(principal);
         return ResponseEntity.ok(enrolleeResponse);
     }
 
@@ -95,31 +95,31 @@ public class EnrolleeInfoController {
 
     @PatchMapping("check/diplomas/{diplomaId}")
     public ResponseEntity<?> checkDiploma(Principal principal, @PathVariable int diplomaId) {
-        Result result = enrolleeService.checkDiploma(principal, diplomaId);
+        Result result = userService.checkDiploma(principal, diplomaId);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
     @GetMapping("diplomas")
     public ResponseEntity<?> getDiplomas(Principal principal) {
-        List<DiplomaResponse> diplomasByEnrolleeInfo = enrolleeService.getDiplomasByEnrolleeInfo(principal);
+        List<DiplomaResponse> diplomasByEnrolleeInfo = userService.getDiplomasByEnrolleeInfo(principal);
         return ResponseEntity.ok(diplomasByEnrolleeInfo);
     }
 
     @GetMapping("diplomas/{diplomaId}")
     public ResponseEntity<?> getDiplomaById(Principal principal, @PathVariable int diplomaId) {
-        DiplomaResponse diplomaByIdAndEnrolleInfo = enrolleeService.getDiplomaByIdAndEnrolleInfo(principal, diplomaId);
+        DiplomaResponse diplomaByIdAndEnrolleInfo = userService.getDiplomaByIdAndEnrolleInfo(principal, diplomaId);
         return ResponseEntity.ok(diplomaByIdAndEnrolleInfo);
     }
 
     @GetMapping("diplomas/profile")
     public ResponseEntity<?> getDiplomaProfile(Principal principal) {
-        DiplomaResponse diplomaByIdAndEnrolleInfo = enrolleeService.getDiplomaProfile(principal);
+        DiplomaResponse diplomaByIdAndEnrolleInfo = userService.getDiplomaProfile(principal);
         return ResponseEntity.ok(diplomaByIdAndEnrolleInfo);
     }
 
     @DeleteMapping("deleteDiploma/{dipplomaId}")
     public ResponseEntity<?> deleteDiploma(@PathVariable Integer dipplomaId, Principal principal) {
-        Result result = enrolleeService.deleteDiploma(dipplomaId, principal);
+        Result result = userService.deleteDiploma(dipplomaId, principal);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 }

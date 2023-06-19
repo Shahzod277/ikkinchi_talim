@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import uz.raqamli_talim.qabul_xotm.domain.User;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -42,12 +42,9 @@ public class DirectionService {
 
     @Transactional
     public Result updateDirection(int directionId, DirectionRequest request) {
-
         try {
             Direction direction = directionRepository.findById(directionId).get();
             direction.setName(request.getName());
-//            FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstitutionId()).get();
-//            direction.setFutureInstitution(futureInstitution);
             directionRepository.save(direction);
             return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, new DirectionResponse(direction));
         } catch (Exception ex) {
@@ -65,7 +62,6 @@ public class DirectionService {
             directionResponse.setName(d.getName());
             directionResponse.setFutureInstitutionId(d.getFutureInstitution().getId());
             directionResponse.setFutureInstitutionName(d.getFutureInstitution().getName());
-
             directionResponses.add(directionResponse);
         });
         return directionResponses;
@@ -124,6 +120,5 @@ public class DirectionService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         return directionRepository.findDirectionByNameLike(text, pageable).map(DirectionResponse::new);
     }
-
 
 }

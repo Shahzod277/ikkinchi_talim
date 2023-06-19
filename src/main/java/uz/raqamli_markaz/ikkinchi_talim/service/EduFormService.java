@@ -14,6 +14,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.request.EduFormRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.LanguageResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DirectionRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.EduFormRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.LanguageRepository;

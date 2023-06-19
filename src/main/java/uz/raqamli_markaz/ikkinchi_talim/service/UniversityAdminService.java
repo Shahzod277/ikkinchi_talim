@@ -45,7 +45,6 @@ public class UniversityAdminService {
             Boolean aBoolean = Boolean.valueOf(status);
             Page<Application> allDiplomebyUAdmin = applicationRepository.getAppDiplomaByEnrollId(institutionId, aBoolean, pageable);
             allDiplomebyUAdmin.forEach(application -> {
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 //   FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma);
@@ -59,7 +58,6 @@ public class UniversityAdminService {
         } else {
             Page<Application> allDiplomebyUAdmin = applicationRepository.getAppDiplomaByEnrollAppDiplomStatusNull(institutionId, pageable);
             allDiplomebyUAdmin.forEach(application -> {
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -85,7 +83,6 @@ public class UniversityAdminService {
                 Boolean aBoolean = Boolean.valueOf(status);
                 Page<Application> allDiplomebyUAdmin = applicationRepository.getAppDipForeign(adminEntity.getFutureInstitution().getId(), aBoolean, pageable);
                 allDiplomebyUAdmin.forEach(application -> {
-                    EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                     Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                     FileResponse fileResponse = getFileResponse(diploma.getId());
                     DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -97,8 +94,6 @@ public class UniversityAdminService {
             } else {
                 Page<Application> allDiplomebyUAdmin = applicationRepository.getAppForeignDipStatusNull(adminEntity.getFutureInstitution().getId(), pageable);
                 allDiplomebyUAdmin.forEach(application -> {
-
-                    EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                     Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                     FileResponse fileResponse = getFileResponse(diploma.getId());
                     DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -131,7 +126,6 @@ public class UniversityAdminService {
             imageResponse.setImage(data.getPhoto());
         }
 
-        EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.get().getEnrolleeInfo(), imageResponse);
         Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.get().getEnrolleeInfo().getId()).get();
 
         FileResponse fileResponse = getFileResponse(diploma.getId());
@@ -160,7 +154,6 @@ public class UniversityAdminService {
         if (!data.getPhoto().isEmpty()) {
             imageResponse.setImage(data.getPhoto());
         }
-        EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.get().getEnrolleeInfo(), imageResponse);
         Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.get().getEnrolleeInfo().getId()).get();
 
         FileResponse fileResponse = getFileResponse(diploma.getId());
@@ -182,7 +175,6 @@ public class UniversityAdminService {
             Page<Application> allApp = applicationRepository.getAllApp(adminEntity.getFutureInstitution().getId(), status, pageable);
             allApp.forEach(application -> {
                 AppResponse appResponse = new AppResponse(application);
-                appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 appResponse.setDiplomaResponse(new DiplomaResponse(diploma, fileResponse));
@@ -488,7 +480,6 @@ public class UniversityAdminService {
             Boolean aBoolean = Boolean.valueOf(status);
             Page<Application> allDiplomebyUAdmin = applicationRepository.searchDiplomaByUAdmin(institutionId, aBoolean, s, pageable);
             allDiplomebyUAdmin.forEach(application -> {
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -503,8 +494,6 @@ public class UniversityAdminService {
         } else {
             Page<Application> allDiplomebyUAdmin = applicationRepository.searchDiplomStatusNull(institutionId, s, pageable);
             allDiplomebyUAdmin.forEach(application -> {
-
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo());
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -539,7 +528,6 @@ public class UniversityAdminService {
                 if (!data.getPhoto().isEmpty()) {
                     imageResponse.setImage(data.getPhoto());
                 }
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo(), imageResponse);
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);
@@ -562,7 +550,6 @@ public class UniversityAdminService {
                 if (!data.getPhoto().isEmpty()) {
                     imageResponse.setImage(data.getPhoto());
                 }
-                EnrolleeResponse enrolleeResponse = new EnrolleeResponse(application.getEnrolleeInfo(), imageResponse);
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                 FileResponse fileResponse = getFileResponse(diploma.getId());
                 DiplomResponseAdmin diplomResponseAdmin = new DiplomResponseAdmin(diploma, fileResponse);

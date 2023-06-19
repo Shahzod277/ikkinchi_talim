@@ -5,15 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import second.education.api_model.iib_api.Data;
-import second.education.api_model.iib_api.IIBResponse;
-import second.education.domain.*;
-import second.education.domain.classificator.University;
-import second.education.model.request.IIBRequest;
-import second.education.model.response.*;
-import second.education.repository.*;
-import second.education.service.api.IIBServiceApi;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.Data;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Document;
+import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
+import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,9 +24,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EnrolleeService {
+public class UserService {
 
-    private final EnrolleInfoRepository enrolleInfoRepository;
     private final DiplomaRepository diplomaRepository;
     private final DocumentService documentService;
     private final ApplicationRepository applicationRepository;
@@ -33,6 +34,7 @@ public class EnrolleeService {
     private final FileService fileService;
     private final DocumentRepository documentRepository;
     private final StoryMessageRepository storyMessageRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Result createDiploma(Principal principal,
@@ -45,7 +47,6 @@ public class EnrolleeService {
                                 String diplomaNumberAndSerial,
                                 MultipartFile diplomaCopy,
                                 MultipartFile diplomaIlova) {
-
         try {
             List<Diploma> allDiplomaByEnrollee = diplomaRepository.findAllDiplomaByEnrollee(principal.getName());
             if (allDiplomaByEnrollee.size() > 1) {
@@ -56,7 +57,6 @@ public class EnrolleeService {
             University university = institutionRepository.findById(institutionId).get();
             diploma.setInstitutionId(institutionId);
             diploma.setInstitutionName(university.getInstitutionName());
-//            University old = institutionRepository.findById(id).get();
             diploma.setInstitutionOldNameId(id);
             diploma.setInstitutionOldName(university.getNameOz());
             diploma.setEduFormName(eduFormName);
@@ -65,13 +65,8 @@ public class EnrolleeService {
             diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
             diploma.setDegreeId(2);
             diploma.setDegreeName("Bakalavr");
-            EnrolleeInfo enrolleeInfo = enrolleInfoRepository.findByEnrolle(principal.getName()).get();
-            diploma.setEnrolleeInfo(enrolleeInfo);
             Diploma diplomaSave = diplomaRepository.save(diploma);
-//            documentService.documentSave(diplomaSave.getId(), diplomaCopy, diplomaIlova);
             documentSave(diplomaSave.getId(), diplomaCopy, diplomaIlova);
-//            FileResponse fileResponse = documentService.getFileResponse(diplomaSave.getId());
-//            FileResponse fileResponse = getFileResponse(diplomaSave.getId());
             Optional<Application> application = applicationRepository.checkApp(principal.getName());
             if (application.isPresent()) {
                 application.get().setDiplomaMessage(null);
@@ -85,22 +80,13 @@ public class EnrolleeService {
     }
 
     @Transactional
-    public Result updateDiploma(
-            Principal principal,
-            int diplomaId,
-            String countryName,
-            Integer institutionId,
-            Integer id,
-            String eduFormName,
-            String eduFinishingDate,
-            String speciality,
-            String diplomaNumberAndSerial,
-            Integer diplomaCopyId,
-            MultipartFile diplomaCopy,
-            Integer diplomaIlovaId,
-            MultipartFile diplomaIlova) {
+    public Result updateDiploma(Principal principal, int diplomaId,
+                                String countryName, Integer institutionId,
+                                Integer id, String eduFormName,
+                                String eduFinishingDate, String speciality,
+                                String diplomaNumberAndSerial, Integer diplomaCopyId,
+                                MultipartFile diplomaCopy, Integer diplomaIlovaId, MultipartFile diplomaIlova) {
         try {
-
             List<Diploma> diplomas = diplomaRepository.findAllDiplomaByEnrollee(principal.getName());
             for (Diploma diploma : diplomas) {
                 if (diploma.getId() == diplomaId) {
@@ -119,14 +105,11 @@ public class EnrolleeService {
                         appByDiplomId.get().setDiplomaStatus(null);
                         appByDiplomId.get().setDiplomaMessage(null);
                         Application save = applicationRepository.save(appByDiplomId.get());
-
                         StoryMessage storyMessage = new StoryMessage();
                         storyMessage.setMessage(save.getDiplomaMessage());
                         String status = String.valueOf(save.getDiplomaStatus());
                         storyMessage.setStatus(status);
                         storyMessage.setPinfl(principal.getName());
-                        storyMessage.setFirstname(save.getEnrolleeInfo().getFirstname());
-                        storyMessage.setLastname(save.getEnrolleeInfo().getLastname());
                         storyMessage.setApplication(save);
                         storyMessageRepository.save(storyMessage);
                     }
@@ -188,7 +171,6 @@ public class EnrolleeService {
         }
     }
 
-
     @Transactional
     public DiplomaResponse createForeignDiploma(Principal principal,
                                                 String countryName,
@@ -209,12 +191,8 @@ public class EnrolleeService {
             diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
             diploma.setDegreeId(2);
             diploma.setDegreeName("Bakalavr");
-            EnrolleeInfo enrolleeInfo = enrolleInfoRepository.findByEnrolle(principal.getName()).get();
-            diploma.setEnrolleeInfo(enrolleeInfo);
             Diploma save = diplomaRepository.save(diploma);
-//            documentService.documentSave(save.getId(), diplomaCopy, diplomaIlova);
             documentSave(save.getId(), diplomaCopy, diplomaIlova);
-//            FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
             FileResponse fileResponse = getFileResponse(save.getId());
             Optional<Application> application = applicationRepository.checkApp(principal.getName());
             if (application.isPresent()) {
@@ -248,7 +226,6 @@ public class EnrolleeService {
             diploma.setEduFinishingDate(eduFinishingDate);
             diploma.setSpecialityName(speciality);
             diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-
             Optional<Application> appByDiplomId = applicationRepository.getAppByDiplomId(diplomaId);
             if (appByDiplomId.isPresent()) {
                 appByDiplomId.get().setDiplomaStatus(null);
@@ -256,9 +233,7 @@ public class EnrolleeService {
                 applicationRepository.save(appByDiplomId.get());
             }
             Diploma save = diplomaRepository.save(diploma);
-//            documentService.documentUpdate(save, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
             documentUpdate(save, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
-//            FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
             FileResponse fileResponse = getFileResponse(save.getId());
             return new DiplomaResponse(diploma, fileResponse);
         } catch (Exception ex) {
@@ -286,7 +261,7 @@ public class EnrolleeService {
     @Transactional(readOnly = true)
     public EnrolleeResponse getEnrolleeResponse(Principal principal) {
         try {
-            EnrolleeInfo enrolleeInfo = enrolleInfoRepository.findByEnrolle(principal.getName()).get();
+
             IIBRequest iibRequest = new IIBRequest();
             iibRequest.setPinfl(enrolleeInfo.getPinfl());
             iibRequest.setGiven_date(enrolleeInfo.getPassportGivenDate());
@@ -455,9 +430,8 @@ public class EnrolleeService {
     public Result deleteDiploma(Integer diplomaId, Principal principal) {
         try {
             Optional<Diploma> byId = diplomaRepository.findById(diplomaId);
-            EnrolleeInfo enrolleeInfo = enrolleInfoRepository.findByEnrolle(principal.getName()).get();
             if (byId.isPresent()) {
-                if (byId.get().getEnrolleeInfo().getId().equals(enrolleeInfo.getId())) {
+                if (byId.get().getUser().getId().equals(enrolleeInfo.getId())) {
                     diplomaRepository.deleteById(diplomaId);
                     return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
                 }
