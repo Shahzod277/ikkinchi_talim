@@ -14,12 +14,12 @@ import java.util.List;
 @RequestMapping("/api/enrolleeInfo/")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "second")
-public class EnrolleeInfoController {
+public class UserController {
 
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getEnrolleInfo(Principal principal) {
+    public ResponseEntity<?> getUserInfo(Principal principal) {
         EnrolleeResponse enrolleeResponse = userService.getEnrolleeResponse(principal);
         return ResponseEntity.ok(enrolleeResponse);
     }
