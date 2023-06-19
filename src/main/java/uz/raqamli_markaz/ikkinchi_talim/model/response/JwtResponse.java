@@ -3,8 +3,7 @@ package uz.raqamli_markaz.ikkinchi_talim.model.response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import second.education.security.SecurityConstant;
-
+import uz.raqamli_markaz.ikkinchi_talim.security.SecurityConstant;
 import java.util.List;
 
 @Getter

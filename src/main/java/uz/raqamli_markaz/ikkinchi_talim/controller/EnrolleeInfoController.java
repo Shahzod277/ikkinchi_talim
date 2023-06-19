@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.UserService;
 import java.security.Principal;
 import java.util.List;
