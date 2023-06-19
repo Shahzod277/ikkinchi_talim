@@ -24,7 +24,6 @@ public class ApplicationService {
     private final EduFormRepository eduFormRepository;
     private final LanguageRepository languageRepository;
     private final ApplicationRepository applicationRepository;
-    private final EnrolleInfoRepository enrolleInfoRepository;
     private final FutureInstitutionRepository futureInstitutionRepository;
     private final StoryMessageRepository storyMessageRepository;
 
