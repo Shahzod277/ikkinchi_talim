@@ -6,19 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import second.education.model.request.IIBRequest;
-import second.education.model.request.LoginRequest;
-import second.education.model.request.ValidateCodeRequest;
-import second.education.model.response.JwtResponse;
-import second.education.model.response.Result;
-import second.education.security.JwtTokenProvider;
-import second.education.security.UserDetailsImpl;
-import second.education.service.AuthService;
-import second.education.service.api.OneIdServiceApi;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.one_id.OneIdServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.LoginRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.ValidateCodeRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.JwtResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.service.AuthService;
 import java.net.URI;
 import java.util.List;
 

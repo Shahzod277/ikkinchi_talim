@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-import uz.raqamli_markaz.ikkinchi_talim.domain.EnrolleeInfo;
 import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
 import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.EduForm;
 import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;

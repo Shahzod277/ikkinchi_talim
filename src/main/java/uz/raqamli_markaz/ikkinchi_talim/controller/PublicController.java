@@ -5,11 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import second.education.model.response.FutureInstitutionResponse;
-import second.education.model.response.UniversityResponse;
-import second.education.service.FutureInstitutionService;
-import second.education.service.api.DiplomaApi;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.FutureInstitutionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.UniversityResponse;
+import uz.raqamli_markaz.ikkinchi_talim.service.FutureInstitutionService;
 import java.util.List;
 
 @RestController

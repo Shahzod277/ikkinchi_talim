@@ -1,67 +1,44 @@
 package uz.raqamli_markaz.ikkinchi_talim.security;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Component
 public class JwtTokenProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JwtTokenProvider.class);
-
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secret;
 
-    public String generateToken(UserDetailsImpl userDetails) {
-        return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstant.TOKEN_EXPIRE_AT))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS384)
-                .compact();
+    public String generateJWTToken(UserDetailsImpl user) {
+        return JWT.create()
+                .withSubject(user.getUsername())
+                .withIssuedAt(Instant.now())
+                .withExpiresAt(Instant.now().plusMillis(SecurityConstant.TOKEN_EXPIRE_AT))
+                .sign(Algorithm.HMAC256(secret));
     }
 
-    public String getUsernameOrPhoneNumberFromToken(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+    public String getUsernameFromToken(String jwtToken) {
+        return JWT.require(Algorithm.HMAC256(secret))
                 .build()
-                .parseClaimsJws(token)
-                .getBody()
+                .verify(jwtToken)
                 .getSubject();
     }
-    public Boolean validateJwtToken(String token) {
+
+    public Boolean validateToken(String jwtToken) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+            JWT.require(Algorithm.HMAC256(secret))
                     .build()
-                    .parseClaimsJws(token);
+                    .verify(jwtToken);
             return true;
         }
-        catch (SignatureException e) {
-            LOG.error("Invalid JWT signature: {}", e.getMessage());
-        }
-        catch (MalformedJwtException e) {
-            LOG.error("Invalid JWT token: {}", e.getMessage());
-        }
-        catch (ExpiredJwtException e) {
-            LOG.error("JWT token is expired: {}", e.getMessage());
-        }
-        catch (UnsupportedJwtException e) {
-            LOG.error("JWT token is unsupported: {}", e.getMessage());
-        }
-        catch (IllegalArgumentException e) {
-            LOG.error("JWT claims is empty: {}", e.getMessage());
+        catch (JWTVerificationException ex) {
+            ex.printStackTrace();
         }
         return false;
-    }
-
-    public String generateJWTToken(UserDetailsImpl userDetails) {
-        return null;
     }
 }

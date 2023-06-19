@@ -4,21 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import second.education.domain.User;
-import second.education.model.response.ResponseMessage;
-import second.education.repository.UserRepository;
+import org.springframework.stereotype.Component;
+import uz.raqamli_talim.qabul_xotm.domain.User;
+import uz.raqamli_talim.qabul_xotm.repository.UserRepository;
 
-@Service
+import java.util.Optional;
+
+@Component
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
-        User user = userRepository.findByPhoneNumber(phoneNumber).orElseThrow(() ->
-                new UsernameNotFoundException("User with:" + phoneNumber + " " + ResponseMessage.NOT_FOUND.getMessage()));
-        return UserDetailsImpl.build(user);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findUserByPinfl(username);
+        return user.map(UserDetailsImpl::build).orElse(null);
     }
 }

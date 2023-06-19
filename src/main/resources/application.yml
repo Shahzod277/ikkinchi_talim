@@ -43,7 +43,7 @@ springdoc:
     path: /docs
 
 jwt:
-  secret: '[0-9.a-zA-z_]^+$TutorAcademy9891212skidU3AkjbgcNftrFbsdrxh^56409unjbgGfd528482'
+
 
 file:
   storage:

@@ -7,11 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import second.education.model.response.ResponseMessage;
-import second.education.model.response.Result;
-import second.education.service.DocumentService;
-import second.education.service.FileService;
-
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.service.DocumentService;
+import uz.raqamli_markaz.ikkinchi_talim.service.FileService;
 import java.io.IOException;
 import java.util.Objects;
 

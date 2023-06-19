@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import second.education.domain.User;
+import uz.raqamli_talim.qabul_xotm.domain.User;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -17,8 +18,8 @@ public class UserDetailsImpl implements UserDetails {
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Integer id, String phoneNumber, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Integer id, String phoneNumber, String password, Collection<? extends GrantedAuthority> authorities) {
+
         this.id = id;
         this.phoneNumber = phoneNumber;
         this.password = password;
@@ -26,15 +27,14 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole().getName()));
-
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return new UserDetailsImpl(
                 user.getId(),
-                user.getPhoneNumber(),
+                user.getPinfl(),
                 user.getPassword(),
                 authorities);
     }
-
     public Integer getId() {
         return id;
     }

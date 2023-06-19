@@ -4,11 +4,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import second.education.model.response.DiplomaResponse;
-import second.education.model.response.EnrolleeResponse;
-import second.education.model.response.Result;
-import second.education.service.EnrolleeService;
-
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.service.EnrolleeService;
 import java.security.Principal;
 import java.util.List;
 
