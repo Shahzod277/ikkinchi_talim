@@ -122,7 +122,7 @@ public class AdminController {
     @GetMapping("getFutureInstitutions")
     public ResponseEntity<?> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                     @RequestParam(value = "size", defaultValue = "30") int size) {
-        Page<FutureInstitutionResponse> allPage = futureInstitutionService.getAllPage(page, size);
+        Page<FutureInstitutionResponse> allPage = futureInstitutionService.getAllFutureInstitution(page, size);
         return ResponseEntity.ok(allPage);
 
     }
@@ -146,7 +146,7 @@ public class AdminController {
     public ResponseEntity<?> searchDirection(@PathVariable String text,
                                              @RequestParam(value = "page", defaultValue = "0") int page,
                                              @RequestParam(value = "size", defaultValue = "30") int size) {
-        Page<DirectionResponse> search = directionService.search(text, page, size);
+        Page<DirectionResponse> search = directionService.searchDirection(text, page, size);
         return ResponseEntity.ok(search);
     }
 
@@ -186,7 +186,7 @@ public class AdminController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "30") int size,
             @RequestParam(value = "text", defaultValue = "0") String text) {
-        Page<FutureInstitutionResponse> futureInstitutionResponses = futureInstitutionService.searchFutureInst(text, page, size);
+        Page<FutureInstitutionResponse> futureInstitutionResponses = futureInstitutionService.searchFutureInstitution(text, page, size);
         return ResponseEntity.ok(futureInstitutionResponses);
     }
 
