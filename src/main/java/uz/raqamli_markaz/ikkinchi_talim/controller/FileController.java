@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.DocumentService;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileService;
 import java.io.IOException;

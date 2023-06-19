@@ -7,6 +7,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
@@ -254,25 +255,6 @@ public class StatService {
         });
 
         return list;
-    }
-
-    @Transactional()
-    public void test() {
-        List<Application> test = applicationRepository.test();
-        test.forEach(application -> {
-            application.setFutureInstitution(application.getEduForm().getDirection().getFutureInstitution());
-            applicationRepository.save(application);
-        });
-
-    }
-
-    public void test2() {
-        List<Application> applications = applicationRepository.test2();
-        applications.forEach(application -> {
-            application.setStatus("Ariza qabul qilindi");
-            applicationRepository.save(application);
-
-        });
     }
 }
 

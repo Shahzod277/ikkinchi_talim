@@ -85,9 +85,4 @@ public class StatController {
         ForeignAndDiplomaAllCount allCount = statService.allCountDiplomaAndForeignAdmin();
         return ResponseEntity.ok(allCount);
     }
-
-    @GetMapping("test")
-    public void test() {
-      statService.test2();
-    }
 }
