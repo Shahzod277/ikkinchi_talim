@@ -18,7 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.phoneNumber=?1 or u.pinfl=?2")
     Optional<User> findByPhoneNumberOrPinfl(String phoneNumber, String pinfl);
 
-
     @Query("select u from User u where u.phoneNumber = ?1")
     List<User> findAllByPhoneNumber(String phoneNumber);
 
