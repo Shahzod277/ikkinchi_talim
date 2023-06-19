@@ -3,24 +3,16 @@ package uz.raqamli_markaz.ikkinchi_talim.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
-import uz.raqamli_markaz.ikkinchi_talim.api.one_id.OneIdServiceApi;
-import uz.raqamli_markaz.ikkinchi_talim.api.sms_api.SmsServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.LoginRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.JwtResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
-import uz.raqamli_markaz.ikkinchi_talim.repository.AdminEntityRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.RoleRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 import uz.raqamli_markaz.ikkinchi_talim.security.JwtTokenProvider;
 import uz.raqamli_markaz.ikkinchi_talim.security.UserDetailsImpl;
 
@@ -37,7 +29,7 @@ public class AuthService {
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest){
         try {
             Authentication authenticate = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getPhoneNumber(), loginRequest.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
             String jwtToken = jwtTokenProvider.generateJWTToken(userDetails);
