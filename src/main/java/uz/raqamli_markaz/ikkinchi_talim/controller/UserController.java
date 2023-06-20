@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.UserService;
 import java.security.Principal;
 import java.util.List;
@@ -13,12 +14,12 @@ import java.util.List;
 @RequestMapping("/api/enrolleeInfo/")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "second")
-public class EnrolleeInfoController {
+public class UserController {
 
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getEnrolleInfo(Principal principal) {
+    public ResponseEntity<?> getUserInfo(Principal principal) {
         EnrolleeResponse enrolleeResponse = userService.getEnrolleeResponse(principal);
         return ResponseEntity.ok(enrolleeResponse);
     }

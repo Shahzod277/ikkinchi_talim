@@ -15,7 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.JwtResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.security.JwtTokenProvider;
 import uz.raqamli_markaz.ikkinchi_talim.security.UserDetailsImpl;
-import uz.raqamli_markaz.ikkinchi_talim.service.AuthService;
+
 import java.net.URI;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest){
         try {
         Authentication authenticate = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getPhoneNumber(), loginRequest.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
         String jwtToken = jwtTokenProvider.generateJWTToken(userDetails);

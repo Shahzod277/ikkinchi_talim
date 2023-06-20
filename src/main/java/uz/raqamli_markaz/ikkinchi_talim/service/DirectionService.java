@@ -115,7 +115,7 @@ public class DirectionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DirectionResponse> search(String text, int page, int size) {
+    public Page<DirectionResponse> searchDirection(String text, int page, int size) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         return directionRepository.findDirectionByNameLike(text, pageable).map(DirectionResponse::new);

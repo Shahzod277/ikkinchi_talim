@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +27,8 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(User user) {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        String roleName = user.getRole().getName();
+        authorities.add(new SimpleGrantedAuthority(roleName));
         return new UserDetailsImpl(
                 user.getId(),
                 user.getPinfl(),

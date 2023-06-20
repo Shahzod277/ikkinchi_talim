@@ -11,13 +11,12 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    @Query("select u from User u where u.phoneNumber = ?1")
     @EntityGraph(attributePaths = "role")
     Optional<User> findByPhoneNumber(String phoneNumber);
 
-    @Query( value = "select u from User u join EnrolleeInfo ei on u.id = ei.user.id " +
-            "where u.phoneNumber=?1 or ei.pinfl=?2")
+    @Query("select u from User u where u.phoneNumber=?1 or u.pinfl=?2")
     Optional<User> findByPhoneNumberOrPinfl(String phoneNumber, String pinfl);
-
 
     @Query("select u from User u where u.phoneNumber = ?1")
     List<User> findAllByPhoneNumber(String phoneNumber);
