@@ -20,4 +20,7 @@ public class ApiConstant {
     public static final String SMS_API_PASSWORD = "pmQgROZaRRaNHqdY";
     public static final String D_ARXIV_LOGIN = "api_ikkinchi_talim_shahzod";
     public static final String D_ARXIV_PASSWORD = "0bHihbG8CNMzjFGsnoKQ";
+    public static final String DEGREE_ID = "2";//Bakalavr
+    public static final String EDU_TYPE_ID = "3";//  "name_oz": "Oliy ta'lim",
+
 }

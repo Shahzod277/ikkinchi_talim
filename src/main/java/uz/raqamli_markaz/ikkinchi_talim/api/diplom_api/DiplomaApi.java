@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
+import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
 import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 
@@ -22,12 +23,12 @@ public class DiplomaApi {
         if (tokenEntity.getEndTime() < now) {
             DArxivTokenResponse response = this.webClient.get()
                     .uri(ApiConstant.D_ARXIV_TOKEN_API)
-                    .headers(httpHeader -> httpHeader.setBasicAuth(ApiConstant.D_ARXIV_LOGIN,ApiConstant.D_ARXIV_PASSWORD))
+                    .headers(httpHeader -> httpHeader.setBasicAuth(ApiConstant.D_ARXIV_LOGIN, ApiConstant.D_ARXIV_PASSWORD))
                     .retrieve()
                     .bodyToMono(DArxivTokenResponse.class)
                     .block();
             assert response != null;
-            String accessToken = response.getData().getNewToken().getAccessToken();
+            String accessToken = response.getDataToken().getNewToken().getAccessToken();
             tokenEntity.setToken(accessToken);
             tokenEntity.setEndTime(now + 83000);
             tokenEntityRepository.save(tokenEntity);
@@ -40,7 +41,7 @@ public class DiplomaApi {
 
     public List<DiplomaResponseInfo> getDiploma(String pinfl) {
 
-        String DIPLOMA_URL = "http://172.18.10.10/api/v2/diploma/get?pinfl=" + pinfl;
+        String DIPLOMA_URL = "https://d-arxiv.edu.uz/api/v2/diploma/get?pinfl=" + pinfl;
         return this.webClient.get()
                 .uri(DIPLOMA_URL)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
@@ -49,5 +50,31 @@ public class DiplomaApi {
                 .collectList()
                 .block();
     }
+    // ta'lim daraja bakalavr , magistr
+
+
+    public CreateDiplomaResponse createDiploma(CreateDiplomaRequest request) {
+
+        String url = "https://d-arxiv.edu.uz/api/v2/diploma/create";
+        return this.webClient.post()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CreateDiplomaResponse.class)
+                .block();
+    }
+
+    public FormEduResponse getFormEdu() {
+
+        String url = "https://d-arxiv.edu.uz/api/v2/reference/edu-forms";
+        return this.webClient.get()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .retrieve()
+                .bodyToMono(FormEduResponse.class)
+                .block();
+    }
+
 
 }
