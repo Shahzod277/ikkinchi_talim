@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.FutureInstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.UniversityResponse;
 import uz.raqamli_markaz.ikkinchi_talim.service.FutureInstitutionService;

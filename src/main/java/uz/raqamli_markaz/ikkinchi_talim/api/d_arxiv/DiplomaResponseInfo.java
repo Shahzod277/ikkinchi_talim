@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.api.diplom_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

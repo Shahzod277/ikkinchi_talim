@@ -1,11 +1,17 @@
-package uz.raqamli_markaz.ikkinchi_talim.api.diplom_api;
+package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
-import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.formEdu.FormEduResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DArxivTokenResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialitiesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 
 import java.util.List;
@@ -51,8 +57,6 @@ public class DiplomaApi {
                 .block();
     }
     // ta'lim daraja bakalavr , magistr
-
-
     public CreateDiplomaResponse createDiploma(CreateDiplomaRequest request) {
 
         String url = "https://d-arxiv.edu.uz/api/v2/diploma/create";
@@ -75,6 +79,42 @@ public class DiplomaApi {
                 .bodyToMono(FormEduResponse.class)
                 .block();
     }
+    public SpecialitiesResponse getSpecialities() {
 
+        String url = "https://d-arxiv.edu.uz/api/v2/reference/specialities";
+        return this.webClient.get()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .retrieve()
+                .bodyToMono(SpecialitiesResponse.class)
+                .block();
+    }
+    public InstitutionResponse getInstitutions() {
+        String url = "https://d-arxiv.edu.uz/api/v2/reference/institutions";
+        return this.webClient.get()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .retrieve()
+                .bodyToMono(InstitutionResponse.class)
+                .block();
+    }
+    public InstitutionResponse getInstitutionsOldNames() {
+        String url = "https://d-arxiv.edu.uz/api/v2/reference/institution-old-names";
+        return this.webClient.get()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .retrieve()
+                .bodyToMono(InstitutionResponse.class)
+                .block();
+    }
+    public DiplomaSerials getDiplomaSerials() {
+        String url = "https://d-arxiv.edu.uz/api/v2/reference/diploma-serials";
+        return this.webClient.get()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .retrieve()
+                .bodyToMono(DiplomaSerials.class)
+                .block();
+    }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.raqamli_markaz.ikkinchi_talim.api.diplom_api.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Country;
@@ -19,7 +19,7 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
-import java.security.Principal;
+
 import java.util.List;
 
 @Service
