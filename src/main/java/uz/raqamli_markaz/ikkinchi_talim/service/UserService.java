@@ -16,6 +16,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public class UserService {
     }
 
 
-//by admin
+    //by admin
     @Transactional
     public Result updateDiplomaByAdmin(
             int diplomaId,
@@ -162,11 +163,11 @@ public class UserService {
                 }
                 diploma.get().setModifiedDate(LocalDateTime.now());
                 Diploma diplomaSave = diplomaRepository.save(diploma.get());
-               documentUpdate(diplomaSave, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
+                documentUpdate(diplomaSave, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
                 return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
             }
             return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
         }
     }

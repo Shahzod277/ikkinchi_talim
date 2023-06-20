@@ -19,7 +19,6 @@ import java.util.Set;
 @Table(name = "users", indexes = @Index(columnList = "phoneNumber"))
 public class User extends AbstractEntity {
 
-    private String phoneNumber;
     private String password;
     private String citizenship;
     private String firstname;
