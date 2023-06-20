@@ -58,7 +58,6 @@ public class FutureInstitutionService {
             return new FutureInstitutionResponse();
         }
     }
-
     public Result deleteFutureInstitution(int futureInstitutionId) {
         try {
             futureInstitutionRepository.deleteById(futureInstitutionId);
@@ -67,7 +66,6 @@ public class FutureInstitutionService {
             return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
         }
     }
-
     @Transactional(readOnly = true)
     public Page<FutureInstitutionResponse> getAllFutureInstitution(int page, int size) {
         if (page > 0) page = page - 1;
