@@ -45,6 +45,7 @@ public class Utils {
             diplomaInstitutionRepository.saveAll(diplomaInstitutions);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
         }
     }
 
@@ -52,6 +53,7 @@ public class Utils {
     public void saveOldInstitution() {
         try {
             List<DiplomaInstitution> all = diplomaInstitutionRepository.findAll();
+            List<DiplomaOldInstitution> diplomaOldInstitutions = new ArrayList<>();
             all.forEach(d -> {
                 Thread thread = new Thread(() -> {
                     InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
@@ -61,9 +63,11 @@ public class Utils {
                         if (Objects.equals(odlDiploma.getInstitutionId(), d.getInstitutionId())) {
                             DiplomaOldInstitution diplomaOldInstitution = new DiplomaOldInstitution();
                             diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
-                            diplomaOldInstitution.setInstitutionName();
-                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
-                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
+                            diplomaOldInstitution.setInstitutionName(odlDiploma.getInstitutionName());
+                            diplomaOldInstitution.setInstitutionOldId(odlDiploma.getId());
+                            diplomaOldInstitution.setInstitutionOldNameUz(d.getInstitutionNameUz());
+                            diplomaOldInstitution.setInstitutionOldNameOz(d.getInstitutionNameOz());
+                            diplomaOldInstitutions.add(diplomaOldInstitution);
                         }
                     });
                 });
@@ -75,10 +79,10 @@ public class Utils {
                     throw new RuntimeException(e);
                 }
             });
-
-
+            diplomaOldInstitutionRepository.saveAll(diplomaOldInstitutions);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
         }
     }
 }
