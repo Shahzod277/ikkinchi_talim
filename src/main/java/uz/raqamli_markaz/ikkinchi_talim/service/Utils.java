@@ -13,15 +13,20 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionData
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 public class Utils {
 
     private final DiplomaInstitutionRepository diplomaInstitutionRepository;
+    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final DiplomaApi diplomaApi;
 
     @Transactional
@@ -46,15 +51,27 @@ public class Utils {
     @Transactional
     public void saveOldInstitution() {
         try {
+            List<DiplomaInstitution> all = diplomaInstitutionRepository.findAll();
+            all.forEach(d -> {
 
-
-
-            InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
-            InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
-            List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
-            dataItems.forEach(d -> {
-
+                new Thread(() -> {
+                    InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
+                    InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
+                    List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
+                    dataItems.forEach(odlDiploma -> {
+                        if (Objects.equals(odlDiploma.getInstitutionId(), d.getInstitutionId())) {
+                            DiplomaOldInstitution diplomaOldInstitution = new DiplomaOldInstitution();
+                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
+                            diplomaOldInstitution.setInstitutionName();
+                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
+                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
+                        }
+                    });
+                })
             });
+
+
+
 
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
