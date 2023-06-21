@@ -19,7 +19,6 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSpecialityRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,7 +41,12 @@ public class Utils {
             List<DiplomaInstitution> diplomaInstitutions = new ArrayList<>();
             data.forEach(d -> {
                 if (d.getInstitutionTypeId() !=null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
-                    DiplomaInstitution diplomaInstitution = new DiplomaInstitution(d.getId(), d.getNameUz(), d.getNameOz());
+                    DiplomaInstitution diplomaInstitution = new DiplomaInstitution();
+                    diplomaInstitution.setInstitutionId(d.getId());
+                    diplomaInstitution.setInstitutionNameUz(d.getNameUz());
+                    diplomaInstitution.setInstitutionNameOz(d.getNameOz());
+                    diplomaInstitution.setInstitutionNameRu(d.getNameRu());
+                    diplomaInstitution.setInstitutionNameEn(d.getNameEn());
                     diplomaInstitutions.add(diplomaInstitution);
                 }
             });
@@ -71,6 +75,8 @@ public class Utils {
                             diplomaOldInstitution.setInstitutionOldId(odlDiploma.getId());
                             diplomaOldInstitution.setInstitutionOldNameUz(d.getInstitutionNameUz());
                             diplomaOldInstitution.setInstitutionOldNameOz(d.getInstitutionNameOz());
+                            diplomaOldInstitution.setInstitutionOldNameRu(d.getInstitutionNameRu());
+                            diplomaOldInstitution.setInstitutionOldNameEn(d.getInstitutionNameEn());
                             diplomaOldInstitutions.add(diplomaOldInstitution);
                         }
                     });

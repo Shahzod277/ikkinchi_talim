@@ -17,4 +17,6 @@ public class DiplomaInstitution extends AbstractEntity {
     private Integer institutionId;
     private String institutionNameUz;
     private String institutionNameOz;
+    private String institutionNameRu;
+    private String institutionNameEn;
 }
