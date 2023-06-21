@@ -14,9 +14,11 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @AllArgsConstructor
 public class DiplomaInstitution extends AbstractEntity {
 
-    private Integer institutionId;
+    private Integer classificatorId;
     private String institutionNameUz;
     private String institutionNameOz;
     private String institutionNameRu;
     private String institutionNameEn;
+    private Integer institutionTypeId;
+    private String institutionTypeName;
 }

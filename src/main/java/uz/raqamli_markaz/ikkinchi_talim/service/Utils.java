@@ -42,11 +42,13 @@ public class Utils {
             data.forEach(d -> {
                 if (d.getInstitutionTypeId() !=null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
                     DiplomaInstitution diplomaInstitution = new DiplomaInstitution();
-                    diplomaInstitution.setInstitutionId(d.getId());
+                    diplomaInstitution.setClassificatorId(d.getId());
                     diplomaInstitution.setInstitutionNameUz(d.getNameUz());
                     diplomaInstitution.setInstitutionNameOz(d.getNameOz());
                     diplomaInstitution.setInstitutionNameRu(d.getNameRu());
                     diplomaInstitution.setInstitutionNameEn(d.getNameEn());
+                    diplomaInstitution.setInstitutionTypeId(d.getInstitutionTypeId());
+                    diplomaInstitution.setInstitutionTypeName(d.getInstitutionTypeName());
                     diplomaInstitutions.add(diplomaInstitution);
                 }
             });
@@ -68,15 +70,15 @@ public class Utils {
                     InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
                     List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
                     dataItems.forEach(odlDiploma -> {
-                        if (Objects.equals(odlDiploma.getInstitutionId(), d.getInstitutionId())) {
+                        if (Objects.equals(odlDiploma.getInstitutionId(), d.getClassificatorId())) {
                             DiplomaOldInstitution diplomaOldInstitution = new DiplomaOldInstitution();
-                            diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
+                            diplomaOldInstitution.setInstitutionId(d.getClassificatorId());
                             diplomaOldInstitution.setInstitutionName(odlDiploma.getInstitutionName());
                             diplomaOldInstitution.setInstitutionOldId(odlDiploma.getId());
-                            diplomaOldInstitution.setInstitutionOldNameUz(d.getInstitutionNameUz());
-                            diplomaOldInstitution.setInstitutionOldNameOz(d.getInstitutionNameOz());
-                            diplomaOldInstitution.setInstitutionOldNameRu(d.getInstitutionNameRu());
-                            diplomaOldInstitution.setInstitutionOldNameEn(d.getInstitutionNameEn());
+                            diplomaOldInstitution.setInstitutionOldNameUz(odlDiploma.getNameUz());
+                            diplomaOldInstitution.setInstitutionOldNameOz(odlDiploma.getNameOz());
+                            diplomaOldInstitution.setInstitutionOldNameRu(odlDiploma.getNameRu());
+                            diplomaOldInstitution.setInstitutionOldNameEn(odlDiploma.getNameEn());
                             diplomaOldInstitutions.add(diplomaOldInstitution);
                         }
                     });
