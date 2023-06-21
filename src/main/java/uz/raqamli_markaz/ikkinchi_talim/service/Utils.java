@@ -72,7 +72,7 @@ public class Utils {
                     dataItems.forEach(odlDiploma -> {
                         if (Objects.equals(odlDiploma.getInstitutionId(), d.getClassificatorId())) {
                             DiplomaOldInstitution diplomaOldInstitution = new DiplomaOldInstitution();
-                            diplomaOldInstitution.setInstitutionId(d.getClassificatorId());
+                            diplomaOldInstitution.setClassificatorId(d.getClassificatorId());
                             diplomaOldInstitution.setInstitutionName(odlDiploma.getInstitutionName());
                             diplomaOldInstitution.setInstitutionOldId(odlDiploma.getId());
                             diplomaOldInstitution.setInstitutionOldNameUz(odlDiploma.getNameUz());
