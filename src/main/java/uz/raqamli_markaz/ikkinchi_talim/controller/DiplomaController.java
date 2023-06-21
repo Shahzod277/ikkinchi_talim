@@ -18,20 +18,7 @@ import java.util.List;
 public class DiplomaController {
 
     private final DiplomaApi diplomaApi;
-    private final TillarRepository tillarRepository;
     private final DiplomaService diplomaService;
-
-    @GetMapping("create/active/institution")
-    public ResponseEntity<?> createActiveInstitution() {
-        Result result = diplomaApi.saveActualInstitution();
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
-
-    @GetMapping("create/institution")
-    public ResponseEntity<?> createInstitution() {
-        Result result = diplomaApi.saveInstitution();
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
 
     @GetMapping("create/specialities")
     public ResponseEntity<?> createSpecialities() {
