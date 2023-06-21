@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
@@ -24,7 +23,7 @@ public class StatService {
     private final EduFormRepository eduFormRepository;
     private final LanguageRepository languageRepository;
     private final IIBServiceApi iibServiceApi;
-    private final FutureInstitutionRepository futureInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
     private final AdminEntityRepository adminEntityRepository;
     private final UniversityRepository universityRepository;
     private final StoryMessageRepository storyMessageRepository;
@@ -147,9 +146,9 @@ public class StatService {
     @Transactional(readOnly = true)
     public List<AcceptAndRejectAndCheckDiploma> statisticAllUniversity() {
 
-        List<FutureInstitution> futureInstitutions = futureInstitutionRepository.findAll();
+        List<DiplomaInstitution> diplomaInstitutions = diplomaInstitutionRepository.findAll();
         List<AcceptAndRejectAndCheckDiploma> list = new ArrayList<>();
-        futureInstitutions.forEach(futureInstitution -> {
+        diplomaInstitutions.forEach(futureInstitution -> {
             AcceptAndRejectApp acceptApp = applicationRepository.getAcceptApp(futureInstitution.getId());
             AcceptAndRejectApp rejectedApp = applicationRepository.getRejectedApp(futureInstitution.getId());
             AcceptAndRejectAndCheckDiploma statistic = new AcceptAndRejectAndCheckDiploma();
@@ -244,10 +243,10 @@ public class StatService {
         List<AdminEntity> all = adminEntityRepository.findAll();
         all.forEach(adminEntity -> {
             DiplomaAdminResponse adminResponse = new DiplomaAdminResponse();
-            if (adminEntity.getFutureInstitution() != null) {
-                List<CountApp> countDiploma = applicationRepository.getCountForeignDiploma(adminEntity.getFutureInstitution().getId());
+            if (adminEntity.getDiplomaInstitution() != null) {
+                List<CountApp> countDiploma = applicationRepository.getCountForeignDiploma(adminEntity.getDiplomaInstitution().getId());
                 adminResponse.setDiploma(countDiploma);
-                adminResponse.setUniversityName(adminEntity.getFutureInstitution().getName());
+                adminResponse.setUniversityName(adminEntity.getDiplomaInstitution().getName());
                 list.add(adminResponse);
             }
         });

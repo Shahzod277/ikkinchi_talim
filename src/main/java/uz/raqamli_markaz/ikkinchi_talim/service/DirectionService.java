@@ -7,14 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Direction;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Direction;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DirectionRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DirectionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DirectionRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.FutureInstitutionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class DirectionService {
 
     private final DirectionRepository directionRepository;
-    private final FutureInstitutionRepository futureInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
 
     @Transactional
     public Result createDirection(DirectionRequest request) {
@@ -31,8 +31,8 @@ public class DirectionService {
         try {
             Direction direction = new Direction();
             direction.setName(request.getName());
-            FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstitutionId()).get();
-            direction.setFutureInstitution(futureInstitution);
+            DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstitutionId()).get();
+            direction.setDiplomaInstitution(diplomaInstitution);
             directionRepository.save(direction);
             return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, new DirectionResponse(direction));
         } catch (Exception ex) {
@@ -60,8 +60,8 @@ public class DirectionService {
             DirectionResponse directionResponse = new DirectionResponse();
             directionResponse.setId(d.getId());
             directionResponse.setName(d.getName());
-            directionResponse.setFutureInstitutionId(d.getFutureInstitution().getId());
-            directionResponse.setFutureInstitutionName(d.getFutureInstitution().getName());
+            directionResponse.setFutureInstitutionId(d.getDiplomaInstitution().getId());
+            directionResponse.setFutureInstitutionName(d.getDiplomaInstitution().getName());
             directionResponses.add(directionResponse);
         });
         return directionResponses;
@@ -75,8 +75,8 @@ public class DirectionService {
             DirectionResponse directionResponse = new DirectionResponse();
             directionResponse.setId(d.getId());
             directionResponse.setName(d.getName());
-            directionResponse.setFutureInstitutionId(d.getFutureInstitution().getId());
-            directionResponse.setFutureInstitutionName(d.getFutureInstitution().getName());
+            directionResponse.setFutureInstitutionId(d.getDiplomaInstitution().getId());
+            directionResponse.setFutureInstitutionName(d.getDiplomaInstitution().getName());
             directionResponses.add(directionResponse);
         });
         return directionResponses;
@@ -89,8 +89,8 @@ public class DirectionService {
             DirectionResponse directionResponse = new DirectionResponse();
             directionResponse.setId(direction.getId());
             directionResponse.setName(direction.getName());
-            directionResponse.setFutureInstitutionId(direction.getFutureInstitution().getId());
-            directionResponse.setFutureInstitutionName(direction.getFutureInstitution().getName());
+            directionResponse.setFutureInstitutionId(direction.getDiplomaInstitution().getId());
+            directionResponse.setFutureInstitutionName(direction.getDiplomaInstitution().getName());
             return directionResponse;
         } catch (Exception ex) {
             return new DirectionResponse();

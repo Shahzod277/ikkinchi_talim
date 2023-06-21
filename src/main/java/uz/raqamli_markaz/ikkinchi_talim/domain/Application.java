@@ -8,9 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.EduForm;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Language;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.EduForm;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 
 @Entity
 @Getter
@@ -31,7 +31,7 @@ public class Application extends AbstractEntity {
     private EduForm eduForm;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private FutureInstitution futureInstitution;
+    private DiplomaInstitution diplomaInstitution;
 
     @OneToOne(fetch = FetchType.LAZY)
     private User user;

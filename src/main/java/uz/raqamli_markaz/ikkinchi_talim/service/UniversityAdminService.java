@@ -9,9 +9,9 @@ import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.UpdateDiplomaStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
@@ -77,10 +77,10 @@ public class UniversityAdminService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         List<DiplomResponseAdmin> diplomResponseAdmins = new ArrayList<>();
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-        if (adminEntity.getFutureInstitution().getId() != null) {
+        if (adminEntity.getDiplomaInstitution().getId() != null) {
             if (status.equals("true") || status.equals("false")) {
                 Boolean aBoolean = Boolean.valueOf(status);
-                Page<Application> allDiplomebyUAdmin = applicationRepository.getAppDipForeign(adminEntity.getFutureInstitution().getId(), aBoolean, pageable);
+                Page<Application> allDiplomebyUAdmin = applicationRepository.getAppDipForeign(adminEntity.getDiplomaInstitution().getId(), aBoolean, pageable);
                 allDiplomebyUAdmin.forEach(application -> {
                     Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                     FileResponse fileResponse = getFileResponse(diploma.getId());
@@ -91,7 +91,7 @@ public class UniversityAdminService {
                 });
                 return new PageImpl<>(diplomResponseAdmins, pageable, allDiplomebyUAdmin.getTotalElements());
             } else {
-                Page<Application> allDiplomebyUAdmin = applicationRepository.getAppForeignDipStatusNull(adminEntity.getFutureInstitution().getId(), pageable);
+                Page<Application> allDiplomebyUAdmin = applicationRepository.getAppForeignDipStatusNull(adminEntity.getDiplomaInstitution().getId(), pageable);
                 allDiplomebyUAdmin.forEach(application -> {
                     Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
                     FileResponse fileResponse = getFileResponse(diploma.getId());
@@ -111,7 +111,7 @@ public class UniversityAdminService {
     @Transactional(readOnly = true)
     public Result getForeignDiplomaById(Integer diplomaId, Principal principal) {
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-        Optional<Application> application = applicationRepository.getAppAndForeignDiplomaById(adminEntity.getFutureInstitution().getId(), diplomaId);
+        Optional<Application> application = applicationRepository.getAppAndForeignDiplomaById(adminEntity.getDiplomaInstitution().getId(), diplomaId);
         if (application.isEmpty()) {
             return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
         }
@@ -170,8 +170,8 @@ public class UniversityAdminService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
         List<AppResponse> responses = new ArrayList<>();
-        if (adminEntity.getFutureInstitution().getId() != null) {
-            Page<Application> allApp = applicationRepository.getAllApp(adminEntity.getFutureInstitution().getId(), status, pageable);
+        if (adminEntity.getDiplomaInstitution().getId() != null) {
+            Page<Application> allApp = applicationRepository.getAllApp(adminEntity.getDiplomaInstitution().getId(), status, pageable);
             allApp.forEach(application -> {
                 AppResponse appResponse = new AppResponse(application);
                 Diploma diploma = diplomaRepository.getDiplomaByEnrolleeInfoId(application.getEnrolleeInfo().getId()).get();
@@ -190,10 +190,10 @@ public class UniversityAdminService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
         List<AppResponse> responses = new ArrayList<>();
-        if (adminEntity.getFutureInstitution().getId() != null) {
+        if (adminEntity.getDiplomaInstitution().getId() != null) {
             if (diplomaStatus.equals("true") || diplomaStatus.equals("false")) {
                 Boolean aBoolean = Boolean.valueOf(diplomaStatus);
-                Page<Application> allApp = applicationRepository.getAllAppByDiplomaStatusAndAppstatus(adminEntity.getFutureInstitution().getId(), aBoolean, appStatus, pageable);
+                Page<Application> allApp = applicationRepository.getAllAppByDiplomaStatusAndAppstatus(adminEntity.getDiplomaInstitution().getId(), aBoolean, appStatus, pageable);
                 allApp.forEach(application -> {
                     AppResponse appResponse = new AppResponse(application);
                     appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
@@ -205,7 +205,7 @@ public class UniversityAdminService {
                 return new PageImpl<>(responses, pageable, allApp.getTotalElements());
             } else {
                 List<AppResponse> responsese = new ArrayList<>();
-                Page<Application> allApp = applicationRepository.getAllAppByDiplomaStatusIsNull(adminEntity.getFutureInstitution().getId(), appStatus, pageable);
+                Page<Application> allApp = applicationRepository.getAllAppByDiplomaStatusIsNull(adminEntity.getDiplomaInstitution().getId(), appStatus, pageable);
                 allApp.forEach(application -> {
                     AppResponse appResponse = new AppResponse(application);
                     appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
@@ -223,7 +223,7 @@ public class UniversityAdminService {
     @Transactional(readOnly = true)
     public Result getAppById(Integer AppId, Principal principal) {
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-        Optional<Application> application = applicationRepository.getAppOne(adminEntity.getFutureInstitution().getId(), AppId);
+        Optional<Application> application = applicationRepository.getAppOne(adminEntity.getDiplomaInstitution().getId(), AppId);
         if (application.isEmpty()) {
             return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
         }
@@ -327,7 +327,7 @@ public class UniversityAdminService {
     public Result updateDiplomStatusbyApp(Principal principal, UpdateDiplomaStatus updateDiplomaStatus, Integer diplomaId) {
         try {
             AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-            Optional<Application> app = applicationRepository.getAppByUadmin(adminEntity.getFutureInstitution().getId(), diplomaId);
+            Optional<Application> app = applicationRepository.getAppByUadmin(adminEntity.getDiplomaInstitution().getId(), diplomaId);
             if (app.isPresent()) {
                 app.get().setDiplomaStatus(updateDiplomaStatus.getDiplomStatus());
                 app.get().setDiplomaMessage(updateDiplomaStatus.getDiplomMessage());
@@ -354,7 +354,7 @@ public class UniversityAdminService {
         try {
             AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
             Integer institutionId = adminEntity.getUniversities().stream().map(University::getInstitutionId).findFirst().get();
-            Optional<Application> application = applicationRepository.getAppAndForeignDiplomaById(adminEntity.getFutureInstitution().getId(), diplomaId);
+            Optional<Application> application = applicationRepository.getAppAndForeignDiplomaById(adminEntity.getDiplomaInstitution().getId(), diplomaId);
             if (application.isPresent()) {
                 String status = String.valueOf(application.get().getDiplomaStatus());
                 application.get().setDiplomaStatus(updateDiplomaStatus.getDiplomStatus());
@@ -381,7 +381,7 @@ public class UniversityAdminService {
     public Result updateStatusApp(Principal principal, UpdateAppStatus updateAppStatus, Integer appId) {
         try {
             AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-            Optional<Application> application = applicationRepository.getAppOne(adminEntity.getFutureInstitution().getId(), appId);
+            Optional<Application> application = applicationRepository.getAppOne(adminEntity.getDiplomaInstitution().getId(), appId);
             if (application.isPresent()) {
                 String status = String.valueOf(application.get().getDiplomaStatus());
                 switch (status) {
@@ -417,7 +417,7 @@ public class UniversityAdminService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
         List<AppResponse> responses = new ArrayList<>();
-        Page<Application> allApp = applicationRepository.searchAppByFirstnameAndLastname(adminEntity.getFutureInstitution().getId(), status, s, pageable);
+        Page<Application> allApp = applicationRepository.searchAppByFirstnameAndLastname(adminEntity.getDiplomaInstitution().getId(), status, s, pageable);
         allApp.forEach(application -> {
             AppResponse appResponse = new AppResponse(application);
 
@@ -441,7 +441,7 @@ public class UniversityAdminService {
             Boolean aBoolean = Boolean.valueOf(diplomaStatus);
 
             Page<Application> allApp = applicationRepository.
-                    searchAppByFirstnameAndLastnameByDiplomastatus(adminEntity.getFutureInstitution().getId(), appStatus, aBoolean, s, pageable);
+                    searchAppByFirstnameAndLastnameByDiplomastatus(adminEntity.getDiplomaInstitution().getId(), appStatus, aBoolean, s, pageable);
             allApp.forEach(application -> {
                 AppResponse appResponse = new AppResponse(application);
                 appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
@@ -453,7 +453,7 @@ public class UniversityAdminService {
             return new PageImpl<>(responses, pageable, allApp.getTotalElements());
         } else {
             Page<Application> applications = applicationRepository.
-                    searchAppByFirstnameAndLastnameByDiplomastatusIsNull(adminEntity.getFutureInstitution().getId(), appStatus, s, pageable);
+                    searchAppByFirstnameAndLastnameByDiplomastatusIsNull(adminEntity.getDiplomaInstitution().getId(), appStatus, s, pageable);
             applications.forEach(application -> {
                 AppResponse appResponse = new AppResponse(application);
                 appResponse.setEnrolleeResponse(new EnrolleeResponse(application.getEnrolleeInfo()));
@@ -516,7 +516,7 @@ public class UniversityAdminService {
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
         if (status.equals("true") || status.equals("false")) {
             Boolean aBoolean = Boolean.valueOf(status);
-            Page<Application> allDiplomebyUAdmin = applicationRepository.searchForeignDiplomas(adminEntity.getFutureInstitution().getId(), aBoolean, s, pageable);
+            Page<Application> allDiplomebyUAdmin = applicationRepository.searchForeignDiplomas(adminEntity.getDiplomaInstitution().getId(), aBoolean, s, pageable);
             allDiplomebyUAdmin.forEach(application -> {
                 IIBRequest iibRequest = new IIBRequest();
                 iibRequest.setPinfl(application.getEnrolleeInfo().getPinfl());
@@ -538,7 +538,7 @@ public class UniversityAdminService {
             });
             return new PageImpl<>(diplomResponseAdmins, pageable, allDiplomebyUAdmin.getTotalElements());
         } else {
-            Page<Application> allDiplomebyUAdmin = applicationRepository.searchForeignDiplomaStatusNull(adminEntity.getFutureInstitution().getId(), s, pageable);
+            Page<Application> allDiplomebyUAdmin = applicationRepository.searchForeignDiplomaStatusNull(adminEntity.getDiplomaInstitution().getId(), s, pageable);
             allDiplomebyUAdmin.forEach(application -> {
                 IIBRequest iibRequest = new IIBRequest();
                 iibRequest.setPinfl(application.getEnrolleeInfo().getPinfl());
@@ -568,10 +568,10 @@ public class UniversityAdminService {
         Integer institutionId = adminEntity.getUniversities().stream().map(University::getInstitutionId).findFirst().get();
         List<CountApp> countDiploma = applicationRepository.getCountDiploma(institutionId);
         CountByUAdmin response = new CountByUAdmin();
-        if (adminEntity.getFutureInstitution() != null) {
-            List<CountApp> countApp = applicationRepository.getCountApp(adminEntity.getFutureInstitution().getId());
-            List<CountApp> countAppByDiplomaStatus = applicationRepository.getCountAppByDiplomaStatus(adminEntity.getFutureInstitution().getId());
-            List<CountApp> countForeignDiploma = applicationRepository.getCountForeignDiploma(adminEntity.getFutureInstitution().getId());
+        if (adminEntity.getDiplomaInstitution() != null) {
+            List<CountApp> countApp = applicationRepository.getCountApp(adminEntity.getDiplomaInstitution().getId());
+            List<CountApp> countAppByDiplomaStatus = applicationRepository.getCountAppByDiplomaStatus(adminEntity.getDiplomaInstitution().getId());
+            List<CountApp> countForeignDiploma = applicationRepository.getCountForeignDiploma(adminEntity.getDiplomaInstitution().getId());
             response.setCountApp(countApp);
             response.setCountForeignDiploma(countForeignDiploma);
             response.setCountAppByDiplomaStatus(countAppByDiplomaStatus);
@@ -583,13 +583,13 @@ public class UniversityAdminService {
     @Transactional(readOnly = true)
     public List<GetCountAppallDate> getCountAppandTodayByUAdmin(Principal principal) {
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-        return applicationRepository.getAppCountTodayByUAdmin(adminEntity.getFutureInstitution().getId());
+        return applicationRepository.getAppCountTodayByUAdmin(adminEntity.getDiplomaInstitution().getId());
     }
 
     @Transactional(readOnly = true)
     public List<GetAppByGender> getCountAppandGenderByUAdmin(Principal principal) {
         AdminEntity adminEntity = adminEntityRepository.getAdminUniversity(principal.getName()).get();
-        List<GetAppByGender> counAppAndGenderByUAdmin = applicationRepository.getCounAppAndGenderByUAdmin(adminEntity.getFutureInstitution().getId());
+        List<GetAppByGender> counAppAndGenderByUAdmin = applicationRepository.getCounAppAndGenderByUAdmin(adminEntity.getDiplomaInstitution().getId());
 
         return counAppAndGenderByUAdmin;
     }
@@ -603,8 +603,8 @@ public class UniversityAdminService {
         List<GetCountAppallDate> diplomaCountTodayByUAdmin = applicationRepository.getDiplomaCountTodayByUAdmin(institutionId);
         statistik.setDiplomaGenderCount(diplomaAndGender);
         statistik.setDiplomaCountToday(diplomaCountTodayByUAdmin);
-        List<GetCountAppallDate> foreignDiplomaCountTodayByUAdmin = applicationRepository.getForeignDiplomaCountTodayByUAdmin(adminEntity.getFutureInstitution().getId());
-        List<GetAppByGender> countForeingDiplomaAndGender = applicationRepository.getCountForeingDiplomaAndGender(adminEntity.getFutureInstitution().getId());
+        List<GetCountAppallDate> foreignDiplomaCountTodayByUAdmin = applicationRepository.getForeignDiplomaCountTodayByUAdmin(adminEntity.getDiplomaInstitution().getId());
+        List<GetAppByGender> countForeingDiplomaAndGender = applicationRepository.getCountForeingDiplomaAndGender(adminEntity.getDiplomaInstitution().getId());
         statistik.setForeigndiplomaGenderCount(countForeingDiplomaAndGender);
         statistik.setForeigndiplomaCountToday(foreignDiplomaCountTodayByUAdmin);
         return statistik;
@@ -627,9 +627,9 @@ public class UniversityAdminService {
         Integer institutionId = adminEntity.getUniversities().stream().map(University::getInstitutionId).findFirst().get();
         if (status.equals("true") || status.equals("false")) {
             Boolean aBoolean = Boolean.valueOf(status);
-            return applicationRepository.exportForeignDiplomaToExcel(adminEntity.getFutureInstitution().getId(), aBoolean);
+            return applicationRepository.exportForeignDiplomaToExcel(adminEntity.getDiplomaInstitution().getId(), aBoolean);
         }
-        return applicationRepository.exportForeignDiplomaNullToExcel(adminEntity.getFutureInstitution().getId());
+        return applicationRepository.exportForeignDiplomaNullToExcel(adminEntity.getDiplomaInstitution().getId());
     }
 
     @Transactional(readOnly = true)
@@ -638,11 +638,11 @@ public class UniversityAdminService {
         Integer institutionId = adminEntity.getUniversities().stream().map(University::getInstitutionId).findFirst().get();
         if (diplomaStatus.equals("true") || diplomaStatus.equals("false")) {
             Boolean aBoolean = Boolean.valueOf(diplomaStatus);
-            return applicationRepository.exportAppDiplomaTrueToExcel(adminEntity.getFutureInstitution().getId());
+            return applicationRepository.exportAppDiplomaTrueToExcel(adminEntity.getDiplomaInstitution().getId());
         } else if (diplomaStatus.equals("null")) {
-            return applicationRepository.exportAppByDiplomaNullToExcel(adminEntity.getFutureInstitution().getId());
+            return applicationRepository.exportAppByDiplomaNullToExcel(adminEntity.getDiplomaInstitution().getId());
         } else {
-            return applicationRepository.exportAppToExcel(adminEntity.getFutureInstitution().getId(), appStatus);
+            return applicationRepository.exportAppToExcel(adminEntity.getDiplomaInstitution().getId(), appStatus);
         }
     }
 

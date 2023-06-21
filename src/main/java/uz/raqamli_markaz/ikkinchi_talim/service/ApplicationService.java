@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.EduForm;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Language;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.EduForm;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ApplicationRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ApplicationStatus;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ApplicationResponse;
@@ -26,7 +26,7 @@ public class ApplicationService {
     private final EduFormRepository eduFormRepository;
     private final LanguageRepository languageRepository;
     private final ApplicationRepository applicationRepository;
-    private final FutureInstitutionRepository futureInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
     private final StoryMessageRepository storyMessageRepository;
 
     @Transactional
@@ -40,8 +40,8 @@ public class ApplicationService {
                 application.setLanguage(language);
                 EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
                 application.setEduForm(eduForm);
-                FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstitutionId()).get();
-                application.setFutureInstitution(futureInstitution);
+                DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstitutionId()).get();
+                application.setDiplomaInstitution(diplomaInstitution);
                 application.setStatus(ApplicationStatus.DEFAULT_STATUS.getMessage());
                 applicationRepository.save(application);
                 return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
@@ -61,8 +61,8 @@ public class ApplicationService {
             application.setLanguage(language);
             EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
             application.setEduForm(eduForm);
-            FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstitutionId()).get();
-            application.setFutureInstitution(futureInstitution);
+            DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstitutionId()).get();
+            application.setDiplomaInstitution(diplomaInstitution);
             application.setStatus(ApplicationStatus.DEFAULT_STATUS.getMessage());
             application.setMessage(null);
             application.setModifiedDate(LocalDateTime.now());

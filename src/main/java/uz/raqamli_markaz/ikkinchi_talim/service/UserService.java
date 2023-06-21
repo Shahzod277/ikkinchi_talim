@@ -9,10 +9,10 @@ import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.Data;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Document;
 import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
@@ -30,7 +30,7 @@ public class UserService {
     private final DiplomaRepository diplomaRepository;
     private final DocumentService documentService;
     private final ApplicationRepository applicationRepository;
-    private final InstitutionRepository institutionRepository;
+    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final IIBServiceApi iibServiceApi;
     private final FileService fileService;
     private final DocumentRepository documentRepository;
@@ -55,7 +55,7 @@ public class UserService {
             }
             Diploma diploma = new Diploma();
             diploma.setCountryName(countryName);
-            University university = institutionRepository.findById(institutionId).get();
+            University university = diplomaOldInstitutionRepository.findById(institutionId).get();
             diploma.setInstitutionId(institutionId);
             diploma.setInstitutionName(university.getInstitutionName());
             diploma.setInstitutionOldNameId(id);
@@ -93,7 +93,7 @@ public class UserService {
                 if (diploma.getId() == diplomaId) {
                     diploma.setCountryName(countryName);
                     diploma.setInstitutionId(institutionId);
-                    University university = institutionRepository.findById(institutionId).get();
+                    University university = diplomaOldInstitutionRepository.findById(institutionId).get();
                     diploma.setInstitutionName(university.getInstitutionName());
                     diploma.setInstitutionOldNameId(id);
                     diploma.setInstitutionOldName(university.getNameOz());
@@ -147,7 +147,7 @@ public class UserService {
             if (diploma.isPresent()) {
                 diploma.get().setCountryName(countryName);
                 diploma.get().setInstitutionId(institutionId);
-                University university = institutionRepository.findById(institutionId).get();
+                University university = diplomaOldInstitutionRepository.findById(institutionId).get();
                 diploma.get().setInstitutionName(university.getInstitutionName());
                 diploma.get().setInstitutionOldNameId(id);
                 diploma.get().setInstitutionOldName(university.getNameOz());

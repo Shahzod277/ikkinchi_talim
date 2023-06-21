@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.EduForm;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.EduForm;
 import java.util.List;
 
 @Getter
@@ -26,8 +26,8 @@ public class EduFormResponse {
         this.name = eduForm.getName();
         this.directionId = eduForm.getDirection().getId();
         this.directionName = eduForm.getDirection().getName();
-        this.futureInsId = eduForm.getDirection().getFutureInstitution().getId();
-        this.futureInstName = eduForm.getDirection().getFutureInstitution().getName();
+        this.futureInsId = eduForm.getDirection().getDiplomaInstitution().getId();
+        this.futureInstName = eduForm.getDirection().getDiplomaInstitution().getName();
         this.languages = languages;
     }
 
@@ -36,7 +36,7 @@ public class EduFormResponse {
         this.name = eduForm.getName();
         this.directionId = eduForm.getDirection().getId();
         this.directionName = eduForm.getDirection().getName();
-        this.futureInsId = eduForm.getDirection().getFutureInstitution().getId();
-        this.futureInstName = eduForm.getDirection().getFutureInstitution().getName();
+        this.futureInsId = eduForm.getDirection().getDiplomaInstitution().getId();
+        this.futureInstName = eduForm.getDirection().getDiplomaInstitution().getName();
     }
 }

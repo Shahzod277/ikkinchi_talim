@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.domain.classificator;
+package uz.raqamli_markaz.ikkinchi_talim.domain.diploma;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +14,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Specialities extends AbstractEntity {
+public class DiplomaSpecialities extends AbstractEntity {
 
     private Integer specialitiesId;
     private Integer institutionId;

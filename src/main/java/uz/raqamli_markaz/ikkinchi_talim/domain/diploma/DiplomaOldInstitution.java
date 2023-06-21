@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.domain.classificator;
+package uz.raqamli_markaz.ikkinchi_talim.domain.diploma;
 
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,10 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FutureInstitution extends AbstractEntity {
+public class DiplomaOldInstitution extends AbstractEntity {
 
-    private String name;
+    private String institutionId;
+    private String institutionName;
+    private String institutionOldId;
+    private String institutionOldName;
 }

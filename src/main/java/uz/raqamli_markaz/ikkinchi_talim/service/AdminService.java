@@ -8,9 +8,10 @@ import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.Data;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.*;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Role;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Role;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DefaultRole;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.UserRequest;
@@ -28,7 +29,7 @@ public class AdminService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final FutureInstitutionRepository futureInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
     private final AdminEntityRepository adminEntityRepository;
     private final UniversityRepository universityRepository;
     private final ApplicationRepository applicationRepository;
@@ -51,10 +52,10 @@ public class AdminService {
                 User saveUser = userRepository.save(user);
                 AdminEntity adminEntity = new AdminEntity();
                 if (request.getFutureInstId() == null) {
-                    adminEntity.setFutureInstitution(null);
+                    adminEntity.setDiplomaInstitution(null);
                 } else {
-                    FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstId()).get();
-                    adminEntity.setFutureInstitution(futureInstitution);
+                    DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstId()).get();
+                    adminEntity.setDiplomaInstitution(diplomaInstitution);
                 }
                 List<University> universities = universityRepository.findAllByInstitutionId(request.getInstitutionId());
                 adminEntity.setUniversities(universities);
@@ -80,10 +81,10 @@ public class AdminService {
                     adminEntity.getUser().setPassword(passwordEncoder.encode(request.getPinfl()));
                     User save = userRepository.save(byPhoneNumber.get());
                     if (request.getFutureInstId() == null) {
-                        adminEntity.setFutureInstitution(null);
+                        adminEntity.setDiplomaInstitution(null);
                     } else {
-                        FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstId()).get();
-                        adminEntity.setFutureInstitution(futureInstitution);
+                        DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstId()).get();
+                        adminEntity.setDiplomaInstitution(diplomaInstitution);
                     }
                     adminEntity.getUniversities().clear();
                     List<University> universities = universityRepository.findAllByInstitutionId(request.getInstitutionId());
@@ -97,8 +98,8 @@ public class AdminService {
             adminEntity.getUser().setPhoneNumber(request.getPinfl());
             adminEntity.getUser().setPassword(passwordEncoder.encode(request.getPinfl()));
             User save = userRepository.save(adminEntity.getUser());
-            FutureInstitution futureInstitution = futureInstitutionRepository.findById(request.getFutureInstId()).get();
-            adminEntity.setFutureInstitution(futureInstitution);
+            DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(request.getFutureInstId()).get();
+            adminEntity.setDiplomaInstitution(diplomaInstitution);
             adminEntity.getUniversities().clear();
             List<University> universities = universityRepository.findAllByInstitutionId(request.getInstitutionId());
             adminEntity.setUniversities(universities);
@@ -121,9 +122,9 @@ public class AdminService {
             UAdminResponse uAdminResponse = new UAdminResponse();
             uAdminResponse.setId(adminEntity.getId());
             uAdminResponse.setPinfl(adminEntity.getUser().getPhoneNumber());
-            if (adminEntity.getFutureInstitution() != null) {
-                uAdminResponse.setFutureInstId(adminEntity.getFutureInstitution().getId());
-                uAdminResponse.setFutureInstName(adminEntity.getFutureInstitution().getName());
+            if (adminEntity.getDiplomaInstitution() != null) {
+                uAdminResponse.setFutureInstId(adminEntity.getDiplomaInstitution().getId());
+                uAdminResponse.setFutureInstName(adminEntity.getDiplomaInstitution().getName());
             } else {
                 uAdminResponse.setFutureInstId(0);
                 uAdminResponse.setFutureInstName(null);
@@ -141,9 +142,9 @@ public class AdminService {
         UAdminResponse uAdminResponse = new UAdminResponse();
         uAdminResponse.setId(adminEntity.getId());
         uAdminResponse.setPinfl(adminEntity.getUser().getPhoneNumber());
-        if (adminEntity.getFutureInstitution() != null) {
-            uAdminResponse.setFutureInstId(adminEntity.getFutureInstitution().getId());
-            uAdminResponse.setFutureInstName(adminEntity.getFutureInstitution().getName());
+        if (adminEntity.getDiplomaInstitution() != null) {
+            uAdminResponse.setFutureInstId(adminEntity.getDiplomaInstitution().getId());
+            uAdminResponse.setFutureInstName(adminEntity.getDiplomaInstitution().getName());
         } else {
             uAdminResponse.setFutureInstId(0);
             uAdminResponse.setFutureInstName(null);
@@ -162,9 +163,9 @@ public class AdminService {
             UAdminResponse uAdminResponse = new UAdminResponse();
             uAdminResponse.setId(adminEntity.getId());
             uAdminResponse.setPinfl(adminEntity.getUser().getPhoneNumber());
-            if (adminEntity.getFutureInstitution() != null) {
-                uAdminResponse.setFutureInstId(adminEntity.getFutureInstitution().getId());
-                uAdminResponse.setFutureInstName(adminEntity.getFutureInstitution().getName());
+            if (adminEntity.getDiplomaInstitution() != null) {
+                uAdminResponse.setFutureInstId(adminEntity.getDiplomaInstitution().getId());
+                uAdminResponse.setFutureInstName(adminEntity.getDiplomaInstitution().getName());
             } else {
                 uAdminResponse.setFutureInstId(0);
                 uAdminResponse.setFutureInstName(null);

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Direction;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Direction;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ public class DirectionResponse {
     public DirectionResponse(Direction direction) {
         this.id = direction.getId();
         this.name = direction.getName();
-        this.futureInstitutionId = direction.getFutureInstitution().getId();
-        this.futureInstitutionName = direction.getFutureInstitution().getName();
+        this.futureInstitutionId = direction.getDiplomaInstitution().getId();
+        this.futureInstitutionName = direction.getDiplomaInstitution().getName();
     }
 }

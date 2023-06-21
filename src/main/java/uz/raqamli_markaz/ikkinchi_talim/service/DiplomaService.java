@@ -14,9 +14,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaResponseInfo;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Diploma;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Country;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaStatusRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
@@ -26,7 +25,6 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.Language;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 
 @Getter
 @Setter

@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class AdminEntity extends AbstractEntity {
     private String fistName;
     private String lastname;
     @OneToOne(fetch = FetchType.LAZY)
-    private FutureInstitution futureInstitution;
+    private DiplomaInstitution diplomaInstitution;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<University> universities = new ArrayList<>();

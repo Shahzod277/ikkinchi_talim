@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.raqamli_markaz.ikkinchi_talim.domain.classificator.FutureInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.FutureInstitutionRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.FutureInstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
-import uz.raqamli_markaz.ikkinchi_talim.repository.FutureInstitutionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,14 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FutureInstitutionService {
 
-    private final FutureInstitutionRepository futureInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
 
     public Result createFutureInstitution(FutureInstitutionRequest request) {
         try {
-            FutureInstitution futureInstitution = new FutureInstitution();
-            futureInstitution.setName(request.getName());
-            futureInstitutionRepository.save(futureInstitution);
-            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, new FutureInstitutionResponse(futureInstitution));
+            DiplomaInstitution diplomaInstitution = new DiplomaInstitution();
+            diplomaInstitution.setName(request.getName());
+            diplomaInstitutionRepository.save(diplomaInstitution);
+            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, new FutureInstitutionResponse(diplomaInstitution));
         } catch (Exception ex) {
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
         }
@@ -35,32 +35,32 @@ public class FutureInstitutionService {
 
     public Result updateFutureInstitution(int id, FutureInstitutionRequest request) {
         try {
-            FutureInstitution futureInstitution = futureInstitutionRepository.findById(id).get();
-            futureInstitution.setName(request.getName());
-            futureInstitution.setModifiedDate(LocalDateTime.now());
-            futureInstitutionRepository.save(futureInstitution);
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, new FutureInstitutionResponse(futureInstitution));
+            DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(id).get();
+            diplomaInstitution.setName(request.getName());
+            diplomaInstitution.setModifiedDate(LocalDateTime.now());
+            diplomaInstitutionRepository.save(diplomaInstitution);
+            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, new FutureInstitutionResponse(diplomaInstitution));
         } catch (Exception ex) {
             return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
         }
     }
 
     public List<FutureInstitutionResponse> getAllFutureInstitution() {
-        return futureInstitutionRepository.findAll().stream()
+        return diplomaInstitutionRepository.findAll().stream()
                 .map(FutureInstitutionResponse::new).toList();
     }
 
     public FutureInstitutionResponse getFutureInstitutionById(int futureInstitutionId) {
         try {
-            FutureInstitution futureInstitution = futureInstitutionRepository.findById(futureInstitutionId).get();
-            return new FutureInstitutionResponse(futureInstitution);
+            DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findById(futureInstitutionId).get();
+            return new FutureInstitutionResponse(diplomaInstitution);
         } catch (Exception ex) {
             return new FutureInstitutionResponse();
         }
     }
     public Result deleteFutureInstitution(int futureInstitutionId) {
         try {
-            futureInstitutionRepository.deleteById(futureInstitutionId);
+            diplomaInstitutionRepository.deleteById(futureInstitutionId);
             return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
         } catch (Exception ex) {
             return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
@@ -70,14 +70,14 @@ public class FutureInstitutionService {
     public Page<FutureInstitutionResponse> getAllFutureInstitution(int page, int size) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return futureInstitutionRepository.findAll(pageable)
+        return diplomaInstitutionRepository.findAll(pageable)
                 .map(FutureInstitutionResponse::new);
     }
     @Transactional(readOnly = true)
     public Page<FutureInstitutionResponse> searchFutureInstitution(String text, int page, int size) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return futureInstitutionRepository.searchFuturuInst(text, pageable)
+        return diplomaInstitutionRepository.searchDiplomaInstitution(text, pageable)
                 .map(FutureInstitutionResponse::new);
     }
 }

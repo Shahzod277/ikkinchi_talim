@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.domain.classificator;
+package uz.raqamli_markaz.ikkinchi_talim.domain.diploma;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,11 +14,10 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Language extends AbstractEntity {
+public class Direction extends AbstractEntity {
 
-    private String language;
-    private Integer kvotaSoni;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private EduForm eduForm;
+    private DiplomaInstitution diplomaInstitution;
 }
