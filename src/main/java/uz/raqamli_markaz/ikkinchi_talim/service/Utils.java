@@ -39,4 +39,23 @@ public class Utils {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
     }
+
+    @Transactional
+    public void saveOldInstitution() {
+        try {
+            InstitutionResponse institutionsOldNames = diplomaApi.getInstitutionsOldNames();
+            Institutions institutions = institutionsOldNames.getInstitutionData().getInstitutions();
+            List<InstitutionDataItem> data = institutions.getData();
+            List<DiplomaInstitution> diplomaInstitutions = new ArrayList<>();
+            data.forEach(d -> {
+                if (d.getInstitutionTypeId() !=null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
+                    DiplomaInstitution diplomaInstitution = new DiplomaInstitution(d.getId(), d.getNameUz(), d.getNameOz());
+                    diplomaInstitutions.add(diplomaInstitution);
+                }
+            });
+            diplomaInstitutionRepository.saveAll(diplomaInstitutions);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+    }
 }
