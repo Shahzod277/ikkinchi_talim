@@ -53,8 +53,7 @@ public class Utils {
         try {
             List<DiplomaInstitution> all = diplomaInstitutionRepository.findAll();
             all.forEach(d -> {
-
-                new Thread(() -> {
+                Thread thread = new Thread(() -> {
                     InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
                     InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
                     List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
@@ -67,10 +66,15 @@ public class Utils {
                             diplomaOldInstitution.setInstitutionId(d.getInstitutionId());
                         }
                     });
-                })
+                });
+                try {
+                    thread.join();
+                    thread.start();
+                } catch (InterruptedException e) {
+                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                    throw new RuntimeException(e);
+                }
             });
-
-
 
 
         } catch (Exception e) {
