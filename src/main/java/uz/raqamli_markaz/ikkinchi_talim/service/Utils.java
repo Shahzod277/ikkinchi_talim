@@ -6,6 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
@@ -43,17 +46,16 @@ public class Utils {
     @Transactional
     public void saveOldInstitution() {
         try {
-            InstitutionResponse institutionsOldNames = diplomaApi.getInstitutionsOldNames();
-            Institutions institutions = institutionsOldNames.getInstitutionData().getInstitutions();
-            List<InstitutionDataItem> data = institutions.getData();
-            List<DiplomaInstitution> diplomaInstitutions = new ArrayList<>();
-            data.forEach(d -> {
-                if (d.getInstitutionTypeId() !=null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
-                    DiplomaInstitution diplomaInstitution = new DiplomaInstitution(d.getId(), d.getNameUz(), d.getNameOz());
-                    diplomaInstitutions.add(diplomaInstitution);
-                }
+
+
+
+            InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
+            InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
+            List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
+            dataItems.forEach(d -> {
+
             });
-            diplomaInstitutionRepository.saveAll(diplomaInstitutions);
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }

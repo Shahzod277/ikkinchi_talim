@@ -9,6 +9,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResp
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DArxivTokenResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialitiesResponse;
@@ -98,13 +99,13 @@ public class DiplomaApi {
                 .bodyToMono(InstitutionResponse.class)
                 .block();
     }
-    public InstitutionResponse getInstitutionsOldNames() {
+    public InstitutionOldNamesResponse getInstitutionsOldNames() {
         String url = "https://d-arxiv.edu.uz/api/v2/reference/institution-old-names";
         return this.webClient.get()
                 .uri(url)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
                 .retrieve()
-                .bodyToMono(InstitutionResponse.class)
+                .bodyToMono(InstitutionOldNamesResponse.class)
                 .block();
     }
     public DiplomaSerials getDiplomaSerials() {
