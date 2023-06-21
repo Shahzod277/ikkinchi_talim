@@ -10,10 +10,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import uz.raqamli_talim.qabul_xotm.api_integration.ApiConstant;
-import uz.raqamli_talim.qabul_xotm.domain.HemisTokenEntity;
-import uz.raqamli_talim.qabul_xotm.repository.HemisTokenEntityRepository;
-
+import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
+import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
+import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 

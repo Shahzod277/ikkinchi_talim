@@ -8,7 +8,7 @@ import lombok.Getter;
 public class DataCreateDiplomaResponse {
 
 	@JsonProperty("diploma")
-	private Diploma diploma;
+	private DiplomaResponse diplomaResponse;
 
 	@JsonProperty("errors")
 	private List<Object> errors;

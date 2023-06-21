@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class Diploma{
+public class DiplomaResponse {
 
 	@JsonProperty("pinfl")
 	private Long pinfl;

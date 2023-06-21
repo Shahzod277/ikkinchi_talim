@@ -3,7 +3,7 @@ package uz.raqamli_markaz.ikkinchi_talim.api.hemis_university_speciality_api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import uz.raqamli_talim.qabul_xotm.domain.HemisTokenEntity;
+import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
 
 @Getter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ public class HemisTokenResponse {
     private Long expires_in;
     private String scope;
 
-    public HemisTokenResponse(HemisTokenEntity hemisTokenEntity) {
-        this.access_token = hemisTokenEntity.getToken();
+    public HemisTokenResponse(TokenEntity tokenEntity) {
+        this.access_token = tokenEntity.getToken();
     }
 }

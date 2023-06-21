@@ -44,7 +44,6 @@ public class DiplomaApi {
 
     }
 
-
     public List<DiplomaResponseInfo> getDiploma(String pinfl) {
 
         String DIPLOMA_URL = "https://d-arxiv.edu.uz/api/v2/diploma/get?pinfl=" + pinfl;
@@ -56,6 +55,7 @@ public class DiplomaApi {
                 .collectList()
                 .block();
     }
+
     // ta'lim daraja bakalavr , magistr
     public CreateDiplomaResponse createDiploma(CreateDiplomaRequest request) {
 

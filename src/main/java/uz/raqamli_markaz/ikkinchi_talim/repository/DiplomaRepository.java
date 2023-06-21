@@ -12,10 +12,8 @@ import java.util.Optional;
 @Repository
 public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
 
-    @Query(nativeQuery = true, value = "select * from diploma d " +
-            "join enrollee_info ei on ei.id = d.enrollee_info_id " +
-            "join users u on ei.user_id = u.id where u.phone_number = ?1 and d.degree_id != 3 ")
-    List<Diploma> findAllByEnrolleeInfo(String phoneNumber);
+    @Query("select d from Diploma d where d.user.pinfl = ?1 ")
+    List<Diploma> findAllDiplomaByUser(String pinfl);
 
     @Query(nativeQuery = true, value = "select * from diploma d " +
             "join enrollee_info ei on ei.id = d.enrollee_info_id " +

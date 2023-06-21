@@ -16,6 +16,7 @@ public class Citizen{
 
 	@JsonProperty("passport_serial")
 	private String passportSerial;
+
 	@JsonProperty("given_date")
 	private String givenDate;
 }

@@ -34,7 +34,7 @@ public class DiplomaResponse {
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldNameId();
+        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
@@ -52,7 +52,7 @@ public class DiplomaResponse {
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldNameId();
+        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
