@@ -31,15 +31,6 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             "join users u on ei.user_id = u.id where u.phone_number = ?1 ")
     List<Diploma> findAllDiplomaByEnrollee(String phoneNumber);
 
-
-    @Query(value = "select d from   Diploma  d where d.institutionId=?1 and d.isActive=true ")
-    Page<Diploma> getAllDiplomebyUAdmin(Integer id, Pageable pageable);
-
-
-    @Query("select d from  Diploma  as d where d.institutionId=?1 and d.isActive=true and d.id=?2 ")
-    Optional<Diploma> getByIdDiplomebyUAdmin(Integer institutionId, Integer diplomaId);
-
-
     @Query("select d from  Diploma as d where d.enrolleeInfo.id=?1 and d.isActive=true ")
     Optional<Diploma> getDiplomaByEnrolleeInfoId(Integer id);
 

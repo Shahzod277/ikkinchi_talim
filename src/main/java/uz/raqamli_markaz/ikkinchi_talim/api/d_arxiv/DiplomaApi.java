@@ -80,16 +80,17 @@ public class DiplomaApi {
                 .bodyToMono(FormEduResponse.class)
                 .block();
     }
-    public SpecialitiesResponse getSpecialities() {
+    public uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse getSpecialities() {
 
         String url = "https://d-arxiv.edu.uz/api/v2/reference/specialities";
         return this.webClient.get()
                 .uri(url)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
                 .retrieve()
-                .bodyToMono(SpecialitiesResponse.class)
+                .bodyToMono(uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse.class)
                 .block();
     }
+
     public InstitutionResponse getInstitutions() {
         String url = "https://d-arxiv.edu.uz/api/v2/reference/institutions";
         return this.webClient.get()

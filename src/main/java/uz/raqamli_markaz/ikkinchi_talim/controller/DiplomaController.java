@@ -20,11 +20,6 @@ public class DiplomaController {
     private final DiplomaApi diplomaApi;
     private final DiplomaService diplomaService;
 
-    @GetMapping("create/specialities")
-    public ResponseEntity<?> createSpecialities() {
-        Result result = diplomaApi.saveSpecialities();
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
 
     @GetMapping("getUniversities")
     public ResponseEntity<?> getUniversities() {

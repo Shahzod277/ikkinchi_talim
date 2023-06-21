@@ -14,7 +14,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiplomaSpecialities extends AbstractEntity {
+public class DiplomaSpeciality extends AbstractEntity {
 
     private Integer specialitiesId;
     private Integer institutionId;
@@ -25,7 +25,4 @@ public class DiplomaSpecialities extends AbstractEntity {
     private String nameRu;
     private String nameEn;
     private Integer beginYear;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private University university;
 }

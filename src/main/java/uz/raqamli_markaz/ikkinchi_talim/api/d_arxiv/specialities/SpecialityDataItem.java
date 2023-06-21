@@ -1,7 +1,9 @@
 package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
+@Getter
 public class SpecialityDataItem {
 
 	@JsonProperty("status_id")
@@ -11,7 +13,7 @@ public class SpecialityDataItem {
 	private Object code;
 
 	@JsonProperty("name_ru")
-	private Object nameRu;
+	private String nameRu;
 
 	@JsonProperty("id")
 	private Integer id;
@@ -29,7 +31,7 @@ public class SpecialityDataItem {
 	private Integer institutionId;
 
 	@JsonProperty("name_en")
-	private Object nameEn;
+	private String nameEn;
 
 	@JsonProperty("begin_year")
 	private Integer beginYear;

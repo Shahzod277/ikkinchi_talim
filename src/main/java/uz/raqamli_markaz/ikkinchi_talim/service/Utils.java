@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
@@ -12,10 +11,14 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.Instit
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialityDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSpecialityRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,7 @@ public class Utils {
 
     private final DiplomaInstitutionRepository diplomaInstitutionRepository;
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
+    private final DiplomaSpecialityRepository diplomaSpecialityRepository;
     private final DiplomaApi diplomaApi;
 
     @Transactional
@@ -80,6 +84,30 @@ public class Utils {
                 }
             });
             diplomaOldInstitutionRepository.saveAll(diplomaOldInstitutions);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    public void saveSpecialities() {
+        try {
+            SpecialitiesResponse specialitiesResponse = diplomaApi.getSpecialities();
+            List<SpecialityDataItem> dataItems = specialitiesResponse.getSpecialityData().getSpecialities().getData();
+            List<DiplomaSpeciality> diplomaSpecialities = new ArrayList<>();
+            dataItems.forEach(d -> {
+                DiplomaSpeciality diplomaSpeciality = new DiplomaSpeciality();
+                diplomaSpeciality.setSpecialitiesId(d.getId());
+                diplomaSpeciality.setNameUz(d.getNameUz());
+                diplomaSpeciality.setNameOz(d.getNameOz());
+                diplomaSpeciality.setNameRu(d.getNameRu());
+                diplomaSpeciality.setNameEn(d.getNameEn());
+                diplomaSpeciality.setInstitutionId(d.getInstitutionId());
+                diplomaSpeciality.setStatusId(d.getStatusId());
+                diplomaSpecialities.add(diplomaSpeciality);
+            });
+           diplomaSpecialityRepository.saveAll(diplomaSpecialities);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();
