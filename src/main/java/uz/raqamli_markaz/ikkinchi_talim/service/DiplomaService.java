@@ -38,12 +38,16 @@ public class DiplomaService {
     private final CountryRepository countryRepository;
     private final ApplicationRepository applicationRepository;
 
+    //bu integratsiyadan kelayotgan diplomlar
     @Transactional
-    public List<DiplomaResponse> saveAndGetDiplomaByDiplomaApi(String pinfl) {
+    public Result saveAndGetDiplomaByDiplomaApi(String pinfl) {
 
         List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(pinfl);
         if (diplomaByUser.size() == 0) {
             List<DiplomaResponseInfo> diplomas = diplomaApi.getDiploma(pinfl);
+            if (diplomas.size() == 0) {
+                return new Result("Sizning diplom malumotlaringiz d-arxiv.edu.uz tizimidan topilmadi", false);
+            }
             List<Diploma> diplomaList = new ArrayList<>();
             diplomas.forEach(diploma -> {
                 Thread thread = new Thread(() -> {
