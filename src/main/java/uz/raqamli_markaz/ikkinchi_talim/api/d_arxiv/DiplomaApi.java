@@ -71,7 +71,6 @@ public class DiplomaApi {
     }
 
     public FormEduResponse getFormEdu() {
-
         String url = "https://d-arxiv.edu.uz/api/v2/reference/edu-forms";
         return this.webClient.get()
                 .uri(url)
@@ -80,6 +79,7 @@ public class DiplomaApi {
                 .bodyToMono(FormEduResponse.class)
                 .block();
     }
+
     public uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse getSpecialities() {
 
         String url = "https://d-arxiv.edu.uz/api/v2/reference/specialities";

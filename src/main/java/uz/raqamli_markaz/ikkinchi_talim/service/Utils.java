@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
@@ -15,10 +18,13 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesRes
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialityDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSerialRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSpecialityRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +36,7 @@ public class Utils {
     private final DiplomaInstitutionRepository diplomaInstitutionRepository;
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final DiplomaSpecialityRepository diplomaSpecialityRepository;
+    private final DiplomaSerialRepository diplomaSerialRepository;
     private final DiplomaApi diplomaApi;
 
     @Transactional
@@ -40,7 +47,7 @@ public class Utils {
             List<InstitutionDataItem> data = institutions.getData();
             List<DiplomaInstitution> diplomaInstitutions = new ArrayList<>();
             data.forEach(d -> {
-                if (d.getInstitutionTypeId() !=null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
+                if (d.getInstitutionTypeId() != null && (d.getInstitutionTypeId() == 1 || d.getInstitutionTypeId() == 2)) {
                     DiplomaInstitution diplomaInstitution = new DiplomaInstitution();
                     diplomaInstitution.setClassificatorId(d.getId());
                     diplomaInstitution.setInstitutionNameUz(d.getNameUz());
@@ -115,10 +122,32 @@ public class Utils {
                 diplomaSpeciality.setStatusId(d.getStatusId());
                 diplomaSpecialities.add(diplomaSpeciality);
             });
-           diplomaSpecialityRepository.saveAll(diplomaSpecialities);
+            diplomaSpecialityRepository.saveAll(diplomaSpecialities);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();
         }
     }
+
+    @Transactional
+    public void getDiplomaSerial() {
+        try {
+            DiplomaSerials diplomaSerials = diplomaApi.getDiplomaSerials();
+            List<DataItemSerials> data = diplomaSerials.getData();
+            List<DiplomaSerial> diplomaSerialsList = new ArrayList<>();
+            data.forEach(d -> {
+                DiplomaSerial diplomaSerial = new DiplomaSerial();
+                diplomaSerial.setSerial(d.getSerial());
+                diplomaSerial.setDegreeId(d.getDegreeId());
+                diplomaSerial.setBeginYear(d.getBeginYear());
+                diplomaSerial.setEndYear(d.getEndYear());
+                diplomaSerialsList.add(diplomaSerial);
+            });
+            diplomaSerialRepository.saveAll(diplomaSerialsList);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+
 }
