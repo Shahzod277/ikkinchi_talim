@@ -7,6 +7,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DArxivTokenResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
@@ -45,14 +46,14 @@ public class DiplomaApi {
 
     }
 
-    public List<DiplomaResponseInfo> getDiploma(String pinfl) {
+    public List<DiplomaResponseApi> getDiploma(String pinfl) {
 
         String DIPLOMA_URL = "https://d-arxiv.edu.uz/api/v2/diploma/get?pinfl=" + pinfl;
         return this.webClient.get()
                 .uri(DIPLOMA_URL)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
                 .retrieve()
-                .bodyToFlux(DiplomaResponseInfo.class)
+                .bodyToFlux(DiplomaResponseApi.class)
                 .collectList()
                 .block();
     }

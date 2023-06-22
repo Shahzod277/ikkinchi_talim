@@ -17,7 +17,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 @AllArgsConstructor
 public class Diploma extends AbstractEntity {
 
-    private Integer id;
+    private Integer diplomaId; //D_ARXIVdan keladigon diplom id si
     private Integer institutionId;
     private String institutionName;
     private Integer institutionOldId;
@@ -32,6 +32,11 @@ public class Diploma extends AbstractEntity {
     private Integer diplomaSerialId;
     private String diplomaSerialAndNumber;
     private String countryName;
+    private String specialityCustomName;
+    private Integer statusId;
+    private String statusName;
+    private String diplomaUrl;
+    private String ilovaUrl;
 
     private Boolean isActive = Boolean.FALSE;
 

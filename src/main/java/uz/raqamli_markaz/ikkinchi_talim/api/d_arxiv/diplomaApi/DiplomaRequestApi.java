@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class DiplomaRequest{
+public class DiplomaRequestApi {
 
 	@JsonProperty("diploma_serial_id")
 	private Integer diplomaSerialId;
@@ -13,7 +13,7 @@ public class DiplomaRequest{
 	private String diplomaGivenDate;
 
 	@JsonProperty("diploma_type_id")
-	private Integer diplomaTypeId;
+	private Integer diplomaTypeId = 0;
 
 	@JsonProperty("speciality_id")
 	private Integer specialityId;
@@ -25,7 +25,7 @@ public class DiplomaRequest{
 	private Integer diplomaNumber;
 
 	@JsonProperty("edu_form_id")
-	private Integer eduFormId;
+	private Integer eduFormId = 3;
 
 	@JsonProperty("institution_id")
 	private Integer institutionId;
@@ -44,6 +44,13 @@ public class DiplomaRequest{
 
 	@JsonProperty("edu_duration_id")
 	private Integer eduDurationId;
+
 	@JsonProperty("speciality_custom_name")
 	private String speciality_custom_name;
+
+	@JsonProperty("diploma_url")
+	private String diplomaUrl;
+
+	@JsonProperty("ilova_url")
+	private String ilovaUrl;
 }
