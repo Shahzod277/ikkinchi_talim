@@ -44,4 +44,6 @@ public class DiplomaRequest{
 
 	@JsonProperty("edu_duration_id")
 	private Integer eduDurationId;
+	@JsonProperty("speciality_custom_name")
+	private String speciality_custom_name;
 }
