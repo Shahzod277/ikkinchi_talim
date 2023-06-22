@@ -13,6 +13,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaRequestApi
 @AllArgsConstructor
 public class DiplomaRequest {
 
+    private Integer id;
+
     @JsonProperty("country_id")
     private Integer countryId; // Umumiy o'zgaruvchi
 

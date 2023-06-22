@@ -302,7 +302,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaByIdAndEnrolleInfo(Principal principal, Integer diplomaId) {
         try {
-            Diploma diploma = diplomaRepository.findDiplomaByIdAndUser(principal.getName(), diplomaId).get();
+            Diploma diploma = diplomaRepository.findDiplomaByDiplomaId(principal.getName(), diplomaId).get();
             FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
             return new DiplomaResponse(diploma, fileResponse);
         } catch (Exception ex) {

@@ -27,9 +27,12 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,25 +56,25 @@ public class DiplomaService {
             }
             List<DiplomaResponse> diplomaResponses = new ArrayList<>();
             diplomas.stream().sorted(Comparator.comparing(DiplomaResponseApi::getStatusId)).forEach(diploma -> {
-                    if (String.valueOf(diploma.getDegreeId()).equals(ApiConstant.DEGREE_ID)) {
-                        if (diploma.getStatusId() == 1) {
-                            Diploma diplomaNew = createDiplomaNew(diploma);
-                            diplomaNew.setUser(user);
-                            Diploma save = diplomaRepository.save(diplomaNew);
-                            diplomaResponses.add(new DiplomaResponse(save));
-                        } else if (diploma.getStatusId() == 2) {
-                            Diploma diplomaNew = createDiplomaNew(diploma);
-                            diplomaNew.setUser(user);
-                            Diploma save = diplomaRepository.save(diplomaNew);
-                            diplomaResponses.add(new DiplomaResponse(save));
-                        } else if (diploma.getStatusId() == 8) {
-                            Diploma diplomaNew = createDiplomaNew(diploma);
-                            diplomaNew.setUser(user);
-                            Diploma save = diplomaRepository.save(diplomaNew);
-                            diplomaResponses.add(new DiplomaResponse(save));
-                        }
+                if (String.valueOf(diploma.getDegreeId()).equals(ApiConstant.DEGREE_ID)) {
+                    if (diploma.getStatusId() == 1) {
+                        Diploma diplomaNew = createDiplomaNew(diploma);
+                        diplomaNew.setUser(user);
+                        Diploma save = diplomaRepository.save(diplomaNew);
+                        diplomaResponses.add(new DiplomaResponse(save));
+                    } else if (diploma.getStatusId() == 2) {
+                        Diploma diplomaNew = createDiplomaNew(diploma);
+                        diplomaNew.setUser(user);
+                        Diploma save = diplomaRepository.save(diplomaNew);
+                        diplomaResponses.add(new DiplomaResponse(save));
+                    } else if (diploma.getStatusId() == 8) {
+                        Diploma diplomaNew = createDiplomaNew(diploma);
+                        diplomaNew.setUser(user);
+                        Diploma save = diplomaRepository.save(diplomaNew);
+                        diplomaResponses.add(new DiplomaResponse(save));
                     }
-                });
+                }
+            });
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
         }
         return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
@@ -108,7 +111,9 @@ public class DiplomaService {
                     diplomaNew.setCountryName(country.getName());
                     diplomaNew.setStatusId(diplomaResponseApi.getStatusId());
                     diplomaNew.setStatusName(diplomaResponseApi.getStatusName());
-                    diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());
+                    if (request.getSpeciality_custom_name() != null) {
+                        diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());
+                    }
                     diplomaRepository.save(diplomaNew);
                     return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
                 }
@@ -119,7 +124,9 @@ public class DiplomaService {
                 diplomaNew.setDegreeName(request.getDegreeName());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                 diplomaNew.setInstitutionName(request.getForeignInstitutionName());
-                diplomaNew.setSpecialityName(request.getSpeciality_custom_name());
+                if (request.getSpeciality_custom_name() != null) {
+                    diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());
+                }
                 diplomaNew.setCountryName(country.getName());
                 diplomaRepository.save(diplomaNew);
                 return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
@@ -132,16 +139,19 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result updateDiploma(String pinfl, CreateDiplomaRequest request) {
+    public Result updateDiploma(String pinfl, DiplomaRequest request) {
         try {
             User user = userRepository.findUserByPinfl(pinfl).get();
-            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(pinfl);
-            if (diplomaList.size() == 0) {
-                CreateDiplomaResponse diploma = diplomaApi.createDiploma(request);
-                DiplomaResponseApi diplomaResponseApi = diploma.getDataCreateDiplomaResponse().getDiplomaResponseApi();
-                Diploma diplomaNew = new Diploma();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), pinfl).get();
+            Country country = countryRepository.findById(request.getCountryId()).get();
+            if (request.getCountryId() == 1) {
+                Citizen citizen = new Citizen(user);
+                CreateDiplomaRequest createDiplomaRequest = new CreateDiplomaRequest(request.getDiplomaRequestApi(), citizen);
+                CreateDiplomaResponse createDiplomaResponse = diplomaApi.createDiploma(createDiplomaRequest);
+                DiplomaResponseApi diplomaResponseApi = createDiplomaResponse.getDataCreateDiplomaResponse().getDiplomaResponseApi();
                 diplomaNew.setUser(user);
                 diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
+                diplomaNew.setDiplomaId(diplomaResponseApi.getId());
                 diplomaNew.setDiplomaSerialAndNumber(diplomaResponseApi.getDiplomaSerial() + " " + diplomaResponseApi.getDiplomaNumber());
                 diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
                 diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
@@ -154,12 +164,66 @@ public class DiplomaService {
                 diplomaNew.setInstitutionOldName(diplomaResponseApi.getInstitutionOldName());
                 diplomaNew.setSpecialityId(diplomaResponseApi.getSpecialityId());
                 diplomaNew.setSpecialityName(diplomaResponseApi.getSpecialityName());
-                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+                diplomaNew.setCountryName(country.getName());
+                diplomaNew.setStatusId(diplomaResponseApi.getStatusId());
+                diplomaNew.setStatusName(diplomaResponseApi.getStatusName());
+                diplomaNew.setModifiedDate(LocalDateTime.now());
+                if (request.getSpeciality_custom_name() != null) {
+                    diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());
+                }
+                diplomaRepository.save(diplomaNew);
+                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
             }
-            return new Result("Sizda diplom mavjud", false);
+            diplomaNew.setUser(user);
+            diplomaNew.setDiplomaSerialAndNumber(request.getDiplomaSerial() + " " + request.getDiplomaRequestApi().getDiplomaNumber());
+            diplomaNew.setDegreeId(request.getDiplomaRequestApi().getDegreeId());
+            diplomaNew.setDegreeName(request.getDegreeName());
+            diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+            diplomaNew.setInstitutionName(request.getForeignInstitutionName());
+            if (request.getSpeciality_custom_name() != null) {
+                diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());
+            }
+            diplomaNew.setCountryName(country.getName());
+            diplomaNew.setModifiedDate(LocalDateTime.now());
+            diplomaRepository.save(diplomaNew);
+            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
         } catch (Exception exception) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
+            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+        }
+    }
+
+    @Transactional
+    public Result changeDiplomaStatusApi(Integer diplomaId, Integer statusId, String statusName) {
+        try {
+            Optional<Diploma> diploma = diplomaRepository.findDiplomaByDiplomaId(diplomaId);
+            if (diploma.isEmpty()) {
+                return new Result(ResponseMessage.NOT_FOUND.getMessage() + ": " + diplomaId, false);
+            }
+            diploma.get().setStatusId(statusId);
+            diploma.get().setStatusName(statusName);
+            diplomaRepository.save(diploma.get());
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR.getMessage(), false);
+        }
+    }
+
+    @Transactional
+    public Result diplomaIsActive(String pinfl, Integer diplomaId, Boolean b) {
+        try {
+            Boolean aBoolean = diplomaRepository.existsDiplomaByIsActiveCount(pinfl);
+            if (aBoolean) {
+                return new Result("Sizda belgilangan diplom bor", false);
+            }
+            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, pinfl).get();
+            diploma.setIsActive(b);
+            diplomaRepository.save(diploma);
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR.getMessage(), false);
         }
     }
 
@@ -170,7 +234,7 @@ public class DiplomaService {
 
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaByPrincipal(int diplomaId, String pinfl) {
-          return diplomaRepository.findDiplomaByIdAndUser(diplomaId, pinfl).map(DiplomaResponse::new).get();
+        return diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, pinfl).map(DiplomaResponse::new).get();
     }
 
     private Diploma createDiplomaNew(DiplomaResponseApi diplomaResponseApi) {
