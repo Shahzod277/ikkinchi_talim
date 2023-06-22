@@ -13,6 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaResponseInfo;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
@@ -87,21 +88,21 @@ public class DiplomaService {
     public Result createDiploma(CreateDiplomaRequest request) {
         try {
             CreateDiplomaResponse diploma = diplomaApi.createDiploma(request);
-            uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponse diplomaResponse = diploma.getDataCreateDiplomaResponse().getDiplomaResponse();
+            DiplomaResponseApi diplomaResponseApi = diploma.getDataCreateDiplomaResponse().getDiplomaResponseApi();
             Diploma diplomaNew = new Diploma();
-            diplomaNew.setDiplomaSerialId(diplomaResponse.getDiplomaSerialId());
-            diplomaNew.setDiplomaSerialAndNumber(diplomaResponse.getDiplomaSerial() + " " + diplomaResponse.getDiplomaNumber());
-            diplomaNew.setDegreeId(diplomaResponse.getDegreeId());
-            diplomaNew.setDegreeName(diplomaResponse.getDegreeName());
-            diplomaNew.setEduFinishingDate(diplomaResponse.getEduFinishingDate());
-            diplomaNew.setEduFormId(diplomaResponse.getEduFormId());
-            diplomaNew.setEduFormName(diplomaResponse.getEduFormName());
-            diplomaNew.setInstitutionId(diplomaResponse.getInstitutionId());
-            diplomaNew.setInstitutionName(diplomaResponse.getInstitutionName());
-            diplomaNew.setInstitutionOldId(diplomaResponse.getInstitutionOldNameId());
-            diplomaNew.setInstitutionOldName(diplomaResponse.getInstitutionOldName());
-            diplomaNew.setSpecialityId(diplomaResponse.getSpecialityId());
-            diplomaNew.setSpecialityName(diplomaResponse.getSpecialityName());
+            diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
+            diplomaNew.setDiplomaSerialAndNumber(diplomaResponseApi.getDiplomaSerial() + " " + diplomaResponseApi.getDiplomaNumber());
+            diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
+            diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
+            diplomaNew.setEduFinishingDate(diplomaResponseApi.getEduFinishingDate());
+            diplomaNew.setEduFormId(diplomaResponseApi.getEduFormId());
+            diplomaNew.setEduFormName(diplomaResponseApi.getEduFormName());
+            diplomaNew.setInstitutionId(diplomaResponseApi.getInstitutionId());
+            diplomaNew.setInstitutionName(diplomaResponseApi.getInstitutionName());
+            diplomaNew.setInstitutionOldId(diplomaResponseApi.getInstitutionOldNameId());
+            diplomaNew.setInstitutionOldName(diplomaResponseApi.getInstitutionOldName());
+            diplomaNew.setSpecialityId(diplomaResponseApi.getSpecialityId());
+            diplomaNew.setSpecialityName(diplomaResponseApi.getSpecialityName());
             return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
         } catch (Exception exception) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
