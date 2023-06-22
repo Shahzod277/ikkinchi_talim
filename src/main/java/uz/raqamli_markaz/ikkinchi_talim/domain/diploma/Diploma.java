@@ -32,6 +32,7 @@ public class Diploma extends AbstractEntity {
     private Integer diplomaSerialId;
     private String diplomaSerialAndNumber;
     private String countryName;
+
     private Boolean isActive = Boolean.FALSE;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -13,20 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
-    @Query("select a from Application a where a.user.id =?1")
-    Optional<Application> findByUserId(Integer userId);
-
-    @Query(nativeQuery = true, value = "select a.id, l.id as tilId, l.language as tilName, " +
-            " ef.id as shaklId, ef.name as shaklName, d.id as directionId, d.name as directionName, " +
-            "fi.id as futureInstitutionId, fi.name as futureInstitutionName, " +
-            "a.status as appStatus, a.diploma_status as diplomaStatus, a.message as appMessage, " +
-            "a.diploma_message as diplomaMessage, a.created_date as createdDate from application a " +
-            "join edu_form ef on a.edu_form_id = ef.id " +
-            "join direction d on ef.direction_id = d.id " +
-            "join future_institution fi on a.future_institution_id = fi.id " +
-            "join language l on a.language_id = l.id " +
-            "join enrollee_info ei on a.user_id = ei.id  where ei.id=?1")
-    Optional<ApplicationResponse> findByAppByPrincipal(Integer userId);
+    @Query("select a from Application a where a.user.pinfl =?1")
+    Optional<Application> findAppByUser(String pinfl);
 
     @Query(nativeQuery = true, value = "select count(a.id) as count_today,(select count(a.id) from application a inner join enrollee_info ei on ei.id = a.enrollee_info_id " +
             " join diploma d on ei.id = d.enrollee_info_id " +
@@ -109,9 +97,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             "where d.institution_old_name_id is null and d.is_active=true " +
             "group by ei.gender ")
     List<GetAppByGender> getCountForeingDiplomaAndGenderAll();
-
-    @Query("select a from Application as a where a.enrolleeInfo.user.phoneNumber=?1")
-    Optional<Application> checkApp(String phoneNumber);
 
     @Query(nativeQuery = true, value = "select l.language as language, l.kvota_soni as kvota, count(a.id) as count from application a " +
             "join language l on l.id = a.language_id where l.edu_form_id=?1 group by l.language, l.kvota_soni")

@@ -57,7 +57,7 @@ public class EduFormService {
             List<Language> languages = new ArrayList<>();
             request.getLanguages().forEach(e -> {
                 Language language = languageRepository.findById(e.getId()).get();
-                language.setLanguage(e.getName());
+                language.setName(e.getName());
                 language.setKvotaSoni(e.getKvota());
                 language.setEduForm(saveEduform);
                 languages.add(language);
@@ -74,7 +74,7 @@ public class EduFormService {
         List<Language> languages = new ArrayList<>();
         request.getLanguages().forEach(l -> {
             Language language = new Language();
-            language.setLanguage(l.getName());
+            language.setName(l.getName());
             language.setKvotaSoni(l.getKvota());
             language.setEduForm(saveEduform);
             languages.add(language);

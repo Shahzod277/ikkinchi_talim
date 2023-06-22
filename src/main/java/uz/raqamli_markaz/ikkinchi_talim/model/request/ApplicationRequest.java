@@ -9,5 +9,5 @@ public class ApplicationRequest {
 
     private Integer languageId;
     private Integer eduFormId;
-    private Integer futureInstitutionId;
+    private Integer classificatorId;
 }

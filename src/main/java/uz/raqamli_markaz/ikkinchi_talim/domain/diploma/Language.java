@@ -16,7 +16,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @AllArgsConstructor
 public class Language extends AbstractEntity {
 
-    private String language;
+    private String name;
     private Integer kvotaSoni;
 
     @ManyToOne(fetch = FetchType.LAZY)

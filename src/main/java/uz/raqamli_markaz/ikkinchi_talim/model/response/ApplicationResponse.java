@@ -1,22 +1,32 @@
 package uz.raqamli_markaz.ikkinchi_talim.model.response;
 
-public interface ApplicationResponse {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 
-    Integer getId();
-    Integer getTilId();
-    String getTilName();
-    Integer getShaklId();
-    String getShaklName();
-    Integer getDirectionId();
-    String getDirectionName();
-    Integer getFutureInstitutionId();
-    String getFutureInstitutionName();
-    String getAppStatus();
-    String getDiplomaStatus();
-    String getAppMessage();
-    String getDiplomaMessage();
-    String getCreatedDate();
-/*
-     List<StoryMessageResponse> getStoryMessageResponse();
-*/
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ApplicationResponse {
+
+    private String status;
+    private Boolean diplomaStatus;
+    private String message;
+    private String diplomaMessage;
+    private String language;
+    private Integer diplomaInstitutionId;
+    private String diplomaInstitutionName;
+
+    public ApplicationResponse(Application application) {
+        this.status = application.getStatus();
+        this.diplomaStatus = application.getDiplomaStatus();
+        this.message = application.getMessage();
+        this.diplomaMessage = application.getDiplomaMessage();
+        this.language = application.getLanguage().getName();
+        this.diplomaInstitutionId = application.getDiplomaInstitution().getClassificatorId();
+        this.diplomaInstitutionName = application.getDiplomaInstitution().getInstitutionNameOz();
+    }
 }
