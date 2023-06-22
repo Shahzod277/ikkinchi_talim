@@ -77,9 +77,10 @@ public class DiplomaService {
                     throw new RuntimeException(e);
                 }
             });
-            return diplomaRepository.saveAll(diplomaList).stream().map(DiplomaResponse::new).toList();
+            List<DiplomaResponse> list = diplomaRepository.saveAll(diplomaList).stream().map(DiplomaResponse::new).toList();
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, list);
         }
-        return diplomaByUser.stream().map(DiplomaResponse::new).toList();
+        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
     }
 
     @Transactional
