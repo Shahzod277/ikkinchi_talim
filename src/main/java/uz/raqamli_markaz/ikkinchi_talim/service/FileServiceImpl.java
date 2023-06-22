@@ -40,8 +40,7 @@ public class FileServiceImpl implements FileService {
         if (!file.isEmpty()) {
             String random = RandomStringUtils.random(5, true, true);
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            String orginalName = fileName.replace("`", "");
-            Integer name = ThreadLocalRandom.current().nextInt(99999999, 1000000000);
+            int name = ThreadLocalRandom.current().nextInt(99999999, 1000000000);
             String s = FilenameUtils.getExtension(fileName);
             String fullFileName = key + "-" + random + name + "." + s;
             String currentUrl = getCurrentUrl(fullFileName);
@@ -129,7 +128,7 @@ public class FileServiceImpl implements FileService {
 
     private String getCurrentUrl(String fileName) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/file/download/")
+                .path("/api/public/download/")
                 .path(fileName).toUriString();
     }
 }
