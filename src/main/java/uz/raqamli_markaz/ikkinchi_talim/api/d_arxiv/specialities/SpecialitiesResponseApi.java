@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class SpecialitiesResponse{
+public class SpecialitiesResponseApi {
 
 	@JsonProperty("data")
 	private SpecialityData specialityData;

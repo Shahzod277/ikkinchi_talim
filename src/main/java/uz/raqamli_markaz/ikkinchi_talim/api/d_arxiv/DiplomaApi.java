@@ -12,8 +12,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSeria
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialitiesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 
 import java.util.List;
@@ -81,14 +81,14 @@ public class DiplomaApi {
                 .block();
     }
 
-    public uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse getSpecialities() {
+    public SpecialitiesResponseApi getSpecialities() {
 
         String url = "https://d-arxiv.edu.uz/api/v2/reference/specialities";
         return this.webClient.get()
                 .uri(url)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
                 .retrieve()
-                .bodyToMono(uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse.class)
+                .bodyToMono(SpecialitiesResponseApi.class)
                 .block();
     }
 

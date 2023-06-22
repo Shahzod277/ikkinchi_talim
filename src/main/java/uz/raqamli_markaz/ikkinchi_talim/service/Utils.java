@@ -7,14 +7,13 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialityDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
@@ -108,8 +107,8 @@ public class Utils {
     @Transactional
     public void saveSpecialities() {
         try {
-            SpecialitiesResponse specialitiesResponse = diplomaApi.getSpecialities();
-            List<SpecialityDataItem> dataItems = specialitiesResponse.getSpecialityData().getSpecialities().getData();
+            SpecialitiesResponseApi specialitiesResponseApi = diplomaApi.getSpecialities();
+            List<SpecialityDataItem> dataItems = specialitiesResponseApi.getSpecialityData().getSpecialities().getData();
             List<DiplomaSpeciality> diplomaSpecialities = new ArrayList<>();
             dataItems.forEach(d -> {
                 DiplomaSpeciality diplomaSpeciality = new DiplomaSpeciality();
