@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
+
 import java.util.ArrayList;
 import java.util.List;
 

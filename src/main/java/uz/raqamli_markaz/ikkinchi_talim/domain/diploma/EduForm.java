@@ -15,8 +15,6 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 public class EduForm extends AbstractEntity {
 
     private String name;
+    private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private Direction direction;
 }

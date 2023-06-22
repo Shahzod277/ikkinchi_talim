@@ -24,15 +24,8 @@ public class Application extends AbstractEntity {
     private String message;
     private String diplomaMessage;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Language language;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private EduForm eduForm;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DiplomaInstitution diplomaInstitution;
-
+    @ManyToOne
+    private Kvota kvota;
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 }

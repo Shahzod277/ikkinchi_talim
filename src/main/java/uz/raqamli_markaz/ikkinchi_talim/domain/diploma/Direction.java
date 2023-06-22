@@ -17,7 +17,6 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 public class Direction extends AbstractEntity {
 
     private String name;
+    private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DiplomaInstitution diplomaInstitution;
 }

@@ -17,8 +17,5 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 public class Language extends AbstractEntity {
 
     private String name;
-    private Integer kvotaSoni;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private EduForm eduForm;
+    private String code;
 }
