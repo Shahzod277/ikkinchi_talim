@@ -15,6 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequ
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaStatusRequest;
@@ -25,7 +26,6 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,29 +85,45 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result createDiploma(CreateDiplomaRequest request) {
+    public Result createDiploma(String pinfl, CreateDiplomaRequest request) {
         try {
-            CreateDiplomaResponse diploma = diplomaApi.createDiploma(request);
-            DiplomaResponseApi diplomaResponseApi = diploma.getDataCreateDiplomaResponse().getDiplomaResponseApi();
-            Diploma diplomaNew = new Diploma();
-            diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
-            diplomaNew.setDiplomaSerialAndNumber(diplomaResponseApi.getDiplomaSerial() + " " + diplomaResponseApi.getDiplomaNumber());
-            diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
-            diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
-            diplomaNew.setEduFinishingDate(diplomaResponseApi.getEduFinishingDate());
-            diplomaNew.setEduFormId(diplomaResponseApi.getEduFormId());
-            diplomaNew.setEduFormName(diplomaResponseApi.getEduFormName());
-            diplomaNew.setInstitutionId(diplomaResponseApi.getInstitutionId());
-            diplomaNew.setInstitutionName(diplomaResponseApi.getInstitutionName());
-            diplomaNew.setInstitutionOldId(diplomaResponseApi.getInstitutionOldNameId());
-            diplomaNew.setInstitutionOldName(diplomaResponseApi.getInstitutionOldName());
-            diplomaNew.setSpecialityId(diplomaResponseApi.getSpecialityId());
-            diplomaNew.setSpecialityName(diplomaResponseApi.getSpecialityName());
-            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+            User user = userRepository.findUserByPinfl(pinfl).get();
+            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(pinfl);
+            if (diplomaList.size() == 0) {
+                CreateDiplomaResponse diploma = diplomaApi.createDiploma(request);
+                DiplomaResponseApi diplomaResponseApi = diploma.getDataCreateDiplomaResponse().getDiplomaResponseApi();
+                Diploma diplomaNew = new Diploma();
+                diplomaNew.setUser(user);
+                diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
+                diplomaNew.setDiplomaSerialAndNumber(diplomaResponseApi.getDiplomaSerial() + " " + diplomaResponseApi.getDiplomaNumber());
+                diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
+                diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
+                diplomaNew.setEduFinishingDate(diplomaResponseApi.getEduFinishingDate());
+                diplomaNew.setEduFormId(diplomaResponseApi.getEduFormId());
+                diplomaNew.setEduFormName(diplomaResponseApi.getEduFormName());
+                diplomaNew.setInstitutionId(diplomaResponseApi.getInstitutionId());
+                diplomaNew.setInstitutionName(diplomaResponseApi.getInstitutionName());
+                diplomaNew.setInstitutionOldId(diplomaResponseApi.getInstitutionOldNameId());
+                diplomaNew.setInstitutionOldName(diplomaResponseApi.getInstitutionOldName());
+                diplomaNew.setSpecialityId(diplomaResponseApi.getSpecialityId());
+                diplomaNew.setSpecialityName(diplomaResponseApi.getSpecialityName());
+                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+            }
+            return new Result("Sizda diplom mavjud", false);
         } catch (Exception exception) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<DiplomaResponse> getAllDiplomaByPrincipal(String pinfl) {
+        return diplomaRepository.findAllDiplomaByUser(pinfl).stream().map(DiplomaResponse::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public DiplomaResponse getDiplomaByPrincipal(int diplomaId, String pinfl) {
+          return diplomaRepository.findDiplomaByIdAndUser(diplomaId, pinfl).map(DiplomaResponse::new).get();
     }
 
     // Admin panel
@@ -130,16 +146,6 @@ public class DiplomaService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         return diplomaRepository.findAll(pageable).map(DiplomaResponse::new);
-    }
-
-    @Transactional(readOnly = true)
-    public DiplomaResponse getDiplomaById(int diplomaId) {
-        try {
-            Diploma diploma = diplomaRepository.findById(diplomaId).get();
-            return new DiplomaResponse(diploma);
-        } catch (Exception ex) {
-            return new DiplomaResponse();
-        }
     }
 
     @Transactional
