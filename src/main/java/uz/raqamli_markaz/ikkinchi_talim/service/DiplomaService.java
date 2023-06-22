@@ -258,20 +258,6 @@ public class DiplomaService {
         return diplomaNew;
     }
 
-    // Admin panel
-    @Transactional
-    public Result updateDiplomaStatus(DiplomaStatusRequest request) {
-        try {
-            Application application = applicationRepository.findById(request.getApplicationId()).get();
-            application.setDiplomaStatus(request.getDiplomaStatus());
-            application.setMessage(request.getMessage());
-            applicationRepository.save(application);
-            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
-        } catch (Exception exception) {
-            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-        }
-    }
-
     @Transactional(readOnly = true)
     public Page<DiplomaResponse> getAllDiploma(int page, int size) {
         if (page > 0) page = page - 1;
