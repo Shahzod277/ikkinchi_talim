@@ -11,12 +11,10 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiplomaResponse {
-
     private Integer id;
-    private String countryName;
     private Integer institutionId;
     private String institutionName;
-    private Integer institutionOldNameId;
+    private Integer institutionOldId;
     private String institutionOldName;
     private Integer degreeId;
     private String degreeName;
@@ -25,16 +23,22 @@ public class DiplomaResponse {
     private Integer specialityId;
     private String specialityName;
     private String eduFinishingDate;
-    private String diplomaNumberAndDiplomaSerial;
-    private Boolean isActive;
-    private FileResponse fileResponse;
+    private Integer diplomaSerialId;
+    private String diplomaSerialAndNumber;
+    private String countryName;
+    private String specialityCustomName;
+    private Integer statusId;
+    private String statusName;
+    private String diplomaUrl;
+    private String ilovaUrl;
+
+    private Boolean isActive ;
 
     public DiplomaResponse(Diploma diploma, FileResponse fileResponse) {
         this.id = diploma.getId();
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
@@ -42,8 +46,9 @@ public class DiplomaResponse {
         this.specialityId = diploma.getSpecialityId();
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaNumberAndDiplomaSerial = diploma.getDiplomaSerialAndNumber();
-        this.fileResponse = fileResponse;
+        this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
+        this.ilovaUrl = diploma.getIlovaUrl();
+        this.diplomaUrl = diploma.getDiplomaUrl();
         this.isActive = diploma.getIsActive();
     }
 
@@ -52,7 +57,6 @@ public class DiplomaResponse {
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
@@ -60,7 +64,9 @@ public class DiplomaResponse {
         this.specialityId = diploma.getSpecialityId();
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaNumberAndDiplomaSerial = diploma.getDiplomaSerialAndNumber();
+        this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
+        this.ilovaUrl = diploma.getIlovaUrl();
+        this.diplomaUrl = diploma.getDiplomaUrl();
         this.isActive = diploma.getIsActive();
 
     }

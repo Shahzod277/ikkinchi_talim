@@ -28,6 +28,7 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -46,11 +47,11 @@ public class DiplomaService {
 
     //bu integratsiyadan kelayotgan diplomlar
     @Transactional
-    public Result saveAndGetDiplomaByDiplomaApi(String pinfl) {
-        User user = userRepository.findUserByPinfl(pinfl).get();
-        List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(pinfl);
+    public Result saveAndGetDiplomaByDiplomaApi(Principal principal) {
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(principal.getName());
         if (diplomaByUser.size() == 0) {
-            List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(pinfl);
+            List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(user.getPinfl());
             if (diplomas.size() == 0) {
                 return new Result("Sizning diplom malumotlaringiz d-arxiv.edu.uz tizimidan topilmadi", false);
             }
@@ -81,10 +82,10 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result createDiploma(String pinfl, DiplomaRequest request) {
+    public Result createDiploma(Principal principal, DiplomaRequest request) {
         try {
-            User user = userRepository.findUserByPinfl(pinfl).get();
-            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(pinfl);
+            User user = userRepository.findUserByPinfl(principal.getName()).get();
+            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(principal.getName());
             Country country = countryRepository.findById(request.getCountryId()).get();
             if (diplomaList.size() == 0) {
                 if (request.getCountryId() == 1) {
@@ -139,10 +140,10 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result updateDiploma(String pinfl, DiplomaRequest request) {
+    public Result updateDiploma(Principal principal, DiplomaRequest request) {
         try {
-            User user = userRepository.findUserByPinfl(pinfl).get();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), pinfl).get();
+            User user = userRepository.findUserByPinfl(principal.getName()).get();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), principal.getName()).get();
             Country country = countryRepository.findById(request.getCountryId()).get();
             if (request.getCountryId() == 1) {
                 Citizen citizen = new Citizen(user);
@@ -266,14 +267,17 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result deleteDiploma(int diplomaId) {
+    public Result deleteDiploma(Integer id, Principal principal) {
         try {
-            diplomaRepository.deleteById(diplomaId);
+            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, principal.getName()).get();
+            diplomaRepository.deleteById(id);
             return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
         } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
         }
     }
+
 
     @Transactional(readOnly = true)
     public List<Country> getAllCountry() {

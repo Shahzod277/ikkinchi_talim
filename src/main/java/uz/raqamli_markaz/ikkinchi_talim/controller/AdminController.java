@@ -18,7 +18,7 @@ import java.util.List;
 @SecurityRequirement(name = "second")
 public class AdminController {
 
-    private final FutureInstitutionService futureInstitutionService;
+    private final ClasificatorService clasificatorService;
     private final DirectionService directionService;
     private final EduFormService eduFormService;
     private final AdminService adminService;
@@ -27,59 +27,55 @@ public class AdminController {
 
     @PostMapping("futureInstitution")
     public ResponseEntity<?> createFutureInstitution(@RequestBody FutureInstitutionRequest request) {
-        Result result = futureInstitutionService.createFutureInstitution(request);
+        Result result = clasificatorService.createFutureInstitution(request);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
     @PutMapping("futureInstitution/{futureInstId}")
     public ResponseEntity<?> updateFutureInstitution(@PathVariable int futureInstId, @RequestBody FutureInstitutionRequest request) {
-        Result result = futureInstitutionService.updateFutureInstitution(futureInstId, request);
+        Result result = clasificatorService.updateFutureInstitution(futureInstId, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-    @GetMapping("futureInstitution")
-    public ResponseEntity<?> getAllFutureInstitution() {
-        List<FutureInstitutionResponse> allFutureInstitution = futureInstitutionService.getAllFutureInstitution();
-        return ResponseEntity.ok(allFutureInstitution);
-    }
+//    @GetMapping("futureInstitution")
+//    public ResponseEntity<?> getAllFutureInstitution() {
+//        List<FutureInstitutionResponse> allFutureInstitution = clasificatorService.getAllFutureInstitution();
+//        return ResponseEntity.ok(allFutureInstitution);
+//    }
 
-    @GetMapping("futureInstitution/{futureInstId}")
-    public ResponseEntity<?> getFutureInstitutionById(@PathVariable int futureInstId) {
-        FutureInstitutionResponse futureInstitutionById = futureInstitutionService.getFutureInstitutionById(futureInstId);
-        return ResponseEntity.ok(futureInstitutionById);
-    }
+
 
     //Ta'lim yo'nalishi
 
-    @PostMapping("direction")
-    public ResponseEntity<?> createDirection(@RequestBody DirectionRequest request) {
-        Result result = directionService.createDirection(request);
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
-
-    @PutMapping("direction/{directionId}")
-    public ResponseEntity<?> updateDirection(@PathVariable int directionId, @RequestBody DirectionRequest request) {
-        Result result = directionService.updateDirection(directionId, request);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
-
-    @GetMapping("direction/futureInstitution/{futureInstitutionId}")
-    public ResponseEntity<?> getAllDirectionByFutureInst(@PathVariable int futureInstitutionId) {
-        List<DirectionResponse> allDirection = directionService.getAllDirectionByFutureInst(futureInstitutionId);
-        return ResponseEntity.ok(allDirection);
-    }
-
-    @GetMapping("direction/{directionId}")
-    public ResponseEntity<?> getDirectionById(@PathVariable int directionId) {
-        DirectionResponse directionById = directionService.getDirectionById(directionId);
-        return ResponseEntity.ok(directionById);
-    }
-
-    @GetMapping("direction")
-    public ResponseEntity<?> getAlldirection() {
-        List<DirectionResponse> allDirection = directionService.getAllDirection();
-        return ResponseEntity.ok(allDirection);
-    }
+//    @PostMapping("direction")
+//    public ResponseEntity<?> createDirection(@RequestBody DirectionRequest request) {
+//        Result result = directionService.createDirection(request);
+//        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+//    }
+//
+//    @PutMapping("direction/{directionId}")
+//    public ResponseEntity<?> updateDirection(@PathVariable int directionId, @RequestBody DirectionRequest request) {
+//        Result result = directionService.updateDirection(directionId, request);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
+//
+//    @GetMapping("direction/futureInstitution/{futureInstitutionId}")
+//    public ResponseEntity<?> getAllDirectionByFutureInst(@PathVariable int futureInstitutionId) {
+//        List<DirectionResponse> allDirection = directionService.getAllDirectionByFutureInst(futureInstitutionId);
+//        return ResponseEntity.ok(allDirection);
+//    }
+//
+//    @GetMapping("direction/{directionId}")
+//    public ResponseEntity<?> getDirectionById(@PathVariable int directionId) {
+//        DirectionResponse directionById = directionService.getDirectionById(directionId);
+//        return ResponseEntity.ok(directionById);
+//    }
+//
+//    @GetMapping("direction")
+//    public ResponseEntity<?> getAlldirection() {
+//        List<DirectionResponse> allDirection = directionService.getAllDirection();
+//        return ResponseEntity.ok(allDirection);
+//    }
 
     @PostMapping("eduForm")
     public ResponseEntity<?> createEduForm(@RequestBody EduFormRequest eduFormRequest) {
@@ -122,7 +118,7 @@ public class AdminController {
     @GetMapping("getFutureInstitutions")
     public ResponseEntity<?> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                     @RequestParam(value = "size", defaultValue = "30") int size) {
-        Page<FutureInstitutionResponse> allPage = futureInstitutionService.getAllFutureInstitution(page, size);
+        Page<FutureInstitutionResponse> allPage = clasificatorService.getAllFutureInstitution(page, size);
         return ResponseEntity.ok(allPage);
 
     }
@@ -186,7 +182,7 @@ public class AdminController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "30") int size,
             @RequestParam(value = "text", defaultValue = "0") String text) {
-        Page<FutureInstitutionResponse> futureInstitutionResponses = futureInstitutionService.searchFutureInstitution(text, page, size);
+        Page<FutureInstitutionResponse> futureInstitutionResponses = clasificatorService.searchFutureInstitution(text, page, size);
         return ResponseEntity.ok(futureInstitutionResponses);
     }
 
