@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import second.education.domain.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 
 @Getter
 @Setter
@@ -27,15 +27,13 @@ public class DiplomResponseAdmin {
     private String diplomaStatus;
     private String diplomaNumberAndDiplomaSerial;
     private StoryMessageResponse storyMessageResponse;
-
-    private EnrolleeResponse enrolleeResponse;
     private FileResponse fileResponse;
     public DiplomResponseAdmin(Diploma diploma, FileResponse fileResponse) {
         this.id = diploma.getId();
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldNameId();
+        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
@@ -52,7 +50,7 @@ public class DiplomResponseAdmin {
         this.countryName = diploma.getCountryName();
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldNameId();
+        this.institutionOldNameId = diploma.getInstitutionOldId();
         this.institutionOldName = diploma.getInstitutionOldName();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();

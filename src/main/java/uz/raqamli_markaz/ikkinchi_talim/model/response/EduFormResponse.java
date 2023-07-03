@@ -24,19 +24,11 @@ public class EduFormResponse {
     public EduFormResponse(EduForm eduForm, List<LanguageResponse> languages) {
         this.id = eduForm.getId();
         this.name = eduForm.getName();
-        this.directionId = eduForm.getDirection().getId();
-        this.directionName = eduForm.getDirection().getName();
-        this.futureInsId = eduForm.getDirection().getDiplomaInstitution().getId();
-        this.futureInstName = eduForm.getDirection().getDiplomaInstitution().getName();
         this.languages = languages;
     }
 
     public EduFormResponse(EduForm eduForm) {
         this.id = eduForm.getId();
         this.name = eduForm.getName();
-        this.directionId = eduForm.getDirection().getId();
-        this.directionName = eduForm.getDirection().getName();
-        this.futureInsId = eduForm.getDirection().getDiplomaInstitution().getId();
-        this.futureInstName = eduForm.getDirection().getDiplomaInstitution().getName();
     }
 }

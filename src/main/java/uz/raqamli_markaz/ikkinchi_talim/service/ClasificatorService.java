@@ -1,6 +1,5 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
@@ -34,11 +32,14 @@ public class ClasificatorService {
     @Transactional(readOnly = true)
     public List<DiplomaSerial> getAllDiplomaSerials() {
         return diplomaSerialRepository.findAll();
-    }   @Transactional(readOnly = true)
+    }
+
+    @Transactional(readOnly = true)
     public List<DiplomaOldInstitution> getAllOldNameInstitution() {
         return diplomaOldInstitutionRepository.findAll();
     }
-@Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<DiplomaSpeciality> getSpecialitiesByInstitutionId(Integer institutionId) {
         return diplomaSpecialityRepository.findDiplomaSpecialitiesByInstitutionId(institutionId);
     }

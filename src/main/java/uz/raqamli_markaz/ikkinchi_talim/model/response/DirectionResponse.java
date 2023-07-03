@@ -20,7 +20,5 @@ public class DirectionResponse {
     public DirectionResponse(Direction direction) {
         this.id = direction.getId();
         this.name = direction.getName();
-        this.futureInstitutionId = direction.getDiplomaInstitution().getId();
-        this.futureInstitutionName = direction.getDiplomaInstitution().getName();
     }
 }

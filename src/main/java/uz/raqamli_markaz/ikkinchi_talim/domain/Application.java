@@ -26,6 +26,7 @@ public class Application extends AbstractEntity {
 
     @ManyToOne
     private Kvota kvota;
+
     @OneToOne(fetch = FetchType.LAZY)
     private User user;
 }

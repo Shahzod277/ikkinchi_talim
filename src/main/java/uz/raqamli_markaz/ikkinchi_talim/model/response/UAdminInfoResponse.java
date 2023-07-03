@@ -2,8 +2,8 @@ package uz.raqamli_markaz.ikkinchi_talim.model.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import second.education.domain.AdminEntity;
-import second.education.domain.classificator.University;
+import uz.raqamli_markaz.ikkinchi_talim.domain.AdminEntity;
+
 
 @Getter
 @Setter
@@ -20,14 +20,10 @@ public class UAdminInfoResponse {
         this.id = adminEntity.getId();
         this.firstname = adminEntity.getFistName();
         this.lastname = adminEntity.getLastname();
-        if (adminEntity.getFutureInstitution() != null) {
-            this.futureInstitutionId = adminEntity.getFutureInstitution().getId();
-            this.futureInstitutionName = adminEntity.getFutureInstitution().getName();
+        if (adminEntity.getDiplomaInstitution() != null) {
+            this.futureInstitutionId = adminEntity.getDiplomaInstitution().getId();
+            this.futureInstitutionName = adminEntity.getDiplomaInstitution().getInstitutionNameOz();
 
-        } else {
-            String university = adminEntity.getUniversities().stream().map(University::getInstitutionName).findFirst().get();
-            this.futureInstitutionId =null;
-            this.futureInstitutionName =university;
         }
     }
 }

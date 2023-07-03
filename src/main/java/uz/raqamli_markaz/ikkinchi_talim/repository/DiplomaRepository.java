@@ -22,14 +22,4 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query("select d from Diploma d where d.diplomaId =?1 ")
     Optional<Diploma> findDiplomaByDiplomaId(Integer diplomaId);
 
-    @Query(nativeQuery = true, value = "select * from diploma d " +
-            "join enrollee_info ei on ei.id = d.enrollee_info_id " +
-            "join users u on ei.user_id = u.id where u.phone_number = ?1 and d.is_active = true ")
-    Optional<Diploma> getDiplomaProfile(String phoneNumber);
-
-    @Query(nativeQuery = true, value = "select * from diploma d " +
-            "join enrollee_info ei on ei.id = d.enrollee_info_id " +
-            "join users u on ei.user_id = u.id where u.phone_number = ?1 ")
-    List<Diploma> findAllDiplomaByEnrollee(String phoneNumber);
-
 }

@@ -19,6 +19,5 @@ public class LanguageResponse {
     public LanguageResponse(Language language) {
         this.id = language.getId();
         this.name = language.getName();
-        this.kvota = language.getKvotaSoni();
     }
 }

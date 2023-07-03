@@ -17,6 +17,6 @@ public class FutureInstitutionResponse {
 
     public FutureInstitutionResponse(DiplomaInstitution diplomaInstitution) {
         this.id = diplomaInstitution.getId();
-        this.name = diplomaInstitution.getName();
+        this.name = diplomaInstitution.getInstitutionNameOz();
     }
 }

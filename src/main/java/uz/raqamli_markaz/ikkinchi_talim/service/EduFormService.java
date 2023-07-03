@@ -35,8 +35,6 @@ public class EduFormService {
        try {
            EduForm eduForm = new EduForm();
            eduForm.setName(request.getName());
-           Direction direction = directionRepository.findById(request.getDirectionId()).get();
-           eduForm.setDirection(direction);
            EduForm saveEduform = eduFormRepository.save(eduForm);
            List<Language> languageAndQuota = createLanguageAndQuota(request, saveEduform);
            List<LanguageResponse> languageResponses = languageAndQuota.stream().map(LanguageResponse::new).toList();
@@ -51,15 +49,11 @@ public class EduFormService {
         try {
             EduForm eduForm = eduFormRepository.findById(eduFormId).get();
             eduForm.setName(request.getName());
-            Direction direction = directionRepository.findById(request.getDirectionId()).get();
-            eduForm.setDirection(direction);
             EduForm saveEduform = eduFormRepository.save(eduForm);
             List<Language> languages = new ArrayList<>();
             request.getLanguages().forEach(e -> {
                 Language language = languageRepository.findById(e.getId()).get();
                 language.setName(e.getName());
-                language.setKvotaSoni(e.getKvota());
-                language.setEduForm(saveEduform);
                 languages.add(language);
             });
             List<Language> languageList = languageRepository.saveAll(languages);
@@ -75,73 +69,71 @@ public class EduFormService {
         request.getLanguages().forEach(l -> {
             Language language = new Language();
             language.setName(l.getName());
-            language.setKvotaSoni(l.getKvota());
-            language.setEduForm(saveEduform);
             languages.add(language);
         });
         return languageRepository.saveAll(languages);
     }
 
-    @Transactional(readOnly = true)
-    public EduFormResponse getEduFormResponse(Integer eduFormId) {
-        try {
-            EduForm eduForm = eduFormRepository.findById(eduFormId).get();
-            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(eduFormId)
-                    .stream().map(LanguageResponse::new).toList();
-            return new EduFormResponse(eduForm, languageResponses);
-        } catch (Exception ex) {
-            return new EduFormResponse();
-        }
-    }
+//    @Transactional(readOnly = true)
+//    public EduFormResponse getEduFormResponse(Integer eduFormId) {
+//        try {
+//            EduForm eduForm = eduFormRepository.findById(eduFormId).get();
+//            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(eduFormId)
+//                    .stream().map(LanguageResponse::new).toList();
+//            return new EduFormResponse(eduForm, languageResponses);
+//        } catch (Exception ex) {
+//            return new EduFormResponse();
+//        }
+//    }
 
-    @Transactional(readOnly = true)
-    public List<EduFormResponse> getAllEduFormResponse() {
-        List<EduFormResponse> eduFormResponses = eduFormRepository.findAll()
-                .stream().map(EduFormResponse::new).toList();
-        eduFormResponses.forEach(e -> {
-            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
-                    .stream().map(LanguageResponse::new).toList();
-            e.setLanguages(languageResponses);
-        });
-        return eduFormResponses;
-    }
+//    @Transactional(readOnly = true)
+//    public List<EduFormResponse> getAllEduFormResponse() {
+//        List<EduFormResponse> eduFormResponses = eduFormRepository.findAll()
+//                .stream().map(EduFormResponse::new).toList();
+//        eduFormResponses.forEach(e -> {
+//            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
+//                    .stream().map(LanguageResponse::new).toList();
+//            e.setLanguages(languageResponses);
+//        });
+//        return eduFormResponses;
+//    }
 
-    @Transactional(readOnly = true)
-    public List<EduFormResponse> getAllEduFormByDirection(Integer directionId) {
-        List<EduFormResponse> eduFormResponses = eduFormRepository.findAllByDirectionIdPage(directionId)
-                .stream().map(EduFormResponse::new).toList();
-            eduFormResponses.forEach(e -> {
-            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
-                    .stream().map(LanguageResponse::new).toList();
-            e.setLanguages(languageResponses);
-        });
-        return eduFormResponses;
-    }
-    @Transactional(readOnly = true)
-    public Page<EduFormResponse> getAllEduFormPage(int page, int size) {
-        if (page > 0) page = page - 1;
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        Page<EduFormResponse> map = eduFormRepository.findAll(pageable).map(EduFormResponse::new);
-        map.forEach(e -> {
-            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
-                    .stream().map(LanguageResponse::new).toList();
-            e.setLanguages(languageResponses);
-        });
-        return map;
-    }
+//    @Transactional(readOnly = true)
+//    public List<EduFormResponse> getAllEduFormByDirection(Integer directionId) {
+//        List<EduFormResponse> eduFormResponses = eduFormRepository.findAllByDirectionIdPage(directionId)
+//                .stream().map(EduFormResponse::new).toList();
+//            eduFormResponses.forEach(e -> {
+//            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
+//                    .stream().map(LanguageResponse::new).toList();
+//            e.setLanguages(languageResponses);
+//        });
+//        return eduFormResponses;
+//    }
+//    @Transactional(readOnly = true)
+//    public Page<EduFormResponse> getAllEduFormPage(int page, int size) {
+//        if (page > 0) page = page - 1;
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+//        Page<EduFormResponse> map = eduFormRepository.findAll(pageable).map(EduFormResponse::new);
+//        map.forEach(e -> {
+//            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
+//                    .stream().map(LanguageResponse::new).toList();
+//            e.setLanguages(languageResponses);
+//        });
+//        return map;
+//    }
 
-    @Transactional(readOnly = true)
-    public Page<EduFormResponse> search(String text, int page, int size) {
-        if (page > 0) page = page - 1;
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        Page<EduFormResponse> map = eduFormRepository.findEduFormByNameLike(text, pageable).map(EduFormResponse::new);
-        map.forEach(e -> {
-            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
-                    .stream().map(LanguageResponse::new).toList();
-            e.setLanguages(languageResponses);
-        });
-        return map;
-    }
+//    @Transactional(readOnly = true)
+//    public Page<EduFormResponse> search(String text, int page, int size) {
+//        if (page > 0) page = page - 1;
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+//        Page<EduFormResponse> map = eduFormRepository.findEduFormByNameLike(text, pageable).map(EduFormResponse::new);
+//        map.forEach(e -> {
+//            List<LanguageResponse> languageResponses = eduFormRepository.findAllLanguageByEduForm(e.getId())
+//                    .stream().map(LanguageResponse::new).toList();
+//            e.setLanguages(languageResponses);
+//        });
+//        return map;
+//    }
 
     @Transactional
     public Result deleteEduForm(Integer eduFormId) {
@@ -152,8 +144,4 @@ public class EduFormService {
             return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
         }
     }
-
-
-
-
 }

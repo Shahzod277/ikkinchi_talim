@@ -1,6 +1,5 @@
 package uz.raqamli_markaz.ikkinchi_talim.domain.diploma;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +20,6 @@ public class DiplomaSerial extends AbstractEntity {
     private Integer creatorId;
     private String createdAt;
     private Integer id;
-    private Object endYear;
+    private Integer endYear;
     private Integer beginYear;
 }

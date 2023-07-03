@@ -1,5 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -133,16 +134,16 @@ public class Utils {
         try {
             DiplomaSerials diplomaSerials = diplomaApi.getDiplomaSerials();
             List<DataItemSerials> data = diplomaSerials.getData();
-            List<DiplomaSerial> diplomaSerialsList = new ArrayList<>();
+            List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();
             data.forEach(d -> {
                 DiplomaSerial diplomaSerial = new DiplomaSerial();
                 diplomaSerial.setSerial(d.getSerial());
                 diplomaSerial.setDegreeId(d.getDegreeId());
                 diplomaSerial.setBeginYear(d.getBeginYear());
-                diplomaSerial.setEndYear(d.getEndYear());
-                diplomaSerialsList.add(diplomaSerial);
+                diplomaSerial.setEndYear((Integer) d.getEndYear());
+                diplomaSerialsListClassificator.add(diplomaSerial);
             });
-            diplomaSerialRepository.saveAll(diplomaSerialsList);
+            diplomaSerialRepository.saveAll(diplomaSerialsListClassificator);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();

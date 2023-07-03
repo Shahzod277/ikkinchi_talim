@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8085
   servlet:
     context-path: /
   ssl:
@@ -15,8 +15,8 @@ server:
       max: 400
 spring:
   datasource:
-    username: seconddbadmin
-    password: seconddbadmin
+    username: postgres
+    password: 2030306
     url: jdbc:postgresql://localhost:5432/second_education
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -43,8 +43,7 @@ springdoc:
     path: /docs
 
 jwt:
-
-
+  secret: '[0-9.a-zA-z_]^+$TutorAcademy9891212skidU3Akj9dfd6kfd5fdASQrFbsMrXh^56409nPgGfd528482'
 file:
   storage:
     location: /home/software/fileStorage

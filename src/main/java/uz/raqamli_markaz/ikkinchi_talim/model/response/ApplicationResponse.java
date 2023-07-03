@@ -25,8 +25,5 @@ public class ApplicationResponse {
         this.diplomaStatus = application.getDiplomaStatus();
         this.message = application.getMessage();
         this.diplomaMessage = application.getDiplomaMessage();
-        this.language = application.getLanguage().getName();
-        this.diplomaInstitutionId = application.getDiplomaInstitution().getClassificatorId();
-        this.diplomaInstitutionName = application.getDiplomaInstitution().getInstitutionNameOz();
     }
 }
