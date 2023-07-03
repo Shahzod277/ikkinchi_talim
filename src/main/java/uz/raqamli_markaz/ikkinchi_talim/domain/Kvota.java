@@ -1,12 +1,10 @@
 package uz.raqamli_markaz.ikkinchi_talim.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 
 @Entity
 @Getter

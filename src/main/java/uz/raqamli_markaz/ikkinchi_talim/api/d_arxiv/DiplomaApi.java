@@ -1,6 +1,8 @@
 package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,16 +31,16 @@ public class DiplomaApi {
         TokenEntity tokenEntity = tokenEntityRepository.findByOrgName("d-arxiv").get();
         long now = System.currentTimeMillis();
         DArxivTokenRequest request = new DArxivTokenRequest();
-        Credits credits = request.getCredits();
-        credits.setUsername(ApiConstant.D_ARXIV_LOGIN);
-        credits.setPassword(ApiConstant.D_ARXIV_PASSWORD);
         if (tokenEntity.getEndTime() < now) {
-            DArxivTokenResponse response = this.webClient.post()
+            DArxivTokenResponse response = webClient.post()
                     .uri(ApiConstant.D_ARXIV_TOKEN_API)
-                    .bodyValue(credits)
+                        .bodyValue(request)
+                    .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .bodyToMono(DArxivTokenResponse.class)
                     .block();
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            DArxivTokenResponse dArxivTokenResponse = objectMapper.convertValue(response, DArxivTokenResponse.class);
             DataToken data = response.getData();
             NewToken newToken = data.getNewToken();
             tokenEntity.setToken(newToken.getAccessToken());

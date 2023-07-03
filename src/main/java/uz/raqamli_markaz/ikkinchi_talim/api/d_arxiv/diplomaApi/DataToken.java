@@ -1,5 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +18,6 @@ public class DataToken {
 	private NewToken newToken;
 
 	@JsonProperty("limits")
-	private Limits limits;
+	@JsonIgnore
+	private Object limits;
 }

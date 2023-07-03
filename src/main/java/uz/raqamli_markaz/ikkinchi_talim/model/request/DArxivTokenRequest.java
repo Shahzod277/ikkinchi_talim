@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class DArxivTokenRequest {
 
+    private String action = "GetNewToken";
     private Credits credits = new Credits();
 }
