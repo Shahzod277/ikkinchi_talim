@@ -112,13 +112,6 @@ public class AdminController {
 //        return ResponseEntity.ok(search);
 //    }
 
-    @GetMapping("getFutureInstitutions")
-    public ResponseEntity<?> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "size", defaultValue = "30") int size) {
-        Page<FutureInstitutionResponse> allPage = classificatorService.getAllFutureInstitution(page, size);
-        return ResponseEntity.ok(allPage);
-
-    }
 
 //    @GetMapping("getEduForms")
 //    public ResponseEntity<?> getAllEduFormPageble(@RequestParam(value = "page", defaultValue = "0") int page,

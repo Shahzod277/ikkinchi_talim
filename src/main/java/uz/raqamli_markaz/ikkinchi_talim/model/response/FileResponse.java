@@ -8,9 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class FileResponse {
-
-    private DiplomaCopyResponse diplomaCopyResponse;
-    private DiplomaIlovaResponse diplomaIlovaResponse;
 }

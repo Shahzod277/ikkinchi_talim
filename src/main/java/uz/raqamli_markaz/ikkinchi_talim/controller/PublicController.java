@@ -29,12 +29,6 @@ public class PublicController {
     private final ClassificatorService classificatorService;
 
 
-    @GetMapping("getAllOldNameInstitution")
-    public ResponseEntity<?> getAllOldNameInstitution() {
-        List<DiplomaOldInstitution> list = classificatorService.getAllOldNameInstitution();
-        return ResponseEntity.ok(list);
-    }
-
     @GetMapping("getAllDiplomaSerials")
     public ResponseEntity<?> getAllDiplomaSerials() {
         List<DiplomaSerial> list = classificatorService.getAllDiplomaSerials();
