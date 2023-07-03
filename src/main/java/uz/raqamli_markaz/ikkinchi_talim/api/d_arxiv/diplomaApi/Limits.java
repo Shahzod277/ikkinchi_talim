@@ -5,17 +5,20 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.NewToken;
+
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-public class DataToken {
+public class Limits{
 
-	@JsonProperty("new_token")
-	private NewToken newToken;
+    @JsonProperty("max_active_tokens")
+    private Integer maxActiveTokens;
 
-	@JsonProperty("limits")
-	private Limits limits;
+    @JsonProperty("current_active_tokens")
+    private Integer currentActiveTokens;
+
+    @JsonProperty("tokens_remaining")
+    private Integer tokensRemaining;
 }

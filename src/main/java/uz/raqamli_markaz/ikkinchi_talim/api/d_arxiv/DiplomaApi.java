@@ -2,18 +2,18 @@ package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DArxivTokenResponse;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.*;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.Credits;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DArxivTokenRequest;
 import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 
 import java.util.List;
@@ -28,19 +28,23 @@ public class DiplomaApi {
     public String getToken() {
         TokenEntity tokenEntity = tokenEntityRepository.findByOrgName("d-arxiv").get();
         long now = System.currentTimeMillis();
+        DArxivTokenRequest request = new DArxivTokenRequest();
+        Credits credits = request.getCredits();
+        credits.setUsername(ApiConstant.D_ARXIV_LOGIN);
+        credits.setPassword(ApiConstant.D_ARXIV_PASSWORD);
         if (tokenEntity.getEndTime() < now) {
-            DArxivTokenResponse response = this.webClient.get()
+            DArxivTokenResponse response = this.webClient.post()
                     .uri(ApiConstant.D_ARXIV_TOKEN_API)
-                    .headers(httpHeader -> httpHeader.setBasicAuth(ApiConstant.D_ARXIV_LOGIN, ApiConstant.D_ARXIV_PASSWORD))
+                    .bodyValue(credits)
                     .retrieve()
                     .bodyToMono(DArxivTokenResponse.class)
                     .block();
-            assert response != null;
-            String accessToken = response.getDataToken().getNewToken().getAccessToken();
-            tokenEntity.setToken(accessToken);
+            DataToken data = response.getData();
+            NewToken newToken = data.getNewToken();
+            tokenEntity.setToken(newToken.getAccessToken());
             tokenEntity.setEndTime(now + 83000);
             tokenEntityRepository.save(tokenEntity);
-            return accessToken;
+            return newToken.getAccessToken();
         }
         return tokenEntity.getToken();
 
