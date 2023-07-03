@@ -1,4 +1,4 @@
-package uz.raqamli_markaz.ikkinchi_talim.model.request;
+package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -12,7 +12,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
-import uz.raqamli_markaz.ikkinchi_talim.service.ClasificatorService;
+import uz.raqamli_markaz.ikkinchi_talim.service.ClassificatorService;
 import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileServiceImpl;
 
@@ -26,24 +26,24 @@ public class PublicController {
 
     private final FileServiceImpl fileService;
     private final DiplomaService diplomaService;
-    private final ClasificatorService clasificatorService;
+    private final ClassificatorService classificatorService;
 
 
     @GetMapping("getAllOldNameInstitution")
     public ResponseEntity<?> getAllOldNameInstitution() {
-        List<DiplomaOldInstitution> list = clasificatorService.getAllOldNameInstitution();
+        List<DiplomaOldInstitution> list = classificatorService.getAllOldNameInstitution();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("getAllDiplomaSerials")
     public ResponseEntity<?> getAllDiplomaSerials() {
-        List<DiplomaSerial> list = clasificatorService.getAllDiplomaSerials();
+        List<DiplomaSerial> list = classificatorService.getAllDiplomaSerials();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("getAllOldNameInstitution/{classificatorId}")
     public ResponseEntity<?> getAllOldNameInstitution(@PathVariable Integer classificatorId) {
-        List<DiplomaSpeciality> list = clasificatorService.getSpecialitiesByInstitutionId(classificatorId);
+        List<DiplomaSpeciality> list = classificatorService.getSpecialitiesByInstitutionId(classificatorId);
         return ResponseEntity.ok(list);
     }
 

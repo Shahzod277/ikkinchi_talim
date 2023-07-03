@@ -20,6 +20,6 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		utils.saveInstitution();
+//		utils.saveDiplomaSerial();
 	}
 }

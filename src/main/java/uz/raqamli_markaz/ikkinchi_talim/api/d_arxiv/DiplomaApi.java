@@ -1,21 +1,19 @@
 package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.*;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerialResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.TokenEntity;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.Credits;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.DArxivTokenRequest;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DArxivTokenRequest;
 import uz.raqamli_markaz.ikkinchi_talim.repository.TokenEntityRepository;
 
 import java.util.List;
@@ -116,13 +114,13 @@ public class DiplomaApi {
                 .bodyToMono(InstitutionOldNamesResponse.class)
                 .block();
     }
-    public DiplomaSerials getDiplomaSerials() {
+    public DiplomaSerialResponse getDiplomaSerials() {
         String url = "https://d-arxiv.edu.uz/api/v2/reference/diploma-serials";
         return this.webClient.get()
                 .uri(url)
                 .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
                 .retrieve()
-                .bodyToMono(DiplomaSerials.class)
+                .bodyToMono(DiplomaSerialResponse.class)
                 .block();
     }
 

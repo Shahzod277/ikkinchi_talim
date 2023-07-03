@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerialResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
@@ -70,9 +71,10 @@ public class Utils {
     public void saveOldInstitution() {
         try {
             List<DiplomaInstitution> all = diplomaInstitutionRepository.findAll();
-            List<DiplomaOldInstitution> diplomaOldInstitutions = new ArrayList<>();
+
             all.forEach(d -> {
                 Thread thread = new Thread(() -> {
+                    List<DiplomaOldInstitution> diplomaOldInstitutions = new ArrayList<>();
                     InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
                     InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
                     List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
@@ -89,6 +91,7 @@ public class Utils {
                             diplomaOldInstitutions.add(diplomaOldInstitution);
                         }
                     });
+                    diplomaOldInstitutionRepository.saveAll(diplomaOldInstitutions);
                 });
                 try {
                     thread.join();
@@ -98,7 +101,6 @@ public class Utils {
                     throw new RuntimeException(e);
                 }
             });
-            diplomaOldInstitutionRepository.saveAll(diplomaOldInstitutions);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();
@@ -130,9 +132,10 @@ public class Utils {
     }
 
     @Transactional
-    public void getDiplomaSerial() {
+    public void saveDiplomaSerial() {
         try {
-            DiplomaSerials diplomaSerials = diplomaApi.getDiplomaSerials();
+            DiplomaSerialResponse response = diplomaApi.getDiplomaSerials();
+            DiplomaSerials diplomaSerials = response.getDataSerials().getDiplomaSerials();
             List<DataItemSerials> data = diplomaSerials.getData();
             List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();
             data.forEach(d -> {
@@ -140,7 +143,8 @@ public class Utils {
                 diplomaSerial.setSerial(d.getSerial());
                 diplomaSerial.setDegreeId(d.getDegreeId());
                 diplomaSerial.setBeginYear(d.getBeginYear());
-                diplomaSerial.setEndYear((Integer) d.getEndYear());
+                diplomaSerial.setStatusId(d.getStatusId());
+                diplomaSerial.setEndYear(d.getEndYear());
                 diplomaSerialsListClassificator.add(diplomaSerial);
             });
             diplomaSerialRepository.saveAll(diplomaSerialsListClassificator);

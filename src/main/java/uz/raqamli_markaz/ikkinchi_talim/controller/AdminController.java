@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.service.*;
-import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/")
@@ -18,7 +15,7 @@ import java.util.List;
 @SecurityRequirement(name = "second")
 public class AdminController {
 
-    private final ClasificatorService clasificatorService;
+    private final ClassificatorService classificatorService;
 //    private final DirectionService directionService;
     private final EduFormService eduFormService;
 //    private final AdminService adminService;
@@ -118,7 +115,7 @@ public class AdminController {
     @GetMapping("getFutureInstitutions")
     public ResponseEntity<?> getAll(@RequestParam(value = "page", defaultValue = "0") int page,
                                     @RequestParam(value = "size", defaultValue = "30") int size) {
-        Page<FutureInstitutionResponse> allPage = clasificatorService.getAllFutureInstitution(page, size);
+        Page<FutureInstitutionResponse> allPage = classificatorService.getAllFutureInstitution(page, size);
         return ResponseEntity.ok(allPage);
 
     }

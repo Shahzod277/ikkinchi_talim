@@ -2,8 +2,10 @@ package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class DataItemSerials {
 
 	@JsonProperty("status_id")
@@ -25,7 +27,7 @@ public class DataItemSerials {
 	private Integer id;
 
 	@JsonProperty("end_year")
-	private Object endYear;
+	private Integer endYear;
 
 	@JsonProperty("begin_year")
 	private Integer beginYear;
