@@ -9,6 +9,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerialResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNamesResponse;
@@ -135,6 +136,29 @@ public class Utils {
     public void saveDiplomaSerial() {
         try {
             DiplomaSerialResponse response = diplomaApi.getDiplomaSerials();
+            DiplomaSerials diplomaSerials = response.getDataSerials().getDiplomaSerials();
+            List<DataItemSerials> data = diplomaSerials.getData();
+            List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();
+            data.forEach(d -> {
+                DiplomaSerial diplomaSerial = new DiplomaSerial();
+                diplomaSerial.setSerial(d.getSerial());
+                diplomaSerial.setDegreeId(d.getDegreeId());
+                diplomaSerial.setBeginYear(d.getBeginYear());
+                diplomaSerial.setStatusId(d.getStatusId());
+                diplomaSerial.setEndYear(d.getEndYear());
+                diplomaSerialsListClassificator.add(diplomaSerial);
+            });
+            diplomaSerialRepository.saveAll(diplomaSerialsListClassificator);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    public void saveEduForm() {
+        try {
+            FormEduResponse formEduResponse = diplomaApi.getFormEdu();
             DiplomaSerials diplomaSerials = response.getDataSerials().getDiplomaSerials();
             List<DataItemSerials> data = diplomaSerials.getData();
             List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();

@@ -26,7 +26,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EduFormService {
 
-    private final DirectionRepository directionRepository;
     private final EduFormRepository eduFormRepository;
     private final LanguageRepository languageRepository;
 
