@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8082
   servlet:
     context-path: /
   ssl:
@@ -17,7 +17,7 @@ spring:
   datasource:
     username: postgres
     password: 2030306
-    url: jdbc:postgresql://localhost:5432/second_education
+    url: jdbc:postgresql://localhost:5432/second_education2023
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false

@@ -160,16 +160,18 @@ public class Utils {
 
             List<EduForm> eduForms = new ArrayList<>();
             dataItems.forEach(eduDataItem -> {
-                EduForm eduForm = new EduForm();
-                eduForm.setCode(eduDataItem.getId());
-                eduForm.setNameOz(eduDataItem.getNameOz());
-                eduForm.setNameUz(eduDataItem.getNameUz());
-                eduForm.setNameRu(eduDataItem.getNameRu());
-                eduForm.setNameEn(eduDataItem.getNameEn());
-                eduForm.setStatusId(eduDataItem.getStatusId());
-                eduForm.setDegreeId(eduDataItem.getDegreeId());
-                eduForm.setDegreeName(eduDataItem.getDegreeName());
-                eduForms.add(eduForm);
+                if (eduDataItem.getDegreeId() == 2) {
+                    EduForm eduForm = new EduForm();
+                    eduForm.setCode(eduDataItem.getId());
+                    eduForm.setNameOz(eduDataItem.getNameOz());
+                    eduForm.setNameUz(eduDataItem.getNameUz());
+                    eduForm.setNameRu(eduDataItem.getNameRu());
+                    eduForm.setNameEn(eduDataItem.getNameEn());
+                    eduForm.setStatusId(eduDataItem.getStatusId());
+                    eduForm.setDegreeId(eduDataItem.getDegreeId());
+                    eduForm.setDegreeName(eduDataItem.getDegreeName());
+                    eduForms.add(eduForm);
+                }
             });
             eduFormRepository.saveAll(eduForms);
         } catch (Exception e) {
