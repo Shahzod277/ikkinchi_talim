@@ -56,6 +56,10 @@ public class PublicController {
         return ResponseEntity.ok(classificatorService.getAllEduFormResponses());
     }
 
+    @GetMapping("allDuration")
+    public ResponseEntity<?> getAllDuration() {
+        return ResponseEntity.ok(classificatorService.getAllDuration());
+    }
 
     @PostMapping("uploadFile")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("key") String key) {
