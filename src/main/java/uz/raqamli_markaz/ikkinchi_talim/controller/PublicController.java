@@ -7,15 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.ClassificatorService;
-import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileServiceImpl;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +23,6 @@ public class PublicController {
 
     private final FileServiceImpl fileService;
     private final ClassificatorService classificatorService;
-
 
     @GetMapping("allDiplomaSerials")
     public ResponseEntity<?> getAllDiplomaSerials() {
