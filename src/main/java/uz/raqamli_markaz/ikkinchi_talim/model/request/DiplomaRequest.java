@@ -34,7 +34,7 @@ public class DiplomaRequest {
     private String eduStartingDate;
 
     @JsonProperty("degree_name")
-    private String degreeName;
+    private String degreeName="Bakalavr";
 
     @JsonProperty("edu_finishing_date")
     private String eduFinishingDate;

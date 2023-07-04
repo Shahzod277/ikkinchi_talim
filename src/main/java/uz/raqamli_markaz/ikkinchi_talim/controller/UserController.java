@@ -28,23 +28,23 @@ public class UserController {
 //    }
 
     @PostMapping("createDiploma")
-    public ResponseEntity<?> createDiploma(Principal principal,
+    public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
                                            @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.createDiploma(principal, request);
+        Result result = diplomaService.createDiploma(token, request);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
     @GetMapping("getDiplomaByDARXIV")
-    public ResponseEntity<?> getDiplomaByDARXIV(Principal principal) {
-        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(principal);
+    public ResponseEntity<?> getDiplomaByDARXIV(@RequestParam(value = "token") String token) {
+        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
 
     @PutMapping("{diplomaId}")
-    public ResponseEntity<?> updateDiploma(Principal principal,
+    public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
                                            @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.updateDiploma(principal, request);
+        Result result = diplomaService.updateDiploma(token, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
@@ -55,8 +55,8 @@ public class UserController {
 //    }
 
     @DeleteMapping("deleteDiploma/{id}")
-    public ResponseEntity<?> deleteDiploma(@PathVariable Integer id, Principal principal) {
-        Result result = diplomaService.deleteDiploma(id, principal);
+    public ResponseEntity<?> deleteDiploma(@PathVariable Integer id, @RequestParam(value = "token") String token) {
+        Result result = diplomaService.deleteDiploma(id, token);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 

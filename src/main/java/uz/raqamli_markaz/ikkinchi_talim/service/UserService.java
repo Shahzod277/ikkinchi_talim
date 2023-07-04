@@ -1,448 +1,119 @@
-//package uz.raqamli_markaz.ikkinchi_talim.service;
-//
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.multipart.MultipartFile;
-//import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-//import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.Data;
-//import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBResponse;
-//import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
-//import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
-//import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
-//import uz.raqamli_markaz.ikkinchi_talim.domain.Document;
-//import uz.raqamli_markaz.ikkinchi_talim.domain.StoryMessage;
-//import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
-//import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
-//import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
-//import uz.raqamli_markaz.ikkinchi_talim.repository.*;
-//
-//import java.security.Principal;
-//import java.time.LocalDateTime;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class UserService {
-//
-//    private final DiplomaRepository diplomaRepository;
-//    private final DocumentService documentService;
-//    private final ApplicationRepository applicationRepository;
-//    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
-//    private final IIBServiceApi iibServiceApi;
-//    private final FileService fileService;
-//    private final DocumentRepository documentRepository;
-//    private final StoryMessageRepository storyMessageRepository;
-//    private final UserRepository userRepository;
-//
-//    @Transactional
-//    public Result createDiploma(Principal principal,
-//                                String countryName,
-//                                Integer institutionId,
-//                                Integer id,
-//                                String eduFormName,
-//                                String eduFinishingDate,
-//                                String speciality,
-//                                String diplomaNumberAndSerial,
-//                                MultipartFile diplomaCopy,
-//                                MultipartFile diplomaIlova) {
-//        try {
-//            List<Diploma> allDiplomaByEnrollee = diplomaRepository.findAllDiplomaByEnrollee(principal.getName());
-//            if (allDiplomaByEnrollee.size() > 1) {
-//                return new Result(ResponseMessage.ALREADY_EXISTS.getMessage(), false);
-//            }
-//            Diploma diploma = new Diploma();
-//            diploma.setCountryName(countryName);
-//            University university = diplomaOldInstitutionRepository.findById(institutionId).get();
-//            diploma.setInstitutionId(institutionId);
-//            diploma.setInstitutionName(university.getInstitutionName());
-//            diploma.setInstitutionOldNameId(id);
-//            diploma.setInstitutionOldName(university.getNameOz());
-//            diploma.setEduFormName(eduFormName);
-//            diploma.setEduFinishingDate(eduFinishingDate);
-//            diploma.setSpecialityName(speciality);
-//            diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-//            diploma.setDegreeId(2);
-//            diploma.setDegreeName("Bakalavr");
-//            Diploma diplomaSave = diplomaRepository.save(diploma);
-//            documentSave(diplomaSave.getId(), diplomaCopy, diplomaIlova);
-//            Optional<Application> application = applicationRepository.checkApp(principal.getName());
-//            if (application.isPresent()) {
-//                application.get().setDiplomaMessage(null);
-//                application.get().setDiplomaStatus(null);
-//                applicationRepository.save(application.get());
-//            }
-//            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-//        }
-//    }
-//
-//    @Transactional
-//    public Result updateDiploma(Principal principal, int diplomaId,
-//                                String countryName, Integer institutionId,
-//                                Integer id, String eduFormName,
-//                                String eduFinishingDate, String speciality,
-//                                String diplomaNumberAndSerial, Integer diplomaCopyId,
-//                                MultipartFile diplomaCopy, Integer diplomaIlovaId, MultipartFile diplomaIlova) {
-//        try {
-//            List<Diploma> diplomas = diplomaRepository.findAllDiplomaByEnrollee(principal.getName());
-//            for (Diploma diploma : diplomas) {
-//                if (diploma.getId() == diplomaId) {
-//                    diploma.setCountryName(countryName);
-//                    diploma.setInstitutionId(institutionId);
-//                    University university = diplomaOldInstitutionRepository.findById(institutionId).get();
-//                    diploma.setInstitutionName(university.getInstitutionName());
-//                    diploma.setInstitutionOldNameId(id);
-//                    diploma.setInstitutionOldName(university.getNameOz());
-//                    diploma.setEduFormName(eduFormName);
-//                    diploma.setEduFinishingDate(eduFinishingDate);
-//                    diploma.setSpecialityName(speciality);
-//                    diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-//                    Optional<Application> appByDiplomId = applicationRepository.getAppByDiplomId(diplomaId);
-//                    if (appByDiplomId.isPresent()) {
-//                        appByDiplomId.get().setDiplomaStatus(null);
-//                        appByDiplomId.get().setDiplomaMessage(null);
-//                        Application save = applicationRepository.save(appByDiplomId.get());
-//                        StoryMessage storyMessage = new StoryMessage();
-//                        storyMessage.setMessage(save.getDiplomaMessage());
-//                        String status = String.valueOf(save.getDiplomaStatus());
-//                        storyMessage.setStatus(status);
-//                        storyMessage.setPinfl(principal.getName());
-//                        storyMessage.setApplication(save);
-//                        storyMessageRepository.save(storyMessage);
-//                    }
-//                    diploma.setModifiedDate(LocalDateTime.now());
-//                    Diploma diplomaSave = diplomaRepository.save(diploma);
-//                    documentUpdate(diplomaSave, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
-//                }
-//                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//            }
-//            return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
-//    }
-//
-//
-//    //by admin
-//    @Transactional
-//    public Result updateDiplomaByAdmin(
-//            int diplomaId,
-//            String countryName,
-//            Integer institutionId,
-//            Integer id,
-//            String eduFormName,
-//            String eduFinishingDate,
-//            String speciality,
-//            String diplomaNumberAndSerial,
-//            Integer diplomaCopyId,
-//            MultipartFile diplomaCopy,
-//            Integer diplomaIlovaId,
-//            MultipartFile diplomaIlova) {
-//        try {
-//            Optional<Diploma> diploma = diplomaRepository.findById(diplomaId);
-//            if (diploma.isPresent()) {
-//                diploma.get().setCountryName(countryName);
-//                diploma.get().setInstitutionId(institutionId);
-//                University university = diplomaOldInstitutionRepository.findById(institutionId).get();
-//                diploma.get().setInstitutionName(university.getInstitutionName());
-//                diploma.get().setInstitutionOldNameId(id);
-//                diploma.get().setInstitutionOldName(university.getNameOz());
-//                diploma.get().setEduFormName(eduFormName);
-//                diploma.get().setEduFinishingDate(eduFinishingDate);
-//                diploma.get().setSpecialityName(speciality);
-//                diploma.get().setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-//                Optional<Application> appByDiplomId = applicationRepository.getAppByDiplomId(diplomaId);
-//                if (appByDiplomId.isPresent()) {
-//                    appByDiplomId.get().setDiplomaStatus(null);
-//                    appByDiplomId.get().setDiplomaMessage(null);
-//                    Application save = applicationRepository.save(appByDiplomId.get());
-//                }
-//                diploma.get().setModifiedDate(LocalDateTime.now());
-//                Diploma diplomaSave = diplomaRepository.save(diploma.get());
-//                documentUpdate(diplomaSave, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
-//                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//            }
-//            return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
-//    }
-//
-//    @Transactional
-//    public DiplomaResponse createForeignDiploma(Principal principal,
-//                                                String countryName,
-//                                                String institutionName,
-//                                                String eduFormName,
-//                                                String eduFinishingDate,
-//                                                String speciality,
-//                                                String diplomaNumberAndSerial,
-//                                                MultipartFile diplomaCopy,
-//                                                MultipartFile diplomaIlova) {
-//        try {
-//            Diploma diploma = new Diploma();
-//            diploma.setCountryName(countryName);
-//            diploma.setInstitutionName(institutionName);
-//            diploma.setEduFormName(eduFormName);
-//            diploma.setEduFinishingDate(eduFinishingDate);
-//            diploma.setSpecialityName(speciality);
-//            diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-//            diploma.setDegreeId(2);
-//            diploma.setDegreeName("Bakalavr");
-//            Diploma save = diplomaRepository.save(diploma);
-//            documentSave(save.getId(), diplomaCopy, diplomaIlova);
-//            FileResponse fileResponse = getFileResponse(save.getId());
-//            Optional<Application> application = applicationRepository.checkApp(principal.getName());
-//            if (application.isPresent()) {
-//                application.get().setDiplomaMessage(null);
-//                application.get().setDiplomaStatus(null);
-//                applicationRepository.save(application.get());
-//            }
-//            return new DiplomaResponse(diploma, fileResponse);
-//        } catch (Exception ex) {
-//            return new DiplomaResponse();
-//        }
-//    }
-//
-//    @Transactional
-//    public DiplomaResponse updateForeignDiploma(Integer diplomaId,
-//                                                String countryName,
-//                                                String institutionName,
-//                                                String eduFormName,
-//                                                String eduFinishingDate,
-//                                                String speciality,
-//                                                String diplomaNumberAndSerial,
-//                                                Integer diplomaCopyId,
-//                                                MultipartFile diplomaCopy,
-//                                                Integer diplomaIlovaId,
-//                                                MultipartFile diplomaIlova) {
-//        try {
-//            Diploma diploma = diplomaRepository.findById(diplomaId).get();
-//            diploma.setCountryName(countryName);
-//            diploma.setInstitutionName(institutionName);
-//            diploma.setEduFormName(eduFormName);
-//            diploma.setEduFinishingDate(eduFinishingDate);
-//            diploma.setSpecialityName(speciality);
-//            diploma.setDiplomaSerialAndNumber(diplomaNumberAndSerial);
-//            Optional<Application> appByDiplomId = applicationRepository.getAppByDiplomId(diplomaId);
-//            if (appByDiplomId.isPresent()) {
-//                appByDiplomId.get().setDiplomaStatus(null);
-//                appByDiplomId.get().setDiplomaMessage(null);
-//                applicationRepository.save(appByDiplomId.get());
-//            }
-//            Diploma save = diplomaRepository.save(diploma);
-//            documentUpdate(save, diplomaCopyId, diplomaIlovaId, diplomaCopy, diplomaIlova);
-//            FileResponse fileResponse = getFileResponse(save.getId());
-//            return new DiplomaResponse(diploma, fileResponse);
-//        } catch (Exception ex) {
-//            return new DiplomaResponse();
-//        }
-//    }
-//
-//    @Transactional
-//    public Result checkDiploma(Principal principal, int diplomaId) {
-//        try {
-//            List<Diploma> diplomas = diplomaRepository.findAllDiplomaByEnrollee(principal.getName());
-//            diplomas.forEach(diploma -> {
-//                diploma.setIsActive(Boolean.FALSE);
-//                diplomaRepository.save(diploma);
-//            });
-//            Diploma diploma = diplomaRepository.findById(diplomaId).get();
-//            diploma.setIsActive(Boolean.TRUE);
-//            diplomaRepository.save(diploma);
-//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public EnrolleeResponse getEnrolleeResponse(Principal principal) {
-//        try {
-//
-//            IIBRequest iibRequest = new IIBRequest();
-//            iibRequest.setPinfl(enrolleeInfo.getPinfl());
-//            iibRequest.setGiven_date(enrolleeInfo.getPassportGivenDate());
-//            IIBResponse iibResponse = iibServiceApi.iibResponse(iibRequest);
-//            Data data = iibResponse.getData();
-//            ImageResponse imageResponse = new ImageResponse();
-//            if (!data.getPhoto().isEmpty()) {
-//                imageResponse.setImage(data.getPhoto());
-//            }
-//            //            Optional<ApplicationResponse> applicationResponse = applicationRepository.findByAppByPrincipal(enrolleeInfo.getId());
-////            if (applicationResponse.isPresent()) {
-////                enrolleeResponse.setApplicationResponse(applicationResponse.get());
-////            }else {
-////                enrolleeResponse.setApplicationResponse(null);
-////            }
-//            return new EnrolleeResponse(enrolleeInfo, imageResponse);
-//        } catch (Exception ex) {
-//            return new EnrolleeResponse();
-//        }
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public List<DiplomaResponse> getDiplomasByEnrolleeInfo(Principal principal) {
-//        List<Diploma> diplomas = diplomaRepository.findAllByEnrolleeInfo(principal.getName());
-//        List<DiplomaResponse> diplomaResponses = new ArrayList<>();
-//        diplomas.forEach(diploma -> {
-//            DiplomaResponse diplomaResponse = new DiplomaResponse(diploma);
-//            FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
-//            if (fileResponse != null) {
-//                diplomaResponse.setFileResponse(fileResponse);
-//            }
-//            diplomaResponses.add(diplomaResponse);
-//        });
-//        return diplomaResponses;
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public DiplomaResponse getDiplomaByIdAndEnrolleInfo(Principal principal, Integer diplomaId) {
-//        try {
-//            Diploma diploma = diplomaRepository.findDiplomaByDiplomaId(principal.getName(), diplomaId).get();
-//            FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
-//            return new DiplomaResponse(diploma, fileResponse);
-//        } catch (Exception ex) {
-//            return new DiplomaResponse();
-//        }
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public DiplomaResponse getDiplomaProfile(Principal principal) {
-//        try {
-//            Diploma diploma = diplomaRepository.getDiplomaProfile(principal.getName()).get();
-//            FileResponse fileResponse = documentService.getFileResponse(diploma.getId());
-//            return new DiplomaResponse(diploma, fileResponse);
-//        } catch (Exception ex) {
-//            return new DiplomaResponse();
-//        }
-//    }
-//
-//    @Transactional
-//    public Result documentSave(int diplomaId, MultipartFile diplomaCopy, MultipartFile diplomaIlova) {
-//
-//        try {
-//            Diploma diploma = diplomaRepository.findById(diplomaId).get();
-//            List<Document> documents = new ArrayList<>();
-//            if (diplomaCopy != null) {
-//                Document diplom = new Document();
-//                String diplomName = fileService.upload(diplomaCopy, "Diplom");
-//                String currentUrl = getCurrentUrl(diplomName);
-//                diplom.setUrl(currentUrl);
-//                diplom.setFileName(diplomName);
-//                diplom.setDiploma(diploma);
-//                documents.add(diplom);
-//            }
-//            if (diplomaIlova != null) {
-//                Document diplomIlova = new Document();
-//                String ilovaName = fileService.upload(diplomaIlova, "Ilova");
-//                String currentUrl = getCurrentUrl(ilovaName);
-//                diplomIlova.setUrl(currentUrl);
-//                diplomIlova.setFileName(ilovaName);
-//                diplomIlova.setDiploma(diploma);
-//                documents.add(diplomIlova);
-//            }
-//            documentRepository.saveAll(documents);
-//            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-//        }
-//    }
-//
-//    @Transactional
-//    public Result documentUpdate(Diploma diploma, Integer docDiplomId, Integer docIlovaId, MultipartFile docDiplom, MultipartFile docIlova) {
-//        try {
-//            List<Document> documents = new ArrayList<>();
-//            if (docDiplomId != null) {
-//                if (docDiplom != null) {
-//                    Document document = documentRepository.findById(docDiplomId).get();
-//                    fileService.deleteDocument(document);
-//                    String diplomName = fileService.upload(docDiplom, "Diplom");
-//                    String currentUrl = getCurrentUrl(diplomName);
-//                    document.setUrl(currentUrl);
-//                    document.setFileName(diplomName);
-//                    document.setModifiedDate(LocalDateTime.now());
-//                    documents.add(document);
-//                }
-//            } else {
-//                Document document = new Document();
-//                String diplomName = fileService.upload(docDiplom, "Diplom");
-//                String currentUrl = getCurrentUrl(diplomName);
-//                document.setFileName(diplomName);
-//                document.setUrl(currentUrl);
-//                document.setDiploma(diploma);
-//                documents.add(document);
-//            }
-//            if (docIlovaId != null) {
-//                if (docIlova != null) {
-//                    Document documentIlova = documentRepository.findById(docIlovaId).get();
-//                    fileService.deleteDocument(documentIlova);
-//                    String diplomIlovaName = fileService.upload(docIlova, "Ilova");
-//                    String currentUrl = getCurrentUrl(diplomIlovaName);
-//                    documentIlova.setUrl(currentUrl);
-//                    documentIlova.setFileName(diplomIlovaName);
-//                    documentIlova.setModifiedDate(LocalDateTime.now());
-//                    documents.add(documentIlova);
-//                }
-//            } else {
-//                Document documentIlova = new Document();
-//                String diplomIlovaName = fileService.upload(docIlova, "Ilova");
-//                String currentUrl = getCurrentUrl(diplomIlovaName);
-//                documentIlova.setFileName(diplomIlovaName);
-//                documentIlova.setUrl(currentUrl);
-//                documentIlova.setDiploma(diploma);
-//                documents.add(documentIlova);
-//            }
-//
-//            if (documents.size() > 0) {
-//                documentRepository.saveAll(documents);
-//            }
-//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//        } catch (Exception ex) {
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
-//    }
-//
-//    @Transactional
-//    public FileResponse getFileResponse(Integer diplomaId) {
-//        List<Document> documents = documentRepository.findAllByDiplomaId(diplomaId);
-//        FileResponse fileResponse = new FileResponse();
-//        documents.forEach(document -> {
-//            if (document.getFileName() != null && document.getFileName().startsWith("Diplom")) {
-//                DiplomaCopyResponse diplomaCopyResponse = new DiplomaCopyResponse();
-//                diplomaCopyResponse.setId(document.getId());
-//                diplomaCopyResponse.setUrl(document.getUrl());
-//                fileResponse.setDiplomaCopyResponse(diplomaCopyResponse);
-//            }
-//            if (document.getFileName() != null && document.getFileName().startsWith("Ilova")) {
-//                DiplomaIlovaResponse diplomaIlovaResponse = new DiplomaIlovaResponse();
-//                diplomaIlovaResponse.setId(document.getId());
-//                diplomaIlovaResponse.setUrl(document.getUrl());
-//                fileResponse.setDiplomaIlovaResponse(diplomaIlovaResponse);
-//            }
-//        });
-//        return fileResponse;
-//    }
-//
-//    @Transactional
-//    public Result deleteDiploma(Integer diplomaId, Principal principal) {
-//        try {
-//            Optional<Diploma> byId = diplomaRepository.findById(diplomaId);
-//            if (byId.isPresent()) {
-//                if (byId.get().getUser().getId().equals(enrolleeInfo.getId())) {
-//                    diplomaRepository.deleteById(diplomaId);
-//                    return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
-//                }
-//                return new Result("bu sizning diplomingiz emas", false);
-//            }
-//            return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
-//        } catch (Exception e) {
-//            return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
-//        }
-//    }
-//
-//
-//}
+package uz.raqamli_markaz.ikkinchi_talim.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.repository.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.sql.Timestamp;
+import java.util.Base64;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+
+    private final UserRepository userRepository;
+    private final MyEduApiService myEduApiService;
+    String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAISfguHXlZp2BzVrUaT+8blLPepjhxjozOCk8BJu6TteMBynTOT7EAC5H00h5MZwT7TgRkImwbk2FcFeAeGQjvSDsVTUbZlakC/wB1AA4UqcUm3OJlC77o6//pTb9wBH+lKlsAvY+PrAiAKwAMTDHFs6Q/ACY74ZbIFLY3O4MFNfAgMBAAECgYAQ8aQyIG3/pvayz3xF3UCa0M8fRAn9l7idNtVpNXxc1mLFNmavlpfrz7r9CsiExdKZJFI1n2f+trc+1jjdTa/FxHshzVB2q29GfeHR/Iu8tjw6ypWcXT4kJdj6wNRYpgMsYRV/f6Sk7Ngp+M9+NeXOj+xX1+EH7UiyDpNSXRwAmQJBALrnl0q/Z2wJiK4XN+8aHTEgroJmhb+NpC0mVDu5DldJWswdK4s/Kvh4C4SHhduEDeC541hjA3CXaUo1AFs9hBsCQQC1psj9VeV/qicN1FYf2coVSChTKp8lhC/yifakPoLp0UX9iHaKzypzTqYWTUdsSZ63d4dKnUa9+Iy6yZZbj7oNAkBEmAIaWKyoJceXvMW2ZqsYAJqLGP01E9KRD2QSlxQATNeZ2YrFi+VFUylG9kXWDlzZgN9C7POyOp9VsKX01lrJAkEAgoNN328K0HoBS1dndcT2A+pvRqnV5I+gH4PumL1tM++veOTGPx9voZ89h8KIcY5HogwYQYzU2gMtobra8/hFNQJAa+NCJazCnUhwL7Nt+jS/wzHToLTWV1ZtLUo3iiMA6R5IegdnxfW6R8LAHNcx/ZhXEbv9ZCV08kU/dtMgSfzqoA==";
+    String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
+@Transactional
+    public Result checkUser(String token) {
+
+        try {
+            String decode = decode(token);
+            if (decode != null) {
+                String pinfl = decode.substring(0, decode.indexOf("|"));
+                String expireteTime = decode.substring(decode.indexOf("|") + 1);
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                Timestamp timestampExpireteTime = Timestamp.valueOf(expireteTime);
+                if (now.after(timestampExpireteTime)) {
+                    return new Result("Expirete Token ", false);
+                }
+                Optional<User> user = userRepository.findUserByPinfl(pinfl);
+                if (user.isEmpty()) {
+                    String encode = encode(pinfl);
+                    UserResponseMyEdu userMyEdu = myEduApiService.getUserByToken(encode);
+                    User userNew = new User();
+                    userNew.setCitizenship(userMyEdu.getCitizenship().getNameUz());
+                    userNew.setGender(userMyEdu.getGender());
+                    userNew.setFullName(userMyEdu.getFirstName() + " " + userMyEdu.getLastName() + " " + userMyEdu.getMiddleName());
+                    userNew.setDateOfBirth(userMyEdu.getBirthDate());
+                    userNew.setPermanentAddress(userMyEdu.getAddress());
+                    userNew.setMyEduId(userMyEdu.getId());
+                    userNew.setPhoneNumber(userMyEdu.getPhoneNumber());
+                    userNew.setFotoUrl(userMyEdu.getPhoto().getFile());
+                    userNew.setPinfl(userMyEdu.getPassport().getPinfl());
+                    userRepository.save(userNew);
+                    return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, userNew.getId());
+                }
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, user.get().getId());
+
+            }
+            return new Result("token is null", false);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR.getMessage(), false);
+        }
+    }
+
+    public String decode(String token) throws InvalidKeySpecException, IOException, NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        byte[] decode = Base64.getDecoder().decode(token); //Test string text
+
+        byte[] decodePrivateKey = Base64.getDecoder().decode(privateKey);
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodePrivateKey);
+        PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+        Cipher decryptCipher = Cipher.getInstance("RSA");
+        decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+        byte[] decryptedMessageBytes = decryptCipher.doFinal(decode);
+        String decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
+        System.out.println(decryptedMessage);
+        return decryptedMessage;
+    }
+
+    public String encode(String pinfl) throws InvalidKeySpecException, IOException, NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        byte[] decodePublicKey = Base64.getDecoder().decode(publicKey);
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decodePublicKey);
+        PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+        Cipher encryptCipher = Cipher.getInstance("RSA");
+        encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] secretMessageBytes = pinfl.getBytes(StandardCharsets.UTF_8);
+        byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
+        String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
+        System.out.println(encodedMessage);
+        return encodedMessage;
+    }
+
+
+}

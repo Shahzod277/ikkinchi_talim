@@ -25,8 +25,9 @@ public class User extends AbstractEntity {
     private String passportGivenDate;
     private String pinfl;
     private String phoneNumber;
-    private String nationality;
     private String permanentAddress;
+    private Integer myEduId;
+    private String fotoUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;

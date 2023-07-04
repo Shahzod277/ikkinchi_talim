@@ -24,6 +24,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,13 +40,18 @@ public class DiplomaService {
     private final DiplomaApi diplomaApi;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
+    private final UserService userService;
 
-    //bu integratsiyadan kelayotgan diplomlar
     @Transactional
-    public Result saveAndGetDiplomaByDiplomaApi(Principal principal) {
+    public Result saveAndGetDiplomaByDiplomaApi(String token) {
         try {
-            User user = userRepository.findUserByPinfl(principal.getName()).get();
-            List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(principal.getName());
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer id = (Integer) result.getObject();
+            User user = userRepository.findById(id).get();
+            List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(id);
             if (diplomaByUser.size() == 0) {
                 List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(user.getPinfl());
                 if (diplomas.size() == 0) {
@@ -82,10 +88,15 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result createDiploma(Principal principal, DiplomaRequest request) {
+    public Result createDiploma(String token, DiplomaRequest request) {
         try {
-            User user = userRepository.findUserByPinfl(principal.getName()).get();
-            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(principal.getName());
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer id = (Integer) result.getObject();
+            User user = userRepository.findById(id).get();
+            List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(id);
             Country country = countryRepository.findById(request.getCountryId()).get();
             if (diplomaList.size() == 0) {
                 if (request.getCountryId() == 1) {
@@ -140,10 +151,15 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result updateDiploma(Principal principal, DiplomaRequest request) {
+    public Result updateDiploma(String token, DiplomaRequest request) {
         try {
-            User user = userRepository.findUserByPinfl(principal.getName()).get();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), principal.getName()).get();
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer id = (Integer) result.getObject();
+            User user = userRepository.findById(id).get();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), id).get();
             Country country = countryRepository.findById(request.getCountryId()).get();
             if (request.getCountryId() == 1) {
                 Citizen citizen = new Citizen(user);
@@ -212,13 +228,18 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result diplomaIsActive(String pinfl, Integer diplomaId, Boolean b) {
+    public Result diplomaIsActive(String token, Integer diplomaId, Boolean b) {
         try {
-            Boolean aBoolean = diplomaRepository.existsDiplomaByIsActiveCount(pinfl);
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer id = (Integer) result.getObject();
+            Boolean aBoolean = diplomaRepository.existsDiplomaByIsActiveCount(id);
             if (aBoolean) {
                 return new Result("Sizda belgilangan diplom bor", false);
             }
-            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, pinfl).get();
+            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, id).get();
             diploma.setIsActive(b);
             diplomaRepository.save(diploma);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
@@ -229,13 +250,25 @@ public class DiplomaService {
     }
 
     @Transactional(readOnly = true)
-    public List<DiplomaResponse> getAllDiplomaByPrincipal(String pinfl) {
-        return diplomaRepository.findAllDiplomaByUser(pinfl).stream().map(DiplomaResponse::new).toList();
+    public Result getAllDiplomaByPrincipal(String token) {
+        Result result = userService.checkUser(token);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        Integer id = (Integer) result.getObject();
+        List<DiplomaResponse> list = diplomaRepository.findAllDiplomaByUser(id).stream().map(DiplomaResponse::new).toList();
+        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, list);
     }
 
     @Transactional(readOnly = true)
-    public DiplomaResponse getDiplomaByPrincipal(int diplomaId, String pinfl) {
-        return diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, pinfl).map(DiplomaResponse::new).get();
+    public Result getDiplomaByPrincipal(int diplomaId, String token) {
+        Result result = userService.checkUser(token);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        Integer id = (Integer) result.getObject();
+        DiplomaResponse diplomaResponse = diplomaRepository.findDiplomaByDiplomaIdAndUser(diplomaId, id).map(DiplomaResponse::new).get();
+        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponse);
     }
 
     private Diploma createDiplomaNew(DiplomaResponseApi diplomaResponseApi) {
@@ -267,10 +300,15 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result deleteDiploma(Integer id, Principal principal) {
+    public Result deleteDiploma(Integer id, String token) {
         try {
-            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, principal.getName()).get();
-            diplomaRepository.deleteById(id);
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer userId = (Integer) result.getObject();
+            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
+            diplomaRepository.delete(diploma);
             return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

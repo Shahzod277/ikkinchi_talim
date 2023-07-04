@@ -27,5 +27,6 @@ public class ApiConstant {
     public static final String D_ARXIV_PASSWORD = "0bHihbG8CNMzjFGsnoKQ";
     public static final String DEGREE_ID = "2";//Bakalavr
     public static final String EDU_TYPE_ID = "3";//  "name_oz": "Oliy ta'lim",
+    public static final String USERS_ME_API = "https://my.edu.uz/api/users/me/";//  "name_oz": "Oliy ta'lim",
 
 }
