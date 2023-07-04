@@ -38,11 +38,12 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 //		utils.saveEduForm();
+//		generateKeys();
 	}
 
 	public void generateKeys() throws NoSuchAlgorithmException {
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(512);
+		generator.initialize(1024);
 		KeyPair pair = generator.generateKeyPair();
 		PublicKey publicKey = pair.getPublic();
 		PrivateKey privateKey = pair.getPrivate();

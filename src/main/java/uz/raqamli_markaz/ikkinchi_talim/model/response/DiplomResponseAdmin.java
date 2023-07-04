@@ -27,23 +27,6 @@ public class DiplomResponseAdmin {
     private String diplomaStatus;
     private String diplomaNumberAndDiplomaSerial;
     private StoryMessageResponse storyMessageResponse;
-    private FileResponse fileResponse;
-    public DiplomResponseAdmin(Diploma diploma, FileResponse fileResponse) {
-        this.id = diploma.getId();
-        this.countryName = diploma.getCountryName();
-        this.institutionId = diploma.getInstitutionId();
-        this.institutionName = diploma.getInstitutionName();
-        this.institutionOldNameId = diploma.getInstitutionOldId();
-        this.institutionOldName = diploma.getInstitutionOldName();
-        this.eduFormName = diploma.getEduFormName();
-        this.degreeId = diploma.getDegreeId();
-        this.degreeName = diploma.getDegreeName();
-        this.specialityId = diploma.getSpecialityId();
-        this.specialityName = diploma.getSpecialityName();
-        this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaNumberAndDiplomaSerial = diploma.getDiplomaSerialAndNumber();
-        this.fileResponse = fileResponse;
-    }
 
     public DiplomResponseAdmin(Diploma diploma) {
         this.id = diploma.getId();
@@ -59,5 +42,6 @@ public class DiplomResponseAdmin {
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
         this.diplomaNumberAndDiplomaSerial = diploma.getDiplomaSerialAndNumber();
+
     }
 }

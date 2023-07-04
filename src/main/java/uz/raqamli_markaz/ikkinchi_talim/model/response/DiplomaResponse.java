@@ -34,24 +34,6 @@ public class DiplomaResponse {
 
     private Boolean isActive ;
 
-    public DiplomaResponse(Diploma diploma, FileResponse fileResponse) {
-        this.id = diploma.getId();
-        this.countryName = diploma.getCountryName();
-        this.institutionId = diploma.getInstitutionId();
-        this.institutionName = diploma.getInstitutionName();
-        this.institutionOldName = diploma.getInstitutionOldName();
-        this.eduFormName = diploma.getEduFormName();
-        this.degreeId = diploma.getDegreeId();
-        this.degreeName = diploma.getDegreeName();
-        this.specialityId = diploma.getSpecialityId();
-        this.specialityName = diploma.getSpecialityName();
-        this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
-        this.ilovaUrl = diploma.getIlovaUrl();
-        this.diplomaUrl = diploma.getDiplomaUrl();
-        this.isActive = diploma.getIsActive();
-    }
-
     public DiplomaResponse(Diploma diploma) {
         this.id = diploma.getId();
         this.countryName = diploma.getCountryName();
@@ -68,6 +50,5 @@ public class DiplomaResponse {
         this.ilovaUrl = diploma.getIlovaUrl();
         this.diplomaUrl = diploma.getDiplomaUrl();
         this.isActive = diploma.getIsActive();
-
     }
 }
