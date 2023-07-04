@@ -39,10 +39,6 @@ public class DiplomaController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-    @GetMapping("allDiplomaByPrincipal")
-    public ResponseEntity<?> getAllDiplomaByPrincipal(@RequestParam(value = "token") String token) {
-        return ResponseEntity.ok(diplomaService.getAllDiplomaByPrincipal(token));
-    }
 
     @GetMapping("getDiplomaByPrincipal/{diplomaId}")
     public ResponseEntity<?> getAllDiplomaByPrincipal(@PathVariable Integer diplomaId,
@@ -66,7 +62,7 @@ public class DiplomaController {
     }
 
     @PostMapping("changeDiplomaStatusApi")
-    @PreAuthorize("hasRole('MODERATOR')")
+    @PreAuthorize("hasRole('MODERATOR')") //shohijahon uchun
     public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
                                                     @RequestParam(value = "statusId") Integer statusId,
                                                     @RequestParam(value = "statusName") String statusName) {

@@ -250,17 +250,6 @@ public class DiplomaService {
     }
 
     @Transactional(readOnly = true)
-    public Result getAllDiplomaByPrincipal(String token) {
-        Result result = userService.checkUser(token);
-        if (!result.isSuccess()) {
-            return result;
-        }
-        Integer id = (Integer) result.getObject();
-        List<DiplomaResponse> list = diplomaRepository.findAllDiplomaByUser(id).stream().map(DiplomaResponse::new).toList();
-        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, list);
-    }
-
-    @Transactional(readOnly = true)
     public Result getDiplomaByPrincipal(int diplomaId, String token) {
         Result result = userService.checkUser(token);
         if (!result.isSuccess()) {
