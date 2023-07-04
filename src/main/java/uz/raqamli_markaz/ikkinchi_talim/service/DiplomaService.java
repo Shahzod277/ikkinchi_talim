@@ -43,37 +43,42 @@ public class DiplomaService {
     //bu integratsiyadan kelayotgan diplomlar
     @Transactional
     public Result saveAndGetDiplomaByDiplomaApi(Principal principal) {
-        User user = userRepository.findUserByPinfl(principal.getName()).get();
-        List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(principal.getName());
-        if (diplomaByUser.size() == 0) {
-            List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(user.getPinfl());
-            if (diplomas.size() == 0) {
-                return new Result("Sizning diplom malumotlaringiz d-arxiv.edu.uz tizimidan topilmadi", false);
-            }
-            List<DiplomaResponse> diplomaResponses = new ArrayList<>();
-            diplomas.stream().sorted(Comparator.comparing(DiplomaResponseApi::getStatusId)).forEach(diploma -> {
-                if (String.valueOf(diploma.getDegreeId()).equals(ApiConstant.DEGREE_ID)) {
-                    if (diploma.getStatusId() == 1) {
-                        Diploma diplomaNew = createDiplomaNew(diploma);
-                        diplomaNew.setUser(user);
-                        Diploma save = diplomaRepository.save(diplomaNew);
-                        diplomaResponses.add(new DiplomaResponse(save));
-                    } else if (diploma.getStatusId() == 2) {
-                        Diploma diplomaNew = createDiplomaNew(diploma);
-                        diplomaNew.setUser(user);
-                        Diploma save = diplomaRepository.save(diplomaNew);
-                        diplomaResponses.add(new DiplomaResponse(save));
-                    } else if (diploma.getStatusId() == 8) {
-                        Diploma diplomaNew = createDiplomaNew(diploma);
-                        diplomaNew.setUser(user);
-                        Diploma save = diplomaRepository.save(diplomaNew);
-                        diplomaResponses.add(new DiplomaResponse(save));
-                    }
+        try {
+            User user = userRepository.findUserByPinfl(principal.getName()).get();
+            List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(principal.getName());
+            if (diplomaByUser.size() == 0) {
+                List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(user.getPinfl());
+                if (diplomas.size() == 0) {
+                    return new Result("Sizning diplom malumotlaringiz d-arxiv.edu.uz tizimidan topilmadi", false);
                 }
-            });
-            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
+                List<DiplomaResponse> diplomaResponses = new ArrayList<>();
+                diplomas.stream().sorted(Comparator.comparing(DiplomaResponseApi::getStatusId)).forEach(diploma -> {
+                    if (String.valueOf(diploma.getDegreeId()).equals(ApiConstant.DEGREE_ID)) {
+                        if (diploma.getStatusId() == 1) {
+                            Diploma diplomaNew = createDiplomaNew(diploma);
+                            diplomaNew.setUser(user);
+                            Diploma save = diplomaRepository.save(diplomaNew);
+                            diplomaResponses.add(new DiplomaResponse(save));
+                        } else if (diploma.getStatusId() == 2) {
+                            Diploma diplomaNew = createDiplomaNew(diploma);
+                            diplomaNew.setUser(user);
+                            Diploma save = diplomaRepository.save(diplomaNew);
+                            diplomaResponses.add(new DiplomaResponse(save));
+                        } else if (diploma.getStatusId() == 8) {
+                            Diploma diplomaNew = createDiplomaNew(diploma);
+                            diplomaNew.setUser(user);
+                            Diploma save = diplomaRepository.save(diplomaNew);
+                            diplomaResponses.add(new DiplomaResponse(save));
+                        }
+                    }
+                });
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
+            }
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
         }
-        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
     }
 
     @Transactional
