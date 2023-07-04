@@ -21,9 +21,9 @@ public class ApplicationResponse {
     private String diplomaInstitutionName;
 
     public ApplicationResponse(Application application) {
-        this.status = application.getStatus();
+        this.status = application.getApplicationStatus();
+        this.message = application.getApplicationMessage();
         this.diplomaStatus = application.getDiplomaStatus();
-        this.message = application.getMessage();
         this.diplomaMessage = application.getDiplomaMessage();
     }
 }

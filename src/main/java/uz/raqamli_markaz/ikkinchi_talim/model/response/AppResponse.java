@@ -13,7 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 public class AppResponse {
 
     private DiplomaResponse diplomaResponse;
-    private StoryMessageResponse storyMessageResponse;
+    private StoryM storyM;
 
     Integer id;
     private Integer tilId;
@@ -30,7 +30,7 @@ public class AppResponse {
 
     public AppResponse(Application application) {
         this.id = application.getId();
-        this.appStatus = application.getStatus();
+        this.appStatus = application.getApplicationStatus();
         this.diplomaStatus = String.valueOf(application.getDiplomaStatus());
         this.createdDate = application.getCreatedDate().toString();
     }
