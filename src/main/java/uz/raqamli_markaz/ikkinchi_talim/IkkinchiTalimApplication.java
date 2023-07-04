@@ -38,8 +38,8 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 //		utils.saveDiplomaSerial();
-		generateKeys();
-		encode();
+//		generateKeys();
+//		encode();
 //		decode();
 	}
 
