@@ -1,55 +1,77 @@
-//package uz.raqamli_markaz.ikkinchi_talim.controller;
-//
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
-//import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialitiesResponse;
-//import uz.raqamli_markaz.ikkinchi_talim.model.response.UniversityResponse;
-//import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping("/api/diploma/")
-//@RequiredArgsConstructor
-//public class DiplomaController {
-//
-//    private final DiplomaApi diplomaApi;
-//    private final DiplomaService diplomaService;
-//
-//
-//    @GetMapping("getUniversities")
-//    public ResponseEntity<?> getUniversities() {
-//        List<UniversityResponse> universities = diplomaApi.getUniversities();
-//        return ResponseEntity.status(!universities.isEmpty() ? 200 : 404).body(universities);
-//    }
-//
-//    @GetMapping("active/getActiveUniversities")
-//    public ResponseEntity<?> getActiveUniversities() {
-//        List<UniversityResponse> universities = diplomaApi.getActiveUniversities();
-//        return ResponseEntity.status(!universities.isEmpty() ? 200 : 404).body(universities);
-//    }
-//
-//    @GetMapping("getSpecialities/{universityId}")
-//    public ResponseEntity<?> getSpecialities(@PathVariable int universityId) {
-//        List<SpecialitiesResponse> specialities = diplomaApi.getSpecialitiesByUniversityId(universityId);
-//        return ResponseEntity.status(!specialities.isEmpty() ? 200 : 404).body(specialities);
-//    }
-//
-////    @PostMapping("saveDiploma")
-////    public ResponseEntity<?> createDiploma(@RequestParam(value = "pinfl") String pinfl) {
-////        Result result = applicationService.saveDiploma(pinfl);
-////        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-////    }
-//
-//    @GetMapping("language")
-//    public List<Tillar> getTillar() {
-//        return tillarRepository.findAll();
-//    }
-//
-//
-//
-//}
+package uz.raqamli_markaz.ikkinchi_talim.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
+import java.security.Principal;
+
+@RestController
+@RequestMapping("/api/diploma/")
+@RequiredArgsConstructor
+public class DiplomaController {
+
+    private final DiplomaService diplomaService;
+
+    @PostMapping("createDiploma")
+    public ResponseEntity<?> createDiploma(@RequestParam(value = "pinfl") String pinfl,
+                                           Principal principal,
+                                           @RequestBody DiplomaRequest request) {
+        Result result = diplomaService.createDiploma(principal, request);
+        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+    }
+
+    @PutMapping("updateDiploma")
+    public ResponseEntity<?> updateDiploma(@RequestParam(value = "pinfl") String pinfl,
+                                           Principal principal,
+                                           @RequestBody DiplomaRequest request) {
+        Result result = diplomaService.updateDiploma(principal, request);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
+    @DeleteMapping("deleteDiploma")
+    public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
+                                           Principal principal) {
+        Result result = diplomaService.deleteDiploma(id, principal);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
+    @GetMapping("allDiplomaByPrincipal")
+    public ResponseEntity<?> getAllDiplomaByPrincipal(@RequestParam(value = "pinfl") String pinfl) {
+        return ResponseEntity.ok( diplomaService.getAllDiplomaByPrincipal(pinfl));
+    }
+
+    @GetMapping("getDiplomaByPrincipal/{diplomaId}")
+    public ResponseEntity<?> getAllDiplomaByPrincipal(@PathVariable Integer diplomaId,
+                                                      @RequestParam(value = "pinfl") String pinfl) {
+        DiplomaResponse diplomaResponse = diplomaService.getDiplomaByPrincipal(diplomaId, pinfl);
+        return ResponseEntity.status(diplomaResponse != null ? 200 : 404).body(diplomaResponse);
+    }
+
+    @PatchMapping("diplomaIsActive/{diplomaId}")
+    public ResponseEntity<?> diplomaIsActive(@PathVariable Integer diplomaId,
+                                             @RequestParam(value = "pinfl") String pinfl,
+                                             @RequestParam(value = "isActive") Boolean isActive) {
+        Result result = diplomaService.diplomaIsActive(pinfl, diplomaId, isActive);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
+    @PostMapping("saveDiplomaApi")
+    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "pinfl") String pinfl,
+                                           Principal principal) {
+        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(principal);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
+    @PostMapping("changeDiplomaStatusApi")
+    public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
+                                                    @RequestParam(value = "statusId") Integer statusId,
+                                                    @RequestParam(value = "statusName") String statusName) {
+        Result result = diplomaService.changeDiplomaStatusApi(diplomaId, statusId, statusName);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
+}

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaInstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaSpecialityResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
@@ -23,6 +24,7 @@ public class ClassificatorService {
     private final DiplomaSerialRepository diplomaSerialRepository;
     private final EduFormRepository eduFormRepository;
     private final CountryRepository countryRepository;
+    private final LanguageRepository languageRepository;
 
     @Transactional(readOnly = true)
     public List<DiplomaSerial> getAllDiplomaSerials() {
@@ -65,6 +67,11 @@ public class ClassificatorService {
     @Transactional(readOnly = true)
     public List<Country> getAllCountry() {
         return countryRepository.findAll(Sort.by("id"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<Language> getAllLanguage() {
+        return languageRepository.findAll(Sort.by("id"));
     }
 
 }

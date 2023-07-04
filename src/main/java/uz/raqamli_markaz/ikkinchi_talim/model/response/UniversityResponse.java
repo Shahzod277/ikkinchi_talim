@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 
 @Getter
 @Setter
@@ -13,18 +12,9 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 public class UniversityResponse {
 
     private Integer id;
-    private Integer institutionId;
-    private String institutionName;
-    private Integer institutionTypeId;
-    private String institutionTypeName;
-    private String statusName;
+    private String code;
     private String nameUz;
     private String nameOz;
     private String nameEn;
     private String nameRu;
-    private String terminationDate;
-    private Integer regionSoatoId;
-    private String regionName;
-
-
 }

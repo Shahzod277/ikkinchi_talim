@@ -26,7 +26,7 @@ public class DiplomResponseAdmin {
     private String eduFinishingDate;
     private String diplomaStatus;
     private String diplomaNumberAndDiplomaSerial;
-    private StoryMessageResponse storyMessageResponse;
+    private StoryM storyM;
 
     public DiplomResponseAdmin(Diploma diploma) {
         this.id = diploma.getId();
