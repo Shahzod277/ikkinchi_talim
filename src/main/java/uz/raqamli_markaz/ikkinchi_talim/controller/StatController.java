@@ -12,7 +12,6 @@ public class StatController {
 
     private final ApplicationRepository applicationRepository;
     private final IIBServiceApi iibServiceApi;
-    private final DirectionRepository directionRepository;
 
 //    @GetMapping("count")
 //    public ResponseEntity<?> getCountAndTodayCount() {
