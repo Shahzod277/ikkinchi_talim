@@ -12,6 +12,9 @@ public class FormEduDataItem {
 	@JsonProperty("degree_id")
 	private Integer degreeId;
 
+	@JsonProperty("degree_name")
+	private String degreeName;
+
 	@JsonProperty("name_ru")
 	private String nameRu;
 

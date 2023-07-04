@@ -1,6 +1,5 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +8,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerialResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.EduFormApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.formEdu.FormEduResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldDataItem;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institution_old_names.InstitutionOldNames;
@@ -18,14 +19,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResp
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialityDataItem;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaInstitutionRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSerialRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSpecialityRepository;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
+import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +34,7 @@ public class Utils {
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final DiplomaSpecialityRepository diplomaSpecialityRepository;
     private final DiplomaSerialRepository diplomaSerialRepository;
+    private final EduFormRepository eduFormRepository;
     private final DiplomaApi diplomaApi;
 
     @Transactional
@@ -159,19 +155,23 @@ public class Utils {
     public void saveEduForm() {
         try {
             FormEduResponse formEduResponse = diplomaApi.getFormEdu();
-            DiplomaSerials diplomaSerials = response.getDataSerials().getDiplomaSerials();
-            List<DataItemSerials> data = diplomaSerials.getData();
-            List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();
-            data.forEach(d -> {
-                DiplomaSerial diplomaSerial = new DiplomaSerial();
-                diplomaSerial.setSerial(d.getSerial());
-                diplomaSerial.setDegreeId(d.getDegreeId());
-                diplomaSerial.setBeginYear(d.getBeginYear());
-                diplomaSerial.setStatusId(d.getStatusId());
-                diplomaSerial.setEndYear(d.getEndYear());
-                diplomaSerialsListClassificator.add(diplomaSerial);
+            EduFormApi eduFormApi = formEduResponse.getFormEduData().getEduFormApi();
+            List<FormEduDataItem> dataItems = eduFormApi.getData();
+
+            List<EduForm> eduForms = new ArrayList<>();
+            dataItems.forEach(eduDataItem -> {
+                EduForm eduForm = new EduForm();
+                eduForm.setCode(eduDataItem.getId());
+                eduForm.setNameOz(eduDataItem.getNameOz());
+                eduForm.setNameUz(eduDataItem.getNameUz());
+                eduForm.setNameRu(eduDataItem.getNameRu());
+                eduForm.setNameEn(eduDataItem.getNameEn());
+                eduForm.setStatusId(eduDataItem.getStatusId());
+                eduForm.setDegreeId(eduDataItem.getDegreeId());
+                eduForm.setDegreeName(eduDataItem.getDegreeName());
+                eduForms.add(eduForm);
             });
-            diplomaSerialRepository.saveAll(diplomaSerialsListClassificator);
+            eduFormRepository.saveAll(eduForms);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();

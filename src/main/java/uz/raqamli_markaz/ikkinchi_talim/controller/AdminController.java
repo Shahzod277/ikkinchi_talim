@@ -74,18 +74,6 @@ public class AdminController {
 //        return ResponseEntity.ok(allDirection);
 //    }
 
-    @PostMapping("eduForm")
-    public ResponseEntity<?> createEduForm(@RequestBody EduFormRequest eduFormRequest) {
-        Result result = eduFormService.createEduForm(eduFormRequest);
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
-
-    @PutMapping("eduForm/update/{eduFormId}")
-    public ResponseEntity<?> updateEduForm(@PathVariable int eduFormId, @RequestBody EduFormRequest request) {
-        Result result = eduFormService.updateEduForm(eduFormId, request);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
-
 //    @GetMapping("eduForm/{eduFormId}")
 //    public ResponseEntity<?> getEduFromById(@PathVariable Integer eduFormId) {
 //        EduFormResponse eduFormResponse = eduFormService.getEduFormResponse(eduFormId);
@@ -119,12 +107,6 @@ public class AdminController {
 //        Page<EduFormResponse> allEduFormPage = eduFormService.getAllEduFormPage(page, size);
 //        return ResponseEntity.ok(allEduFormPage);
 //    }
-
-    @DeleteMapping("eduForm{eduFormId}")
-    public ResponseEntity<?> deleteEduForm(@PathVariable int eduFormId) {
-        Result result = eduFormService.deleteEduForm(eduFormId);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
 
 //    @PostMapping("uadmin")
 //    public ResponseEntity<?> createUAdmin(@RequestBody UserRequest request) {

@@ -14,7 +14,13 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @ToString
 public class EduForm extends AbstractEntity {
 
-    private String name;
-    private String code;
+    private String nameOz;
+    private String nameUz;
+    private String nameRu;
+    private String nameEn;
+    private Integer statusId;
+    private Integer degreeId;
+    private String degreeName;
+    private Integer code;
 
 }

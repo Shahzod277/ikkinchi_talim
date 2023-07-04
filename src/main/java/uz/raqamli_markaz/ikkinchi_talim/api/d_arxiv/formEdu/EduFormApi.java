@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class Specialities{
+public class EduFormApi {
 
 	@JsonProperty("total")
 	private Integer total;

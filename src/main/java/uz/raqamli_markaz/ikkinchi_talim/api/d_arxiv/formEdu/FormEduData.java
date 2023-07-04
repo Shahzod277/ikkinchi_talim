@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 public class FormEduData {
 
-	@JsonProperty("specialities")
-	private Specialities specialities;
+	@JsonProperty("edu_forms")
+	private EduFormApi eduFormApi;
 }

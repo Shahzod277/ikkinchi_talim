@@ -23,12 +23,12 @@ public class EduFormResponse {
 
     public EduFormResponse(EduForm eduForm, List<LanguageResponse> languages) {
         this.id = eduForm.getId();
-        this.name = eduForm.getName();
+        this.name = eduForm.getNameOz();
         this.languages = languages;
     }
 
     public EduFormResponse(EduForm eduForm) {
         this.id = eduForm.getId();
-        this.name = eduForm.getName();
+        this.name = eduForm.getNameOz();
     }
 }
