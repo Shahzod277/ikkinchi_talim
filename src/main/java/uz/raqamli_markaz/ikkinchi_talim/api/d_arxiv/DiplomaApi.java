@@ -49,7 +49,6 @@ public class DiplomaApi {
         return tokenEntity.getToken();
 
     }
-
     public List<DiplomaResponseApi> getDiploma(String pinfl) {
 
         String DIPLOMA_URL = "https://d-arxiv.edu.uz/api/v2/diploma/get?pinfl=" + pinfl;
