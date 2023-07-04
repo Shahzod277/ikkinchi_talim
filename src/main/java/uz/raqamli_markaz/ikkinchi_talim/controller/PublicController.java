@@ -41,6 +41,11 @@ public class PublicController {
         return ResponseEntity.ok(classificatorService.getAllCountry());
     }
 
+    @GetMapping("languages")
+    public ResponseEntity<?> getAllLanguage() {
+        return ResponseEntity.ok(classificatorService.getAllLanguage());
+    }
+
     @GetMapping("allDiplomaInstitutions")
     public ResponseEntity<?> getAllDiplomaInstitutions() {
         return ResponseEntity.ok(classificatorService.getAllDiplomaInstitutionResponse());

@@ -1,14 +1,9 @@
 package uz.raqamli_markaz.ikkinchi_talim.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.IIBRequest;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DirectionRepository;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/statistic/")

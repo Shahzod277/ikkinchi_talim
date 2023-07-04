@@ -8,9 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.EduForm;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 
 @Entity
 @Getter
@@ -19,9 +16,9 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Language;
 @AllArgsConstructor
 public class Application extends AbstractEntity {
 
-    private String status;
+    private String applicationStatus;
+    private String applicationMessage;
     private Boolean diplomaStatus;
-    private String message;
     private String diplomaMessage;
 
     @ManyToOne

@@ -1,8 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.domain.diploma;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
