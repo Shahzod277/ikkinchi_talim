@@ -14,20 +14,16 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.Citizen;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
-import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaStatusRequest;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
-import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -43,7 +39,6 @@ public class DiplomaService {
     private final DiplomaApi diplomaApi;
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
-    private final ApplicationRepository applicationRepository;
 
     //bu integratsiyadan kelayotgan diplomlar
     @Transactional
@@ -283,9 +278,4 @@ public class DiplomaService {
         }
     }
 
-
-    @Transactional(readOnly = true)
-    public List<Country> getAllCountry() {
-        return countryRepository.findAll(Sort.by("id"));
-    }
 }

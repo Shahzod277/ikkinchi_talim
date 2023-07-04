@@ -37,12 +37,16 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		utils.saveEduForm();
+//		utils.saveEduForm();
+//		generateKeys();
+		encode();
+		decode();
+
 	}
 
 	public void generateKeys() throws NoSuchAlgorithmException {
 		KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-		generator.initialize(512);
+		generator.initialize(1024);
 		KeyPair pair = generator.generateKeyPair();
 		PublicKey publicKey = pair.getPublic();
 		PrivateKey privateKey = pair.getPrivate();
@@ -65,23 +69,24 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 	}
 
 	String secretMessage = "My secret message";
+	String encodeMessage = "RoWRQH4VCPo1l6HKt/hcrKIV0iUWQW6NBlxWrnoNdsBOgWoCOzBwNCLtH+BBYEF/cApLG3tJVDno+9eJ3Yv3+MDkkJsT7F6Vjs78mWJ8HjIySDB/NsAoK9dOf4EEetKVPlkgZivSYWOeQ3sR/tsZI1Hr3GLltic3FHCHDUsHNDU=";
+	String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
+	String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAISfguHXlZp2BzVrUaT+8blLPepjhxjozOCk8BJu6TteMBynTOT7EAC5H00h5MZwT7TgRkImwbk2FcFeAeGQjvSDsVTUbZlakC/wB1AA4UqcUm3OJlC77o6//pTb9wBH+lKlsAvY+PrAiAKwAMTDHFs6Q/ACY74ZbIFLY3O4MFNfAgMBAAECgYAQ8aQyIG3/pvayz3xF3UCa0M8fRAn9l7idNtVpNXxc1mLFNmavlpfrz7r9CsiExdKZJFI1n2f+trc+1jjdTa/FxHshzVB2q29GfeHR/Iu8tjw6ypWcXT4kJdj6wNRYpgMsYRV/f6Sk7Ngp+M9+NeXOj+xX1+EH7UiyDpNSXRwAmQJBALrnl0q/Z2wJiK4XN+8aHTEgroJmhb+NpC0mVDu5DldJWswdK4s/Kvh4C4SHhduEDeC541hjA3CXaUo1AFs9hBsCQQC1psj9VeV/qicN1FYf2coVSChTKp8lhC/yifakPoLp0UX9iHaKzypzTqYWTUdsSZ63d4dKnUa9+Iy6yZZbj7oNAkBEmAIaWKyoJceXvMW2ZqsYAJqLGP01E9KRD2QSlxQATNeZ2YrFi+VFUylG9kXWDlzZgN9C7POyOp9VsKX01lrJAkEAgoNN328K0HoBS1dndcT2A+pvRqnV5I+gH4PumL1tM++veOTGPx9voZ89h8KIcY5HogwYQYzU2gMtobra8/hFNQJAa+NCJazCnUhwL7Nt+jS/wzHToLTWV1ZtLUo3iiMA6R5IegdnxfW6R8LAHNcx/ZhXEbv9ZCV08kU/dtMgSfzqoA==";
 	byte[] encryptedMessageBytes = null;
 
 	public void encode() throws InvalidKeySpecException, IOException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		File publicKeyFile = new File("public.key");
-		byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-		System.out.println(Arrays.toString(Base64.getDecoder().decode(publicKeyBytes)));
+//		File publicKeyFile = new File("public.key");
+//		byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
+		byte[] decodePublicKey = Base64.getDecoder().decode(publicKey);
+
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);
+		EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decodePublicKey);
 		PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-		String s = Base64.getEncoder().encodeToString(publicKey.getEncoded());
-		System.out.println(s);
 
 		Cipher encryptCipher = Cipher.getInstance("RSA");
 		encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
 		byte[] secretMessageBytes = secretMessage.getBytes(StandardCharsets.UTF_8);
-		System.out.println(secretMessageBytes.toString());
 		encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
 		String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
 		System.out.println(encodedMessage);
@@ -89,16 +94,22 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	public void decode() throws InvalidKeySpecException, IOException, NoSuchAlgorithmException,
 			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-		File privateKeyFile = new File("private.key");
-		byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());
+		byte[] decode = Base64.getDecoder().decode(encodeMessage); //Test string text
+
+		byte[] decodePrivateKey = Base64.getDecoder().decode(privateKey);
+
+/*		File privateKeyFile = new File("private.key");
+		byte[] privateKeyBytes = Files.readAllBytes(privateKeyFile.toPath());*/
+
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-		EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+
+		EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodePrivateKey);
 		PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
 		Cipher decryptCipher = Cipher.getInstance("RSA");
 		decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
 
-		byte[] decryptedMessageBytes = decryptCipher.doFinal(encryptedMessageBytes);
+		byte[] decryptedMessageBytes = decryptCipher.doFinal(decode);
 		String decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
 		System.out.println(decryptedMessage);
 	}

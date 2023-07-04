@@ -1,15 +1,16 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaInstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaSpecialityResponse;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaOldInstitutionRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSerialRepository;
-import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaSpecialityRepository;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
+import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class ClassificatorService {
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final DiplomaSpecialityRepository diplomaSpecialityRepository;
     private final DiplomaSerialRepository diplomaSerialRepository;
+    private final EduFormRepository eduFormRepository;
+    private final CountryRepository countryRepository;
 
     @Transactional(readOnly = true)
     public List<DiplomaSerial> getAllDiplomaSerials() {
@@ -52,6 +55,16 @@ public class ClassificatorService {
     public DiplomaSpecialityResponse getDiplomaSpecialityById(Integer specialityId) {
         return diplomaSpecialityRepository.findDiplomaSpecialitiesById(specialityId)
                 .map(DiplomaSpecialityResponse::new).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EduFormResponse> getAllEduFormResponses() {
+        return eduFormRepository.findAll().stream().map(EduFormResponse::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Country> getAllCountry() {
+        return countryRepository.findAll(Sort.by("id"));
     }
 
 }
