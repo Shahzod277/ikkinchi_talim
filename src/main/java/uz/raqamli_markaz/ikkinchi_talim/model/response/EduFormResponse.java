@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.EduForm;
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,21 +13,12 @@ import java.util.List;
 public class EduFormResponse {
 
     private Integer id;
-    private String name;
-    private Integer directionId;
-    private String directionName;
-    private Integer futureInsId;
-    private String futureInstName;
-    private List<LanguageResponse> languages;
-
-    public EduFormResponse(EduForm eduForm, List<LanguageResponse> languages) {
-        this.id = eduForm.getId();
-        this.name = eduForm.getNameOz();
-        this.languages = languages;
-    }
+    private Integer code;
+    private String nameOz;
 
     public EduFormResponse(EduForm eduForm) {
         this.id = eduForm.getId();
-        this.name = eduForm.getNameOz();
+        this.code = eduForm.getCode();
+        this.nameOz = eduForm.getNameOz();
     }
 }

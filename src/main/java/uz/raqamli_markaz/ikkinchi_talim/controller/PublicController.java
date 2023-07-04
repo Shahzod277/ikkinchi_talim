@@ -25,26 +25,36 @@ import java.util.Objects;
 public class PublicController {
 
     private final FileServiceImpl fileService;
-    private final DiplomaService diplomaService;
     private final ClassificatorService classificatorService;
 
 
-    @GetMapping("getAllDiplomaSerials")
+    @GetMapping("allDiplomaSerials")
     public ResponseEntity<?> getAllDiplomaSerials() {
         List<DiplomaSerial> list = classificatorService.getAllDiplomaSerials();
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("getAllOldNameInstitution/{classificatorId}")
-    public ResponseEntity<?> getAllOldNameInstitution(@PathVariable Integer classificatorId) {
+    @GetMapping("allSpecialitiesInstitution/{classificatorId}")
+    public ResponseEntity<?> getAllSpecialitiesInstitution(@PathVariable Integer classificatorId) {
         List<DiplomaSpeciality> list = classificatorService.getSpecialitiesByInstitutionId(classificatorId);
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("countries")
     public ResponseEntity<?> getAllCountry() {
-        return ResponseEntity.ok(diplomaService.getAllCountry());
+        return ResponseEntity.ok(classificatorService.getAllCountry());
     }
+
+    @GetMapping("allDiplomaInstitutions")
+    public ResponseEntity<?> getAllDiplomaInstitutions() {
+        return ResponseEntity.ok(classificatorService.getAllDiplomaInstitutionResponse());
+    }
+
+    @GetMapping("allEduForm")
+    public ResponseEntity<?> getAllEduForm() {
+        return ResponseEntity.ok(classificatorService.getAllEduFormResponses());
+    }
+
 
     @PostMapping("uploadFile")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("key") String key) {
