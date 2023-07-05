@@ -38,7 +38,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 utils.saveInstitution();
-utils.saveOldInstitution();
+//utils.saveOldInstitution();
 	}
 
 	public void generateKeys() throws NoSuchAlgorithmException {
