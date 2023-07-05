@@ -61,7 +61,7 @@ public class PublicController {
         return ResponseEntity.ok(classificatorService.getAllDuration());
     }
 
-    @PostMapping("uploadFile")
+    @PostMapping(value = "uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("key") String key) {
         return ResponseEntity.ok(fileService.upload(file,key));
     }
