@@ -13,6 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Duration extends AbstractEntity {
+
     private Integer durationId;
     private String nameOz;
 }

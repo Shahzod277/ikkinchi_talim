@@ -51,7 +51,6 @@ utils.saveInstitution();
 		String p = Base64.getEncoder().encodeToString(publicKey.getEncoded());
 		System.out.println(s);
 		System.out.println(p);
-
 		try {
 			FileOutputStream publicFos = new FileOutputStream("public.key");
 			publicFos.write(publicKey.getEncoded());
@@ -66,8 +65,9 @@ utils.saveInstitution();
 	}
 
 	String secretMessage = "My secret message";
-	String encodeMessage = "VPXB2mLq5nVl0BazfCtjJhMLbqnJHmoWDg5wd6NF8tbT4mspVAQaMQl5eWuSs2V5ooBU3PJOILaEgb9zW9ov+KWhK+5l8tXfZrZ1tML57q1u6vu49AIkYO627qJE7XZl/YZHqSMkIc0PJGlsO98MHXJOZM+cnLJ1gZ31Af31X+A=";
+	String encodeMessage = "gTlr0/ZHN9fmQoUDAqlcwVAMdbiJiQp70rwJQV4S67raUrVTEq3geXoT3tgcaCTdmdT3g2tPZxyD69xtU9MVrqg6zWmfUMM3Ik4afFKLZ2LxtxT8yvS77FoSAbYealuw0hYGgIH5G/89vhOUkLc3fPOPDZUbFisH/t1JMpkzlOA=";
 	String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
+	String publicKeyTest = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCe6PeC7/ufFdTfIr00axHB+vGAJxlH8X0HG6pMixXQgDL95AcBZO/e6wFkfZ/oh0J9WD7am1v1ASUtocx3XeGLelxZfAaiOInQ+Qn/EcjSlKqO+uckxcFKac6iBcoahrymFWQVvcbN6p5xdcOBdj6nO1onRvsWkk2sxcRAlzrUHwIDAQAB";
 	String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAISfguHXlZp2BzVrUaT+8blLPepjhxjozOCk8BJu6TteMBynTOT7EAC5H00h5MZwT7TgRkImwbk2FcFeAeGQjvSDsVTUbZlakC/wB1AA4UqcUm3OJlC77o6//pTb9wBH+lKlsAvY+PrAiAKwAMTDHFs6Q/ACY74ZbIFLY3O4MFNfAgMBAAECgYAQ8aQyIG3/pvayz3xF3UCa0M8fRAn9l7idNtVpNXxc1mLFNmavlpfrz7r9CsiExdKZJFI1n2f+trc+1jjdTa/FxHshzVB2q29GfeHR/Iu8tjw6ypWcXT4kJdj6wNRYpgMsYRV/f6Sk7Ngp+M9+NeXOj+xX1+EH7UiyDpNSXRwAmQJBALrnl0q/Z2wJiK4XN+8aHTEgroJmhb+NpC0mVDu5DldJWswdK4s/Kvh4C4SHhduEDeC541hjA3CXaUo1AFs9hBsCQQC1psj9VeV/qicN1FYf2coVSChTKp8lhC/yifakPoLp0UX9iHaKzypzTqYWTUdsSZ63d4dKnUa9+Iy6yZZbj7oNAkBEmAIaWKyoJceXvMW2ZqsYAJqLGP01E9KRD2QSlxQATNeZ2YrFi+VFUylG9kXWDlzZgN9C7POyOp9VsKX01lrJAkEAgoNN328K0HoBS1dndcT2A+pvRqnV5I+gH4PumL1tM++veOTGPx9voZ89h8KIcY5HogwYQYzU2gMtobra8/hFNQJAa+NCJazCnUhwL7Nt+jS/wzHToLTWV1ZtLUo3iiMA6R5IegdnxfW6R8LAHNcx/ZhXEbv9ZCV08kU/dtMgSfzqoA==";
 	byte[] encryptedMessageBytes = null;
 
@@ -75,7 +75,7 @@ utils.saveInstitution();
 			NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 //		File publicKeyFile = new File("public.key");
 //		byte[] publicKeyBytes = Files.readAllBytes(publicKeyFile.toPath());
-		byte[] decodePublicKey = Base64.getDecoder().decode(publicKey);
+		byte[] decodePublicKey = Base64.getDecoder().decode(publicKeyTest);
 
 		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 		EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decodePublicKey);
