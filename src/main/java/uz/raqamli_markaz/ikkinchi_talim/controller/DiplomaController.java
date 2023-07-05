@@ -1,5 +1,7 @@
 package uz.raqamli_markaz.ikkinchi_talim.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -62,6 +64,7 @@ public class DiplomaController {
     }
 
     @PostMapping("changeDiplomaStatusApi")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     @PreAuthorize("hasRole('MODERATOR')") //shohijahon uchun
     public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
                                                     @RequestParam(value = "statusId") Integer statusId,
