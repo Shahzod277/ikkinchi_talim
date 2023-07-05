@@ -28,5 +28,6 @@ public class ApiConstant {
     public static final String DEGREE_ID = "2";//Bakalavr
     public static final String EDU_TYPE_ID = "3";//  "name_oz": "Oliy ta'lim",
     public static final String USERS_ME_API = "https://my.edu.uz/api/users/me/";//  "name_oz": "Oliy ta'lim",
+    public static final String CREATE_APP_MYEDU = "https://my.edu.uz/api/applications/";//  "name_oz": "Oliy ta'lim",
 
 }

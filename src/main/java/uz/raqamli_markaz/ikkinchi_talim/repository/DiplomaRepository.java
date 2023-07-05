@@ -19,7 +19,10 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query("select (count(d) > 0) from Diploma d where d.isActive = true and d.user.id=?1")
     Boolean existsDiplomaByIsActiveCount(Integer id);
 
-    @Query("select d from Diploma d where d.diplomaId =?1 ")
+    @Query("select d from Diploma d where d.diplomaId =?1 and d.isActive = true")
     Optional<Diploma> findDiplomaByDiplomaId(Integer diplomaId);
+    @Query("select d from Diploma d where d.user.id =?1 and d.isActive = true")
+    Optional<Diploma> findActiveDiplomaByUser(Integer id);
+
 
 }

@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Kvota;
 
 @Getter
 @Setter
@@ -13,17 +15,9 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 public class ApplicationResponse {
 
     private String status;
-    private Boolean diplomaStatus;
     private String message;
-    private String diplomaMessage;
-    private String language;
-    private Integer diplomaInstitutionId;
-    private String diplomaInstitutionName;
+    private Kvota kvota;
+    private DiplomaResponse diplomaResponse;
+    private UserResponse userResponse;
 
-    public ApplicationResponse(Application application) {
-        this.status = application.getApplicationStatus();
-        this.message = application.getApplicationMessage();
-        this.diplomaStatus = application.getDiplomaStatus();
-        this.diplomaMessage = application.getDiplomaMessage();
-    }
 }

@@ -41,12 +41,12 @@ public class DiplomaService {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final UserService userService;
-private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2SD0XPYctuITQFLGE+R1+kIMjWms6lHJ02ZgDIsmjQpyRaCGB8jmoEn/7MyKO1R502lGgRMkg230HCRGIf4kO4w7UIp9a/WxlQ4iEg6nr00e1QoTsVLk=";
+//private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2SD0XPYctuITQFLGE+R1+kIMjWms6lHJ02ZgDIsmjQpyRaCGB8jmoEn/7MyKO1R502lGgRMkg230HCRGIf4kO4w7UIp9a/WxlQ4iEg6nr00e1QoTsVLk=";
 
     @Transactional
     public Result saveAndGetDiplomaByDiplomaApi(String token) {
         try {
-            Result result = userService.checkUser(tokena);
+            Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
             }
@@ -81,7 +81,8 @@ private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2S
                 });
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
             }
-            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
+            Optional<Diploma> any = diplomaByUser.stream().filter(Diploma::getIsActive).findAny();
+            return any.map(diploma -> new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, new DiplomaResponse(diploma))).orElseGet(() -> new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList()));
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
@@ -197,6 +198,8 @@ private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2S
             diplomaNew.setDegreeId(request.getDiplomaRequestApi().getDegreeId());
             diplomaNew.setDegreeName(request.getDegreeName());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+            diplomaNew.setStatusId(3);
+            diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
             diplomaNew.setInstitutionName(request.getForeignInstitutionName());
             if (request.getSpeciality_custom_name() != null) {
                 diplomaNew.setSpecialityCustomName(request.getDiplomaRequestApi().getSpeciality_custom_name());

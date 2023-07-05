@@ -21,5 +21,23 @@ public class MyEduApiService {
                 .bodyToMono(UserResponseMyEdu.class)
                 .block();
     }
+    public CreateAppRequestMyEdu createApp(String token,CreateAppRequestMyEdu request) {
+        return this.webClient.post()
+                .uri(ApiConstant.CREATE_APP_MYEDU)
+                .headers(httpHeader -> httpHeader.set("Authorization", "Local " + token))
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CreateAppRequestMyEdu.class)
+                .block();
+    }
+    public CreateAppRequestMyEdu updateApp(String token,CreateAppRequestMyEdu request) {
+        return this.webClient.post()
+                .uri(ApiConstant.CREATE_APP_MYEDU+request.getExternalId())
+                .headers(httpHeader -> httpHeader.set("Authorization", "Local " + token))
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CreateAppRequestMyEdu.class)
+                .block();
+    }
 
 }

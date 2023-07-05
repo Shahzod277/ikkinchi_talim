@@ -18,8 +18,6 @@ public class Application extends AbstractEntity {
 
     private String applicationStatus;
     private String applicationMessage;
-    private Boolean diplomaStatus;
-    private String diplomaMessage;
 
     @ManyToOne
     private Kvota kvota;

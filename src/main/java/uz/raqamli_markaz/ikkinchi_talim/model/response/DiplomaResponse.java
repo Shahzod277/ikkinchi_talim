@@ -32,7 +32,7 @@ public class DiplomaResponse {
     private String diplomaUrl;
     private String ilovaUrl;
 
-    private Boolean isActive ;
+    private Boolean isActive;
 
     public DiplomaResponse(Diploma diploma) {
         this.id = diploma.getId();
@@ -47,8 +47,10 @@ public class DiplomaResponse {
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
         this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
-        this.ilovaUrl = diploma.getIlovaUrl();
-        this.diplomaUrl = diploma.getDiplomaUrl();
+        if (diploma.getDiplomaUrl() != null) {
+            this.ilovaUrl = diploma.getIlovaUrl();
+            this.diplomaUrl = diploma.getDiplomaUrl();
+        }
         this.isActive = diploma.getIsActive();
     }
 }

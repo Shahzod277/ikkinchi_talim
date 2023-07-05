@@ -31,4 +31,6 @@ public class User extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
+    @OneToOne(mappedBy = "user")
+    private Application application;
 }

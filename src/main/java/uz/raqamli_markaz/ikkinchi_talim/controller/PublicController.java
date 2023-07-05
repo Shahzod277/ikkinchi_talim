@@ -13,6 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.ClassificatorService;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileServiceImpl;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -41,9 +42,27 @@ public class PublicController {
         return ResponseEntity.ok(classificatorService.getAllCountry());
     }
 
-    @GetMapping("languages")
-    public ResponseEntity<?> getAllLanguage() {
-        return ResponseEntity.ok(classificatorService.getAllLanguage());
+
+    @GetMapping("allAppUnivesity")
+    public ResponseEntity<?> getOtmByKvota() {
+        return ResponseEntity.ok(classificatorService.getOtmByKvota());
+    }
+
+    @GetMapping("getEduFormApp/{otmCode}")
+    public ResponseEntity<?> getEduForm(@PathVariable String otmCode) {
+        return ResponseEntity.ok(classificatorService.getEduForm(otmCode));
+    }
+    @GetMapping("getLanguageApp/{eduFormCode}/{otmCode}")
+    public ResponseEntity<?> getLanguageByOtmCodeAndEduFormCode(@PathVariable String eduFormCode,
+                                                                @PathVariable String otmCode) {
+        return ResponseEntity.ok(classificatorService.getLanguageByOtmCodeAndEduFormCode(eduFormCode, otmCode));
+    }
+
+    @GetMapping("getSpecialityApp/{eduFormCode}/{otmCode}/{languageCode}")
+    public ResponseEntity<?> getSpeciality(@PathVariable String eduFormCode,
+                                           @PathVariable String otmCode,
+                                           @PathVariable String languageCode) {
+        return ResponseEntity.ok(classificatorService.getSpeciality(languageCode,eduFormCode, otmCode));
     }
 
     @GetMapping("allDiplomaInstitutions")
@@ -51,20 +70,23 @@ public class PublicController {
         return ResponseEntity.ok(classificatorService.getAllDiplomaInstitutionResponse());
     }
 
-    @GetMapping("allEduForm")
-    public ResponseEntity<?> getAllEduForm() {
+    @GetMapping("getAllEduFormDiploma")
+    public ResponseEntity<?> getAllEduFormDiploma() {
         return ResponseEntity.ok(classificatorService.getAllEduFormResponses());
     }
+
+
 
     @GetMapping("allDuration")
     public ResponseEntity<?> getAllDuration() {
         return ResponseEntity.ok(classificatorService.getAllDuration());
     }
 
-    @PostMapping(value = "uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "uploadFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("key") String key) {
-        return ResponseEntity.ok(fileService.upload(file,key));
+        return ResponseEntity.ok(fileService.upload(file, key));
     }
+
     @GetMapping("/download/{fileName}")
     public ResponseEntity<?> downloadDiploma(@PathVariable String fileName) {
         try {

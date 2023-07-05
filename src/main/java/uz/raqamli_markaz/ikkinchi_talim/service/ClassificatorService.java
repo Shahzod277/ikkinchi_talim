@@ -4,13 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Kvota;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaInstitutionResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaSpecialityResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.OtmProjection;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,8 @@ public class ClassificatorService {
     private final CountryRepository countryRepository;
     private final LanguageRepository languageRepository;
     private final DurationRepository durationRepository;
+    private final UniversityRepository universityRepository;
+    private final KvotaRepository kvotaRepository;
 
     @Transactional(readOnly = true)
     public List<DiplomaSerial> getAllDiplomaSerials() {
@@ -68,13 +73,24 @@ public class ClassificatorService {
     }
 
     @Transactional(readOnly = true)
-    public List<Language> getAllLanguage() {
-        return languageRepository.findAll(Sort.by("id"));
-    }
-
-    @Transactional(readOnly = true)
     public List<Duration> getAllDuration() {
         return durationRepository.findAll(Sort.by("id"));
     }
 
+    @Transactional(readOnly = true)
+    public List<OtmProjection> getOtmByKvota() {
+        return kvotaRepository.getOtmByKvota();
+    }
+    @Transactional(readOnly = true)
+    public List<OtmProjection> getEduForm(String code) {
+        return kvotaRepository.getEduFormByOtmCode(code);
+    }
+    @Transactional(readOnly = true)
+    public List<OtmProjection> getLanguageByOtmCodeAndEduFormCode(String code,String otmcode) {
+        return kvotaRepository.getLanguageByOtmCodeAndEduFormCode(code,otmcode);
+    }
+    @Transactional(readOnly = true)
+    public List<OtmProjection> getSpeciality(String languageCode,String code,String otmcode) {
+        return kvotaRepository.getSpeciality(languageCode,code,otmcode);
+    }
 }
