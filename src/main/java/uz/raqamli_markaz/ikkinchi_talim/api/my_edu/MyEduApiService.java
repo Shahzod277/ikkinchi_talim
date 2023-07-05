@@ -13,10 +13,10 @@ public class MyEduApiService {
     private final WebClient webClient;
 
 
-    public UserResponseMyEdu getUserByToken(String token ) {
+    public UserResponseMyEdu getUserByToken(String token) {
         return this.webClient.get()
                 .uri(ApiConstant.USERS_ME_API)
-                .headers(httpHeader -> httpHeader.setBearerAuth(token))
+                .headers(httpHeader -> httpHeader.set("Authorization", "Local " + token))
                 .retrieve()
                 .bodyToMono(UserResponseMyEdu.class)
                 .block();
