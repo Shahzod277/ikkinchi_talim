@@ -45,7 +45,7 @@ public class UserService {
                 Long now = System.currentTimeMillis();
                 Long aLong = Long.valueOf(expireteTime);
                 if (now>aLong*1000) {
-                    return new Result("Expirete Token ", false);
+                    return new Result("Expirete Token", false);
                 }
                 Optional<User> user = userRepository.findUserByPinfl(pinfl);
                 if (user.isEmpty()) {
@@ -60,7 +60,7 @@ public class UserService {
                     userNew.setMyEduId(userMyEdu.getId());
                     userNew.setPhoneNumber(userMyEdu.getPhoneNumber());
                     userNew.setFotoUrl(userMyEdu.getPhoto().getFile());
-                    userNew.setPinfl(userMyEdu.getPassport().getPinfl());
+                    userNew.setPinfl(userMyEdu.getPinfl());
                     userRepository.save(userNew);
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, userNew.getId());
                 }

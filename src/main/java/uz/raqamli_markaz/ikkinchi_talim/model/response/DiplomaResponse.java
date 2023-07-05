@@ -40,6 +40,7 @@ public class DiplomaResponse {
         this.institutionId = diploma.getInstitutionId();
         this.institutionName = diploma.getInstitutionName();
         this.institutionOldName = diploma.getInstitutionOldName();
+        this.institutionOldId = diploma.getInstitutionOldId();
         this.eduFormName = diploma.getEduFormName();
         this.degreeId = diploma.getDegreeId();
         this.degreeName = diploma.getDegreeName();
