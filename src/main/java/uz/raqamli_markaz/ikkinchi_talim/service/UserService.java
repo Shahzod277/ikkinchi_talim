@@ -42,8 +42,8 @@ public class UserService {
             if (decode != null) {
                 String pinfl = decode.substring(0, decode.indexOf("|"));
                 String expireteTime = decode.substring(decode.indexOf("|") + 1);
-                Long now = System.currentTimeMillis();
-                Long aLong = Long.valueOf(expireteTime);
+                long now = System.currentTimeMillis();
+                long aLong = Long.parseLong(expireteTime);
                 if (now>aLong*1000) {
                     return new Result("Expirete Token", false);
                 }
