@@ -73,6 +73,17 @@ public class DiplomaApi {
                 .bodyToMono(CreateDiplomaResponse.class)
                 .block();
     }
+    public CreateDiplomaResponse updateDiploma(CreateDiplomaRequest request) {
+
+        String url = "https://d-arxiv.edu.uz/api/v2/diploma/update";
+        return this.webClient.post()
+                .uri(url)
+                .headers(httpHeader -> httpHeader.setBearerAuth(getToken()))
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CreateDiplomaResponse.class)
+                .block();
+    }
 
     public FormEduResponse getFormEdu() {
         String url = "https://d-arxiv.edu.uz/api/v2/reference/edu-forms";

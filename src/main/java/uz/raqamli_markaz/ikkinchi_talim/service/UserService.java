@@ -37,7 +37,6 @@ public class UserService {
 
     @Transactional
     public Result checkUser(String token) {
-
         try {
             String decode = decode(token);
             if (decode != null) {
@@ -57,8 +56,6 @@ public class UserService {
                     userNew.setGender(userMyEdu.getGender());
                     userNew.setFullName(userMyEdu.getFirstName() + " " + userMyEdu.getLastName() + " " + userMyEdu.getMiddleName());
                     userNew.setDateOfBirth(userMyEdu.getBirthDate());
-                    userNew.setPassportSerial(userNew.getPassportSerial());
-                    userNew.setPassportNumber(userNew.getPassportNumber());
                     userNew.setPermanentAddress(userMyEdu.getAddress());
                     userNew.setMyEduId(userMyEdu.getId());
                     userNew.setPhoneNumber(userMyEdu.getPhoneNumber());

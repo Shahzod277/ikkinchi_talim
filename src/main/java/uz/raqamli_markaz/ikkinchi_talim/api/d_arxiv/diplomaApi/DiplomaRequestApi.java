@@ -2,12 +2,15 @@ package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class DiplomaRequestApi {
 
 	@JsonProperty("diploma_serial_id")
 	private Integer diplomaSerialId;
+	private Integer id;
 
 	@JsonProperty("diploma_given_date")
 	private String diplomaGivenDate;

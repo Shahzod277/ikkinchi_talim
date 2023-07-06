@@ -12,6 +12,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.*;
+import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
@@ -19,6 +20,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.CountryRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
@@ -39,6 +41,7 @@ public class DiplomaService {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final UserService userService;
+    private final ApplicationRepository applicationRepository;
 //private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2SD0XPYctuITQFLGE+R1+kIMjWms6lHJ02ZgDIsmjQpyRaCGB8jmoEn/7MyKO1R502lGgRMkg230HCRGIf4kO4w7UIp9a/WxlQ4iEg6nr00e1QoTsVLk=";
 
     @Transactional
@@ -132,6 +135,7 @@ public class DiplomaService {
                 Diploma diplomaNew = new Diploma();
                 diplomaNew.setUser(user);
                 diplomaNew.setDiplomaSerialAndNumber(request.getDiplomaSerial() + " " + request.getDiplomaRequestApi().getDiplomaNumber());
+                diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
                 diplomaNew.setDegreeId(request.getDiplomaRequestApi().getDegreeId());
                 diplomaNew.setDegreeName(request.getDegreeName());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
@@ -159,18 +163,20 @@ public class DiplomaService {
             }
             Integer id = (Integer) result.getObject();
             User user = userRepository.findById(id).get();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), id).get();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getDiplomaRequestApi().getId(), id).get();
             Country country = countryRepository.findById(request.getCountryId()).get();
             if (request.getCountryId() == 1) {
                 Citizen citizen = new Citizen(user);
+                request.getDiplomaRequestApi().setId(diplomaNew.getDiplomaId());
                 CreateDiplomaRequest createDiplomaRequest = new CreateDiplomaRequest(request.getDiplomaRequestApi(), citizen);
-                CreateDiplomaResponse createDiplomaResponse = diplomaApi.createDiploma(createDiplomaRequest);
+                CreateDiplomaResponse createDiplomaResponse = diplomaApi.updateDiploma(createDiplomaRequest);
                 DiplomaResponseApi diplomaResponseApi = createDiplomaResponse.getDataCreateDiplomaResponse().getDiplomaResponseApi();
                 diplomaNew.setUser(user);
                 diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
                 diplomaNew.setDiplomaId(diplomaResponseApi.getId());
                 diplomaNew.setDiplomaSerialAndNumber(diplomaResponseApi.getDiplomaSerial() + " " + diplomaResponseApi.getDiplomaNumber());
                 diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
+                diplomaNew.setModifiedDate(LocalDateTime.now());
                 diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
                 diplomaNew.setEduFinishingDate(diplomaResponseApi.getEduFinishingDate());
                 diplomaNew.setEduFormId(diplomaResponseApi.getEduFormId());
@@ -196,7 +202,6 @@ public class DiplomaService {
             diplomaNew.setDegreeId(request.getDiplomaRequestApi().getDegreeId());
             diplomaNew.setDegreeName(request.getDegreeName());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
-            diplomaNew.setStatusId(3);
             diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
             diplomaNew.setInstitutionName(request.getForeignInstitutionName());
             if (request.getSpeciality_custom_name() != null) {
@@ -220,8 +225,14 @@ public class DiplomaService {
                 return new Result(ResponseMessage.NOT_FOUND.getMessage() + ": " + diplomaId, false);
             }
             diploma.get().setStatusId(statusId);
-            diploma.get().setStatusName("Diplom "+statusName);
+            diploma.get().setStatusName(statusName);
             diplomaRepository.save(diploma.get());
+            User user = diploma.get().getUser();
+            if (user.getApplication() != null) {
+                Application userApplication = user.getApplication();
+                userApplication.setApplicationStatus(statusName);
+                applicationRepository.save(userApplication);
+            }
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
