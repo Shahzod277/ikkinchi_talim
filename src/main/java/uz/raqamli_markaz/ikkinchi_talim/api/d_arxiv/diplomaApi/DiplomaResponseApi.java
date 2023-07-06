@@ -2,9 +2,14 @@ package uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class DiplomaResponseApi {
+
+	@JsonProperty("id")
+	private Integer id;
 
 	@JsonProperty("pinfl")
 	private Long pinfl;
@@ -44,9 +49,6 @@ public class DiplomaResponseApi {
 
 	@JsonProperty("edu_finishing_date")
 	private String eduFinishingDate;
-
-	@JsonProperty("id")
-	private Integer id;
 
 	@JsonProperty("institution_type_name")
 	private String institutionTypeName;
