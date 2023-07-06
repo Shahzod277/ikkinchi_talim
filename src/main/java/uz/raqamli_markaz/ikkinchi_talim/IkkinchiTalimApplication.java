@@ -31,9 +31,9 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Autowired
 	private Utils utils;
-	@Autowired
 
-		private DiplomaService diplomaService;
+	@Autowired
+	private DiplomaService diplomaService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(IkkinchiTalimApplication.class, args);
