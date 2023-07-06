@@ -28,36 +28,35 @@ public class ApplicationService {
     @Transactional
     public Result createApplication(String token, Integer kvotaId) {
         try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
+        Result result = userService.checkUser(token);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        Integer id = (Integer) result.getObject();
+        User user = userRepository.findById(id).get();
+        Kvota kvota = kvotaRepository.findById(kvotaId).get();
+        Application application = new Application();
+        application.setUser(user);
+        application.setKvota(kvota);
+        Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
+        application.setApplicationStatus(diploma.getStatusName());
+        application.setKvota(kvota);
+        Application save = applicationRepository.save(application);
+        Thread thread = new Thread(() -> {
+            try {
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+                request.setExternalId(save.getId().toString());
+                request.setStatus(save.getApplicationStatus());
+                request.setData(kvota);
+                myEduApiService.createApp(encode, request);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            Integer id = (Integer) result.getObject();
-            User user = userRepository.findById(id).get();
-            Kvota kvota = kvotaRepository.findById(kvotaId).get();
-            Application application = new Application();
-            application.setUser(user);
-            application.setKvota(kvota);
-            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-            application.setApplicationStatus(diploma.getStatusName());
-            application.setKvota(kvota);
-            Thread thread = new Thread(() -> {
-                try {
-                    String encode = userService.encode(user.getPinfl());
-                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-                    request.setExternalId(application.getId().toString());
-                    request.setStatus(application.getApplicationStatus());
-                    request.setData(kvota);
-                    myEduApiService.createApp(encode, request);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.start();
-            thread.join(5000);
-            applicationRepository.save(application);
-            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), false);
-
+        });
+        thread.start();
+        thread.join(5000);
+        return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), false);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
@@ -68,7 +67,6 @@ public class ApplicationService {
     @Transactional
     public Result updateApplication(String token, Integer kvotaId) {
         try {
-
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
@@ -82,6 +80,7 @@ public class ApplicationService {
             Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
             application.setApplicationStatus(diploma.getStatusName());
             application.setKvota(kvota);
+            applicationRepository.save(application);
             Thread thread = new Thread(() -> {
                 try {
                     String encode = userService.encode(user.getPinfl());
@@ -96,7 +95,6 @@ public class ApplicationService {
             });
             thread.start();
             thread.join(5000);
-            applicationRepository.save(application);
             return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -122,7 +120,7 @@ public class ApplicationService {
         applicationResponse.setStatus(userApplication.getApplicationStatus());
         applicationResponse.setMessage(userApplication.getApplicationMessage());
         applicationResponse.setKvota(userApplication.getKvota());
-        return new  Result(ResponseMessage.SUCCESSFULLY.getMessage(),true,applicationResponse);
+        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, applicationResponse);
     }
 
 }
