@@ -45,7 +45,6 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
 //		utils.saveDiplomaSerial();
-		utils.saveDiplomaSerial();
 	}
 
 //	public void generateKeys() throws NoSuchAlgorithmException {
