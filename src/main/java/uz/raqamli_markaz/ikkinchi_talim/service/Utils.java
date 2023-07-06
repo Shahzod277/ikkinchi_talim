@@ -137,6 +137,7 @@ public class Utils {
             List<DiplomaSerial> diplomaSerialsListClassificator = new ArrayList<>();
             data.forEach(d -> {
                 DiplomaSerial diplomaSerial = new DiplomaSerial();
+                diplomaSerial.setSerialId(d.getId());
                 diplomaSerial.setSerial(d.getSerial());
                 diplomaSerial.setDegreeId(d.getDegreeId());
                 diplomaSerial.setBeginYear(d.getBeginYear());

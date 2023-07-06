@@ -16,10 +16,10 @@ public class DiplomaSerial extends AbstractEntity {
 
     private Integer statusId;
     private Integer degreeId;
+    private Integer serialId;
     private String serial;
     private Integer creatorId;
     private String createdAt;
-    private Integer id;
     private Integer endYear;
     private Integer beginYear;
 }
