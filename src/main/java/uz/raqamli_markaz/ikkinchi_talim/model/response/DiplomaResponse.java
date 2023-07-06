@@ -31,7 +31,6 @@ public class DiplomaResponse {
     private String statusName;
     private String diplomaUrl;
     private String ilovaUrl;
-
     private Boolean isActive;
 
     public DiplomaResponse(Diploma diploma) {
