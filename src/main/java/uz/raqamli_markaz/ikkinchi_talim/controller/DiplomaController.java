@@ -9,22 +9,36 @@ import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.service.ApplicationService;
 import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
 
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/diploma/")
+@RequestMapping("/api/diplomaAndApp/")
 @RequiredArgsConstructor
 public class DiplomaController {
 
     private final DiplomaService diplomaService;
+    private final ApplicationService applicationService;
 
-    @PostMapping("createDiploma")
+    @PostMapping("createApplication")
+    public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "kvotaId") Integer kvotaId) {
+        Result result = applicationService.createApplication(token, kvotaId);
+        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+    }    @PostMapping("createDiploma")
     public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
                                            @RequestBody DiplomaRequest request) {
         Result result = diplomaService.createDiploma(token, request);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+    }
+
+    @PutMapping("updateApplication")
+    public ResponseEntity<?> updateApplication(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "kvotaId") Integer kvotaId) {
+        Result result = applicationService.updateApplication(token, kvotaId);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
     @PutMapping("updateDiploma")
@@ -33,7 +47,6 @@ public class DiplomaController {
         Result result = diplomaService.updateDiploma(token, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
-
     @DeleteMapping("deleteDiploma/{id}")
     public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
                                            @RequestParam(value = "token") String token) {
