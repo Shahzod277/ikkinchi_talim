@@ -7,17 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.ApplicationService;
 import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
 
-import java.security.Principal;
-
 @RestController
 @RequestMapping("/api/diplomaAndApp/")
 @RequiredArgsConstructor
-public class DiplomaController {
+public class DiplomaAndAppController {
 
     private final DiplomaService diplomaService;
     private final ApplicationService applicationService;
