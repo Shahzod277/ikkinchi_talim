@@ -173,6 +173,9 @@ public class DiplomaService {
                 request.getDiplomaRequestApi().setId(diplomaNew.getDiplomaId());
                 CreateDiplomaRequest createDiplomaRequest = new CreateDiplomaRequest(request.getDiplomaRequestApi(), citizen);
                 CreateDiplomaResponse createDiplomaResponse = diplomaApi.updateDiploma(createDiplomaRequest);
+                if (!createDiplomaResponse.getSuccess()) {
+                    return new Result("Ushbu diplom seriya raqami sizning ta`lim muassasangizga avvalroq kiritilgan", false);
+                }
                 DiplomaResponseApi diplomaResponseApi = createDiplomaResponse.getDataCreateDiplomaResponse().getDiplomaResponseApi();
                 diplomaNew.setUser(user);
                 diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
