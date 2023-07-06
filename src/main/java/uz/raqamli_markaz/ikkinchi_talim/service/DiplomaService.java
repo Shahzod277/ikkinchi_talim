@@ -106,6 +106,9 @@ public class DiplomaService {
                     Citizen citizen = new Citizen(user);
                     CreateDiplomaRequest createDiplomaRequest = new CreateDiplomaRequest(request.getDiplomaRequestApi(), citizen);
                     CreateDiplomaResponse diploma = diplomaApi.createDiploma(createDiplomaRequest);
+                    if (!diploma.getSuccess()) {
+                        return new Result("Ushbu diplom seriya raqami sizning ta`lim muassasangizga avvalroq kiritilgan", false);
+                    }
                     DiplomaResponseApi diplomaResponseApi = diploma.getDataCreateDiplomaResponse().getDiplomaResponseApi();
                     Diploma diplomaNew = new Diploma();
                     diplomaNew.setUser(user);
@@ -230,7 +233,7 @@ public class DiplomaService {
             User user = diploma.get().getUser();
             if (user.getApplication() != null) {
                 Application userApplication = user.getApplication();
-                userApplication.setApplicationStatus("Diplom "+statusName);
+                userApplication.setApplicationStatus("Diplom " + statusName);
                 applicationRepository.save(userApplication);
             }
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
