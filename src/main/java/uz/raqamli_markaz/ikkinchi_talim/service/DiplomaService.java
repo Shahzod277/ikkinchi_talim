@@ -230,7 +230,7 @@ public class DiplomaService {
             User user = diploma.get().getUser();
             if (user.getApplication() != null) {
                 Application userApplication = user.getApplication();
-                userApplication.setApplicationStatus(statusName);
+                userApplication.setApplicationStatus("Diplom "+statusName);
                 applicationRepository.save(userApplication);
             }
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
