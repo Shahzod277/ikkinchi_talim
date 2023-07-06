@@ -47,6 +47,8 @@ public class DiplomaResponse {
         this.specialityId = diploma.getSpecialityId();
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
+        this.statusId = diploma.getStatusId();
+        this.statusName = diploma.getStatusName();
         this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
         if (diploma.getDiplomaUrl() != null) {
             this.ilovaUrl = diploma.getIlovaUrl();

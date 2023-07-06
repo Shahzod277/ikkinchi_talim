@@ -18,6 +18,4 @@ public class CreateDiplomaRequest{
 	@JsonProperty("Citizen")
 	private Citizen citizen;
 
-
-
 }
