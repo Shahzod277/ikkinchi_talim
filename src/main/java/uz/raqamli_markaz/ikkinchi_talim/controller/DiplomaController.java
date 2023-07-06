@@ -27,12 +27,12 @@ public class DiplomaController {
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
-//    @PutMapping("updateDiploma")
-//    public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
-//                                           @RequestBody DiplomaRequest request) {
-//        Result result = diplomaService.updateDiploma(token, request);
-//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-//    }
+    @PutMapping("updateDiploma")
+    public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
+                                           @RequestBody DiplomaRequest request) {
+        Result result = diplomaService.updateDiploma(token, request);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
 
     @DeleteMapping("deleteDiploma/{id}")
     public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
@@ -63,14 +63,14 @@ public class DiplomaController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-//    @PostMapping("changeDiplomaStatusApi")
-//    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
-//    @PreAuthorize("hasRole('MODERATOR')") //shohijahon uchun
-//    public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
-//                                                    @RequestParam(value = "statusId") Integer statusId,
-//                                                    @RequestParam(value = "statusName") String statusName) {
-//        Result result = diplomaService.changeDiplomaStatusApi(diplomaId, statusId, statusName);
-//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-//    }
+    @PostMapping("changeDiplomaStatusApi")
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @PreAuthorize("hasRole('MODERATOR')") //shohijahon uchun
+    public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
+                                                    @RequestParam(value = "statusId") Integer statusId,
+                                                    @RequestParam(value = "statusName") String statusName) {
+        Result result = diplomaService.changeDiplomaStatusApi(diplomaId, statusId, statusName);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
 
 }
