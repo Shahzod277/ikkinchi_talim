@@ -39,7 +39,7 @@ public class ApplicationService {
         application.setUser(user);
         application.setKvota(kvota);
         Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-        application.setApplicationStatus(diploma.getStatusName());
+        application.setApplicationStatus("Diplom "+diploma.getStatusName());
         application.setKvota(kvota);
         Application save = applicationRepository.save(application);
         Thread thread = new Thread(() -> {
@@ -77,7 +77,7 @@ public class ApplicationService {
             application.setUser(user);
             application.setKvota(kvota);
             Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-            application.setApplicationStatus(diploma.getStatusName());
+            application.setApplicationStatus("Diplom "+diploma.getStatusName());
             application.setKvota(kvota);
             applicationRepository.save(application);
             Thread thread = new Thread(() -> {

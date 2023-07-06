@@ -58,6 +58,11 @@ public class DiplomaAndAppController {
         Result diplomaResponse = diplomaService.getDiplomaByPrincipal(diplomaId, token);
         return ResponseEntity.status(diplomaResponse.isSuccess() ? 200 : 404).body(diplomaResponse);
     }
+    @GetMapping("getApplication/{diplomaId}")
+    public ResponseEntity<?> getApplication(@RequestParam(value = "token") String token) {
+        Result diplomaResponse = applicationService.getApplicationByPrincipal(token);
+        return ResponseEntity.status(diplomaResponse.isSuccess() ? 200 : 404).body(diplomaResponse);
+    }
 
     @PatchMapping("diplomaIsActive/{diplomaId}")
     public ResponseEntity<?> diplomaIsActive(@PathVariable Integer diplomaId,

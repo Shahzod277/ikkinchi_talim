@@ -220,7 +220,7 @@ public class DiplomaService {
                 return new Result(ResponseMessage.NOT_FOUND.getMessage() + ": " + diplomaId, false);
             }
             diploma.get().setStatusId(statusId);
-            diploma.get().setStatusName(statusName);
+            diploma.get().setStatusName("Diplom "+statusName);
             diplomaRepository.save(diploma.get());
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
