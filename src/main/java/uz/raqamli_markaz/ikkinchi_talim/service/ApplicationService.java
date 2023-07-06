@@ -61,7 +61,6 @@ public class ApplicationService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
         }
-
     }
 
     @Transactional
