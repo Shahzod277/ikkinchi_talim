@@ -120,6 +120,7 @@ public class DiplomaService {
                     diplomaNew.setEduFormId(request.getEduFormId());
                     diplomaNew.setEduFormName(eduForm.getNameOz());
                     diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
+                    diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
 
                     diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
                     diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
@@ -196,6 +197,7 @@ public class DiplomaService {
                 diplomaNew.setEduFormId(request.getEduFormId());
                 diplomaNew.setEduFormName(eduForm.getNameOz());
                 diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
+                diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
 
                 diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
                 diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
