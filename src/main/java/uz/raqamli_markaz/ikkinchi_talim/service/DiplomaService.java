@@ -271,7 +271,8 @@ public class DiplomaService {
     private Diploma createDiplomaNew(DiplomaResponseApi diplomaResponseApi) {
         Country country = countryRepository.findById(1).get();
         Diploma diplomaNew = new Diploma();
-
+        Optional<DiplomaOldInstitution> optional = diplomaOldInstitutionRepository.findDiplomaOldInstitutionByOldId(diplomaResponseApi.getInstitutionId(), diplomaResponseApi.getInstitutionOldNameId());
+        optional.ifPresent(diplomaOldInstitution -> diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId()));
         Optional<DiplomaSpeciality> speciality = diplomaSpecialityRepository.findDiplomaSpecialitiesById(diplomaResponseApi.getSpecialityId());
         speciality.ifPresent(diplomaSpeciality -> diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId()));
         diplomaNew.setCountryId(1);

@@ -40,7 +40,7 @@ public class DiplomaResponse {
         this.id = diploma.getId();
         this.countryName = diploma.getCountryName();
         if (diploma.getInstitutionId() != null) {
-            this.institutionId = diploma.getInstitutionId();
+            this.institutionId = diploma.getInstitutionIdDb();
         }
         this.countryId = diploma.getCountryId();
         this.institutionName = diploma.getInstitutionName();

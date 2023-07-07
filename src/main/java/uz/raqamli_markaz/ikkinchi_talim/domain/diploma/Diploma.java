@@ -19,6 +19,7 @@ public class Diploma extends AbstractEntity {
 
     private Integer diplomaId; //D_ARXIVdan keladigon diplom id si
     private Integer institutionId;
+    private Integer institutionIdDb;
     private String institutionName;
     private Integer institutionOldId;
     private String institutionOldName;
