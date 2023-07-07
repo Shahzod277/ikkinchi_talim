@@ -41,7 +41,6 @@ public class DiplomResponseAdmin {
         this.specialityId = diploma.getSpecialityId();
         this.specialityName = diploma.getSpecialityName();
         this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaNumberAndDiplomaSerial = diploma.getDiplomaSerialAndNumber();
 
     }
 }
