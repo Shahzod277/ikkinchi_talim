@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface DiplomaOldInstitutionRepository extends JpaRepository<DiplomaOldInstitution, Integer> {
 
-    @Query("select d from DiplomaOldInstitution d where d.institutionOldId = ?1")
+    @Query("select d from DiplomaOldInstitution d where d.classificatorId = ?1 and ")
     Optional<DiplomaOldInstitution> findDiplomaOldInstitutionByOldId(Integer id);
 }

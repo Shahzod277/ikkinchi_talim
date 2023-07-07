@@ -18,7 +18,6 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
-    private final StoryMessageRepository storyMessageRepository;
     private final UserRepository userRepository;
     private final UserService userService;
     private final KvotaRepository kvotaRepository;

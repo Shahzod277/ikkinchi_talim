@@ -27,16 +27,21 @@ public class Diploma extends AbstractEntity {
     private Integer eduFormId;
     private String eduFormName;
     private Integer specialityId;
+    private Integer specialityIdDb;
     private String specialityName;
     private String eduFinishingDate;
     private Integer diplomaSerialId;
-    private String diplomaSerialAndNumber;
+    private String diplomaSerial;
+    private Integer diplomaNumber;
+    private Integer countryId;
     private String countryName;
     private String specialityCustomName;
     private Integer statusId;
     private String statusName;
     private String diplomaUrl;
     private String ilovaUrl;
+    private Integer eduDurationId;
+    private String eduDurationName;
 
     private Boolean isActive = Boolean.FALSE;
 

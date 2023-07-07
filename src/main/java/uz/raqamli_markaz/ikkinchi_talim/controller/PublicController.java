@@ -11,6 +11,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialityProjection;
 import uz.raqamli_markaz.ikkinchi_talim.service.ClassificatorService;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileServiceImpl;
 
@@ -31,9 +32,9 @@ public class PublicController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("allSpecialitiesInstitution/{classificatorId}")
-    public ResponseEntity<?> getAllSpecialitiesInstitution(@PathVariable Integer classificatorId) {
-        List<DiplomaSpeciality> list = classificatorService.getSpecialitiesByInstitutionId(classificatorId);
+    @GetMapping("allSpecialitiesInstitution/{id}")
+    public ResponseEntity<?> getAllSpecialitiesInstitution(@PathVariable Integer id) {
+        List<SpecialityProjection> list = classificatorService.getSpecialitiesByInstitutionId(id);
         return ResponseEntity.ok(list);
     }
 

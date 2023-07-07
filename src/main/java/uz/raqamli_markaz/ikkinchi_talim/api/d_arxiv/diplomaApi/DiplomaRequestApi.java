@@ -28,7 +28,7 @@ public class DiplomaRequestApi {
 	private Integer diplomaNumber;
 
 	@JsonProperty("edu_form_id")
-	private Integer eduFormId = 3;
+	private Integer eduFormId ;
 
 	@JsonProperty("institution_id")
 	private Integer institutionId;

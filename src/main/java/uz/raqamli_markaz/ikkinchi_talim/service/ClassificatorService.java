@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Kvota;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaInstitutionResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaSpecialityResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.OtmProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.util.List;
@@ -24,9 +21,7 @@ public class ClassificatorService {
     private final DiplomaSerialRepository diplomaSerialRepository;
     private final EduFormRepository eduFormRepository;
     private final CountryRepository countryRepository;
-    private final LanguageRepository languageRepository;
     private final DurationRepository durationRepository;
-    private final UniversityRepository universityRepository;
     private final KvotaRepository kvotaRepository;
 
     @Transactional(readOnly = true)
@@ -35,8 +30,8 @@ public class ClassificatorService {
     }
 
     @Transactional(readOnly = true)
-    public List<DiplomaSpeciality> getSpecialitiesByInstitutionId(Integer institutionId) {
-        return diplomaSpecialityRepository.findDiplomaSpecialitiesByInstitutionId(institutionId);
+    public List<SpecialityProjection> getSpecialitiesByInstitutionId(Integer id) {
+        return diplomaSpecialityRepository.findDiplomaSpecialitiesByInstitutionId(id);
     }
 
     @Transactional(readOnly = true)
@@ -44,23 +39,7 @@ public class ClassificatorService {
         return diplomaOldInstitutionRepository.findAll().stream().map(DiplomaInstitutionResponse::new).toList();
     }
 
-    @Transactional(readOnly = true)
-    public DiplomaInstitutionResponse getAllDiplomaInstitutionById(Integer institutionOldId) {
-        return diplomaOldInstitutionRepository.findDiplomaOldInstitutionByOldId(institutionOldId)
-                .map(DiplomaInstitutionResponse::new).orElse(null);
-    }
 
-    @Transactional(readOnly = true)
-    public List<DiplomaSpecialityResponse> getAllDiplomaSpecialityResponse() {
-        return diplomaSpecialityRepository.findAll().stream()
-                .map(DiplomaSpecialityResponse::new).toList();
-    }
-
-    @Transactional(readOnly = true)
-    public DiplomaSpecialityResponse getDiplomaSpecialityById(Integer specialityId) {
-        return diplomaSpecialityRepository.findDiplomaSpecialitiesById(specialityId)
-                .map(DiplomaSpecialityResponse::new).orElse(null);
-    }
 
     @Transactional(readOnly = true)
     public List<EduFormResponse> getAllEduFormResponses() {

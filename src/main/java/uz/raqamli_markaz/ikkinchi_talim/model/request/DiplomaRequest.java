@@ -18,8 +18,6 @@ public class DiplomaRequest {
     @JsonProperty("diploma_serial")
     private String diplomaSerial;
 
-    @JsonProperty("foreign_institution_name")
-    private String foreignInstitutionName;
 
     @JsonProperty("diploma_number")
     private Integer diplomaNumber;
@@ -44,6 +42,25 @@ public class DiplomaRequest {
 
     @JsonProperty("ilova_url")
     private String ilovaUrl;
+    @JsonProperty("diploma_serial_id")
+    private Integer diplomaSerialId;
 
-    private DiplomaRequestApi diplomaRequestApi; //D_ARXIV Api uchun
+    @JsonProperty("speciality_id")
+    private Integer specialityId;
+
+    //talim shakli kunduzgi
+    @JsonProperty("edu_form_id")
+    private Integer eduFormId;
+
+
+    @JsonProperty("institution_id")
+    private Integer institutionId;
+    @JsonProperty("foreign_otm_name")
+    private String foreignOtmName;
+
+
+    @JsonProperty("edu_duration_id")
+    private Integer eduDurationId;
+
+//    private DiplomaRequestApi diplomaRequestApi; //D_ARXIV Api uchun
 }

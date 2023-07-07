@@ -14,9 +14,7 @@ public class DiplomaResponse {
     private Integer id;
     private Integer institutionId;
     private String institutionName;
-    private Integer institutionOldId;
     private String institutionOldName;
-    private Integer degreeId;
     private String degreeName;
     private Integer eduFormId;
     private String eduFormName;
@@ -24,30 +22,50 @@ public class DiplomaResponse {
     private String specialityName;
     private String eduFinishingDate;
     private Integer diplomaSerialId;
-    private String diplomaSerialAndNumber;
+    private String diplomaSerial;
+    private Integer diplomaNumber;
+    private Integer countryId;
     private String countryName;
     private String specialityCustomName;
     private Integer statusId;
     private String statusName;
     private String diplomaUrl;
     private String ilovaUrl;
-
     private Boolean isActive;
+    private Integer eduDurationId;
+    private String eduDurationName;
+
 
     public DiplomaResponse(Diploma diploma) {
         this.id = diploma.getId();
         this.countryName = diploma.getCountryName();
-        this.institutionId = diploma.getInstitutionId();
+        if (diploma.getInstitutionId() != null) {
+            this.institutionId = diploma.getInstitutionId();
+        }
+        this.countryId = diploma.getCountryId();
         this.institutionName = diploma.getInstitutionName();
         this.institutionOldName = diploma.getInstitutionOldName();
-        this.institutionOldId = diploma.getInstitutionOldId();
         this.eduFormName = diploma.getEduFormName();
-        this.degreeId = diploma.getDegreeId();
         this.degreeName = diploma.getDegreeName();
-        this.specialityId = diploma.getSpecialityId();
-        this.specialityName = diploma.getSpecialityName();
+        this.eduDurationId = diploma.getEduDurationId();
+        this.eduDurationName = diploma.getEduDurationName();
+        if (diploma.getSpecialityIdDb() != null) {
+            this.specialityId = diploma.getSpecialityIdDb();
+        }
+        if (diploma.getSpecialityIdDb() != null) {
+            this.specialityName = diploma.getSpecialityName();
+        }
+        if (diploma.getDiplomaSerialId() != null) {
+            this.diplomaSerialId = diploma.getDiplomaSerialId();
+        }
+        if (diploma.getSpecialityCustomName() != null) {
+            this.specialityCustomName = diploma.getSpecialityCustomName();
+
+        }
         this.eduFinishingDate = diploma.getEduFinishingDate();
-        this.diplomaSerialAndNumber = diploma.getDiplomaSerialAndNumber();
+        this.statusName = diploma.getStatusName();
+        this.diplomaSerial = diploma.getDiplomaSerial();
+        this.diplomaNumber = diploma.getDiplomaNumber();
         if (diploma.getDiplomaUrl() != null) {
             this.ilovaUrl = diploma.getIlovaUrl();
             this.diplomaUrl = diploma.getDiplomaUrl();

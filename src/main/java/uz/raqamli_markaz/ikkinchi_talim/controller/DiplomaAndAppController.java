@@ -21,10 +21,12 @@ public class DiplomaAndAppController {
 
     @PostMapping("createApplication")
     public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
-                                           @RequestParam(value = "kvotaId") Integer kvotaId) {
+                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
         Result result = applicationService.createApplication(token, kvotaId);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }    @PostMapping("createDiploma")
+    }
+
+    @PostMapping("createDiploma")
     public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
                                            @RequestBody DiplomaRequest request) {
         Result result = diplomaService.createDiploma(token, request);
@@ -33,17 +35,19 @@ public class DiplomaAndAppController {
 
     @PutMapping("updateApplication")
     public ResponseEntity<?> updateApplication(@RequestParam(value = "token") String token,
-                                           @RequestParam(value = "kvotaId") Integer kvotaId) {
+                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
         Result result = applicationService.updateApplication(token, kvotaId);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
     @PutMapping("updateDiploma")
     public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "id") Integer id,
                                            @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.updateDiploma(token, request);
+        Result result = diplomaService.updateDiploma(token,id, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
+
     @DeleteMapping("deleteDiploma/{id}")
     public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
                                            @RequestParam(value = "token") String token) {
@@ -51,24 +55,10 @@ public class DiplomaAndAppController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-
-    @GetMapping("getDiplomaByPrincipal/{diplomaId}")
-    public ResponseEntity<?> getAllDiplomaByPrincipal(@PathVariable Integer diplomaId,
-                                                      @RequestParam(value = "token") String token) {
-        Result diplomaResponse = diplomaService.getDiplomaByPrincipal(diplomaId, token);
-        return ResponseEntity.status(diplomaResponse.isSuccess() ? 200 : 404).body(diplomaResponse);
-    }
-    @GetMapping("getApplication/{diplomaId}")
-    public ResponseEntity<?> getApplication(@RequestParam(value = "token") String token) {
-        Result diplomaResponse = applicationService.getApplicationByPrincipal(token);
-        return ResponseEntity.status(diplomaResponse.isSuccess() ? 200 : 404).body(diplomaResponse);
-    }
-
     @PatchMapping("diplomaIsActive/{diplomaId}")
     public ResponseEntity<?> diplomaIsActive(@PathVariable Integer diplomaId,
-                                             @RequestParam(value = "token") String token,
-                                             @RequestParam(value = "isActive") Boolean isActive) {
-        Result result = diplomaService.diplomaIsActive(token, diplomaId, isActive);
+                                             @RequestParam(value = "token") String token) {
+        Result result = diplomaService.diplomaIsActive(token, diplomaId);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
@@ -78,14 +68,5 @@ public class DiplomaAndAppController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-    @PostMapping("changeDiplomaStatusApi")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
-    @PreAuthorize("hasRole('MODERATOR')") //shohijahon uchun
-    public ResponseEntity<?> changeDiplomaStatusApi(@RequestParam(value = "diplomaId") Integer diplomaId,
-                                                    @RequestParam(value = "statusId") Integer statusId,
-                                                    @RequestParam(value = "statusName") String statusName) {
-        Result result = diplomaService.changeDiplomaStatusApi(diplomaId, statusId, statusName);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
 
 }

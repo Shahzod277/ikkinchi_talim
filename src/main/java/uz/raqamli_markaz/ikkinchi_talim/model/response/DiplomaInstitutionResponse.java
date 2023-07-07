@@ -12,16 +12,13 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
 @AllArgsConstructor
 public class DiplomaInstitutionResponse {
 
-    private Integer classificatorId; // yangi institutlar id, yani institution id
+    private Integer id;
     private String institutionName;
-    private Integer institutionOldId;
     private String institutionOldNameOz;
 
     public DiplomaInstitutionResponse(DiplomaOldInstitution diplomaOldInstitution) {
-
-        this.classificatorId = diplomaOldInstitution.getClassificatorId();
+        this.id = diplomaOldInstitution.getId();
         this.institutionName = diplomaOldInstitution.getInstitutionName();
-        this.institutionOldId = diplomaOldInstitution.getInstitutionOldId();
         this.institutionOldNameOz = diplomaOldInstitution.getInstitutionOldNameOz();
     }
 }
