@@ -29,7 +29,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
 
     @Query("select d from Diploma d where d.diplomaId =?1 and d.isActive = true")
     Optional<Diploma> findDiplomaByDiplomaId(Integer diplomaId);
-    
+
     @Query("select d from Diploma d where d.user.id =?1 and d.isActive = true")
     Optional<Diploma> findActiveDiplomaByUser(Integer id);
 
