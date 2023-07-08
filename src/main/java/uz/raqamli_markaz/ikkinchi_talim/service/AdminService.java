@@ -15,10 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaRequestApi
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.ApplicationResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 import java.security.Principal;
 
@@ -63,6 +60,15 @@ public class AdminService {
                    .map(DiplomaResponse::new);
     }
 
+    @Transactional(readOnly = true)
+    public DiplomaResponse getDiplomaByIdUAdmin(Principal principal, Integer diplomaId) {
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        Integer institutionDbId = user.getDiplomaOldInstitution().getId();
+        return diplomaRepository
+                .findDiplomaByInstitutionAndId(institutionDbId, diplomaId)
+                .map(DiplomaResponse::new).orElse(null);
+    }
+
     @Transactional
     public Result confirmApplication(Principal principal, Integer applicationId, String message) {
         try {
@@ -70,11 +76,15 @@ public class AdminService {
             String universityCode = user.getUniversity().getCode();
             Application application = applicationRepository
                     .findApplicationByUniversityAndId(universityCode, applicationId).get();
-            //diplomni statusiga qarab check qilish kerak
-            application.setApplicationStatus("Ariza tasdiqlandi");
-            application.setApplicationMessage(message);
-            applicationRepository.save(application);
-            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            User appUser = application.getUser();
+            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
+            if (diploma.getStatusId()== 1) {
+                application.setApplicationStatus("Ariza tasdiqlandi");
+                application.setApplicationMessage(message);
+                applicationRepository.save(application);
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            }
+            return new Result("Diplom tasdiqlanmagan ", false);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
@@ -89,5 +99,23 @@ public class AdminService {
         String universityCode = user.getUniversity().getCode();
         return applicationRepository.findAllApplicationByUniversity(universityCode, pageable)
                 .map(a -> new ApplicationResponse(a, a.getUser()));
+    }
+
+    @Transactional(readOnly = true)
+    public ApplicationResponse getApplicationByIdUAdmin(Principal principal, Integer applicationId) {
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        String universityCode = user.getUniversity().getCode();
+        Application application = applicationRepository
+                .findApplicationByUniversityAndId(universityCode, applicationId).get();
+        User appUser = application.getUser();
+        Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
+        ApplicationResponse response = new ApplicationResponse();
+        response.setId(application.getId());
+        response.setStatus(application.getApplicationStatus());
+        response.setMessage(application.getApplicationMessage());
+        response.setKvota(application.getKvota());
+        response.setUserResponse(new UserResponse(appUser));
+        response.setDiplomaResponse(new DiplomaResponse(diploma));
+        return response;
     }
 }
