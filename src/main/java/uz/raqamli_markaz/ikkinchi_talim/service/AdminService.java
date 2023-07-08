@@ -24,8 +24,6 @@ import java.security.Principal;
 public class AdminService {
 
     private final DiplomaRepository diplomaRepository;
-    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
-    private final UniversityRepository universityRepository;
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final DiplomaApi diplomaApi;
