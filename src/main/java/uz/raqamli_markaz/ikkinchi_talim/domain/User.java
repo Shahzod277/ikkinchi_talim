@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Role;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 
 @Entity
 @Getter
@@ -28,6 +30,12 @@ public class User extends AbstractEntity {
     private String permanentAddress;
     private Integer myEduId;
     private String fotoUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DiplomaOldInstitution diplomaOldInstitution;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private University university;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
