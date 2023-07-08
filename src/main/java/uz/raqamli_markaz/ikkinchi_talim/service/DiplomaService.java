@@ -144,8 +144,8 @@ public class DiplomaService {
                 diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
                 diplomaNew.setDegreeId(2);
                 diplomaNew.setDegreeName("Bakalavr");
-                diplomaNew.setEduFormId(eduForm.getId());
-                diplomaNew.setEduFormName(eduForm.getNameOz());
+//                diplomaNew.setEduFormId(eduForm.getId());
+                diplomaNew.setEduFormName(request.getEduFormName());
                 diplomaNew.setEduDurationId(duration.getDurationId());
                 diplomaNew.setEduDurationName(duration.getNameOz());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
@@ -220,8 +220,8 @@ public class DiplomaService {
             diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
             diplomaNew.setDegreeId(2);
             diplomaNew.setDegreeName("Bakalavr");
-            diplomaNew.setEduFormId(eduForm.getId());
-            diplomaNew.setEduFormName(eduForm.getNameOz());
+//            diplomaNew.setEduFormId(eduForm.getId());
+            diplomaNew.setEduFormName(request.getEduFormName());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());

@@ -52,6 +52,8 @@ public class DiplomaRequest {
     @JsonProperty("edu_form_id")
     private Integer eduFormId;
 
+    @JsonProperty("edu_form_name")
+    private String eduFormName;
 
     @JsonProperty("institution_id")
     private Integer institutionId;
