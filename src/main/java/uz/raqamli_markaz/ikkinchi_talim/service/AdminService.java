@@ -55,17 +55,17 @@ public class AdminService {
             if (page > 0) page = page - 1;
             Pageable pageable = PageRequest.of(page, size);
             User user = userRepository.findUserByPinfl(principal.getName()).get();
-            Integer institutionDbId = user.getDiplomaOldInstitution().getId();
-           return diplomaRepository.findAllDiplomaByInstitution(institutionDbId, status, pageable)
+            Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
+           return diplomaRepository.findAllDiplomaByInstitution(institutionId, status, pageable)
                    .map(DiplomaResponse::new);
     }
 
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaByIdUAdmin(Principal principal, Integer diplomaId) {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        Integer institutionDbId = user.getDiplomaOldInstitution().getId();
+        Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
         return diplomaRepository
-                .findDiplomaByInstitutionAndId(institutionDbId, diplomaId)
+                .findDiplomaByInstitutionAndId(institutionId, diplomaId)
                 .map(DiplomaResponse::new).orElse(null);
     }
 
