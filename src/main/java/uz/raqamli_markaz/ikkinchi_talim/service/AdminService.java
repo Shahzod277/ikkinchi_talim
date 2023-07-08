@@ -34,8 +34,8 @@ public class AdminService {
     public Result confirmDiploma(Principal principal, Integer diplomaId) {
         try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
-            Integer institutionDbId = user.getDiplomaOldInstitution().getId();
-            Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(institutionDbId, diplomaId).get();
+            Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
+            Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(institutionId, diplomaId).get();
             diploma.setStatusId(3);
             diploma.setStatusName("Diplom tasdiqlangan");
             diplomaRepository.save(diploma);
