@@ -16,7 +16,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     List<Diploma> findAllDiplomaByUser(Integer id);
 
     @Query("select d from Diploma d where d.institutionIdDb = ?1 and d.id= ?2 ")
-    Optional<Diploma> findDiplomaByInstitution(Integer institutionId, Integer diplomaId);
+    Optional<Diploma> findDiplomaByInstitutionAndId(Integer institutionId, Integer diplomaId);
 
     @Query("select d from Diploma d where d.institutionIdDb = ?1 ")
     Page<Diploma> findAllDiplomaByInstitution(Integer institutionId, Pageable pageable);
@@ -29,6 +29,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
 
     @Query("select d from Diploma d where d.diplomaId =?1 and d.isActive = true")
     Optional<Diploma> findDiplomaByDiplomaId(Integer diplomaId);
+    
     @Query("select d from Diploma d where d.user.id =?1 and d.isActive = true")
     Optional<Diploma> findActiveDiplomaByUser(Integer id);
 
