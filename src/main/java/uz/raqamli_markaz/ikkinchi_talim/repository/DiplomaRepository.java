@@ -18,8 +18,8 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query("select d from Diploma d where d.institutionIdDb = ?1 and d.id= ?2 ")
     Optional<Diploma> findDiplomaByInstitutionAndId(Integer institutionId, Integer diplomaId);
 
-    @Query("select d from Diploma d where d.institutionIdDb = ?1 ")
-    Page<Diploma> findAllDiplomaByInstitution(Integer institutionId, Pageable pageable);
+    @Query("select d from Diploma d where d.institutionIdDb = ?1 and d.statusName= ?2")
+    Page<Diploma> findAllDiplomaByInstitution(Integer institutionDbId, String status, Pageable pageable);
 
     @Query("select d from Diploma d where d.id =?1 and d.user.id =?2 ")
     Optional<Diploma> findDiplomaByDiplomaIdAndUser(Integer id, Integer userId);

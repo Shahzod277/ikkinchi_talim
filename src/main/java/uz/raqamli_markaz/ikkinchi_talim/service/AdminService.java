@@ -51,12 +51,12 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DiplomaResponse> getAllDiplomaByUAdmin(Principal principal, int page, int size) {
+    public Page<DiplomaResponse> getAllDiplomaByUAdmin(Principal principal, int page, int size, String status) {
             if (page > 0) page = page - 1;
             Pageable pageable = PageRequest.of(page, size);
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             Integer institutionDbId = user.getDiplomaOldInstitution().getId();
-           return diplomaRepository.findAllDiplomaByInstitution(institutionDbId, pageable)
+           return diplomaRepository.findAllDiplomaByInstitution(institutionDbId, status, pageable)
                    .map(DiplomaResponse::new);
     }
 
@@ -92,12 +92,12 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getAllApplicationByUAdmin(Principal principal, int page, int size) {
+    public Page<ApplicationResponse> getAllApplicationByUAdmin(Principal principal, int page, int size, String status) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         String universityCode = user.getUniversity().getCode();
-        return applicationRepository.findAllApplicationByUniversity(universityCode, pageable)
+        return applicationRepository.findAllApplicationByUniversity(universityCode, status, pageable)
                 .map(a -> new ApplicationResponse(a, a.getUser()));
     }
 

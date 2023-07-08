@@ -33,8 +33,9 @@ public class AdminController {
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllDiplomaByUAdmin(Principal principal,
                                             @RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "size", defaultValue = "20") int size) {
-        Page<DiplomaResponse> responses = adminService.getAllDiplomaByUAdmin(principal, page, size);
+                                            @RequestParam(value = "size", defaultValue = "20") int size,
+                                            @RequestParam(value = "status", defaultValue = "") String status) {
+        Page<DiplomaResponse> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status);
         return ResponseEntity.ok(responses);
     }
 
@@ -61,8 +62,9 @@ public class AdminController {
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllApplicationByUAdmin(Principal principal,
                                                    @RequestParam(value = "page", defaultValue = "0") int page,
-                                                   @RequestParam(value = "size", defaultValue = "20") int size) {
-        Page<ApplicationResponse> responses = adminService.getAllApplicationByUAdmin(principal, page, size);
+                                                   @RequestParam(value = "size", defaultValue = "20") int size,
+                                                   @RequestParam(value = "status", defaultValue = "") String status) {
+        Page<ApplicationResponse> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status);
         return ResponseEntity.ok(responses);
     }
 

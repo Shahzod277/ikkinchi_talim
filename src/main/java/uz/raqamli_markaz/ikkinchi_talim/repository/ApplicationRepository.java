@@ -12,8 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
-    @Query("select a from Application a where a.kvota.universityCode= ?1 ")
-    Page<Application> findAllApplicationByUniversity(String universityCode, Pageable pageable);
+    @Query("select a from Application a where a.kvota.universityCode= ?1 and a.applicationStatus= ?2 ")
+    Page<Application> findAllApplicationByUniversity(String universityCode, String status, Pageable pageable);
 
     @Query("select a from Application a where a.kvota.universityCode= ?1 and a.id= ?2")
     Optional<Application> findApplicationByUniversityAndId(String universityCode, Integer applicationId);
