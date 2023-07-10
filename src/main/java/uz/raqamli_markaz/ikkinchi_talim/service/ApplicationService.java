@@ -57,7 +57,7 @@ public class ApplicationService {
         });
         thread.start();
         thread.join(5000);
-        return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+        return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true,save.getId());
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
@@ -81,7 +81,7 @@ public class ApplicationService {
             Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
             application.setApplicationStatus("Diplom "+diploma.getStatusName());
             application.setKvota(kvota);
-            applicationRepository.save(application);
+            Application save = applicationRepository.save(application);
             Thread thread = new Thread(() -> {
                 try {
                     String encode = userService.encode(user.getPinfl());
@@ -96,7 +96,7 @@ public class ApplicationService {
             });
             thread.start();
             thread.join(5000);
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,application.getId());
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
@@ -115,7 +115,6 @@ public class ApplicationService {
         Application userApplication = user.getApplication();
         Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
         ApplicationResponse applicationResponse = new ApplicationResponse();
-
         applicationResponse.setDiplomaResponse(new DiplomaResponse(diploma));
         applicationResponse.setUserResponse(new UserResponse(user));
         applicationResponse.setStatus(userApplication.getApplicationStatus());
