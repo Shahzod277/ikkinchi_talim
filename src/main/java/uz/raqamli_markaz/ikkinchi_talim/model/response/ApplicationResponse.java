@@ -21,7 +21,7 @@ public class ApplicationResponse {
     private String message;
     private Kvota kvota;
     private DiplomaResponse diplomaResponse;
-    private UserResponse userResponse;
+//    private UserResponse userResponse;
 
     //Page uchun
     public ApplicationResponse(Application application, User user) {
