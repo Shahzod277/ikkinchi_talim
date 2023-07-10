@@ -9,6 +9,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +37,8 @@ public class ClassificatorService {
 
     @Transactional(readOnly = true)
     public List<DiplomaInstitutionResponse> getAllDiplomaInstitutionResponse() {
-        return diplomaOldInstitutionRepository.findAll().stream().map(DiplomaInstitutionResponse::new).toList();
+        return diplomaOldInstitutionRepository.findAll().stream().sorted(Comparator.comparing(DiplomaOldInstitution::getInstitutionOldNameOz)).map(DiplomaInstitutionResponse::new).toList();
     }
-
 
 
     @Transactional(readOnly = true)
@@ -60,16 +60,19 @@ public class ClassificatorService {
     public List<OtmProjection> getOtmByKvota() {
         return kvotaRepository.getOtmByKvota();
     }
+
     @Transactional(readOnly = true)
     public List<OtmProjection> getEduForm(String code) {
         return kvotaRepository.getEduFormByOtmCode(code);
     }
+
     @Transactional(readOnly = true)
-    public List<OtmProjection> getLanguageByOtmCodeAndEduFormCode(String code,String otmcode) {
-        return kvotaRepository.getLanguageByOtmCodeAndEduFormCode(code,otmcode);
+    public List<OtmProjection> getLanguageByOtmCodeAndEduFormCode(String code, String otmcode) {
+        return kvotaRepository.getLanguageByOtmCodeAndEduFormCode(code, otmcode);
     }
+
     @Transactional(readOnly = true)
-    public List<OtmProjection> getSpeciality(String languageCode,String code,String otmcode) {
-        return kvotaRepository.getSpeciality(languageCode,code,otmcode);
+    public List<OtmProjection> getSpeciality(String languageCode, String code, String otmcode) {
+        return kvotaRepository.getSpeciality(languageCode, code, otmcode);
     }
 }

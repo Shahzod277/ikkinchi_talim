@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface KvotaRepository extends JpaRepository<Kvota, Integer> {
-    @Query(nativeQuery = true, value = "select distinct(k.university_code) otmCode ,k.university_name otmName  from kvota  k ")
+    @Query(nativeQuery = true, value = "select distinct(k.university_code) otmCode ,k.university_name otmName  from kvota  k order by k.university_name ")
     List<OtmProjection> getOtmByKvota();
 
     @Query(nativeQuery = true, value = "select distinct(k.edu_form_code) eduFormCode ,k.edu_form_name eduFormName,k.university_code otmCode  from kvota k where k.university_code=?1")
