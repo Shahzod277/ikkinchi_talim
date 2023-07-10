@@ -43,9 +43,8 @@ public class DiplomaAndAppController {
 
     @PutMapping("addDiplomaAndIlova")
     public ResponseEntity<?> addDiplomaAndIlova(@RequestParam(value = "token") String token,
-                                               @RequestParam(value = "id") Integer id,
                                                @RequestBody DiplomaAndIlovaRequest request) {
-        Result result = diplomaService.addDiplomaAndIlova(token, id, request);
+        Result result = diplomaService.addDiplomaAndIlova(token, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 

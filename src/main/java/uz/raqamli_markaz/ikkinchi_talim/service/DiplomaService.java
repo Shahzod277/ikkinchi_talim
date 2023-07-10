@@ -175,14 +175,14 @@ public class DiplomaService {
     }
 
     @Transactional
-    public Result addDiplomaAndIlova(String token, Integer id, DiplomaAndIlovaRequest request) {
+    public Result addDiplomaAndIlova(String token, DiplomaAndIlovaRequest request) {
         try {
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
             }
             Integer userId = (Integer) result.getObject();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), userId).get();
             diplomaNew.setIlovaUrl(request.getIlova());
             diplomaNew.setDiplomaUrl(request.getDiploma());
             diplomaRepository.save(diplomaNew);

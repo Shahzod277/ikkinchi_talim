@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DiplomaAndIlovaRequest {
+private Integer id;
 private String ilova;
 private String diploma;
 }
