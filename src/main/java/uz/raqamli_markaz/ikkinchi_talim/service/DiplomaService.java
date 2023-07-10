@@ -39,6 +39,7 @@ public class DiplomaService {
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final EduFormRepository eduFormRepository;
     private final DurationRepository durationRepository;
+    private final DiplomaSerialRepository diplomaSerialRepository;
 //private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2SD0XPYctuITQFLGE+R1+kIMjWms6lHJ02ZgDIsmjQpyRaCGB8jmoEn/7MyKO1R502lGgRMkg230HCRGIf4kO4w7UIp9a/WxlQ4iEg6nr00e1QoTsVLk=";
 
     @Transactional
@@ -109,13 +110,15 @@ public class DiplomaService {
                         diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
                     }
                     DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
+                    DiplomaSerial diplomaSerial = diplomaSerialRepository.findById(request.getDiplomaSerialId()).get();
 
                     diplomaNew.setUser(user);
-                    diplomaNew.setDiplomaSerialId(request.getDiplomaSerialId());
+                    diplomaNew.setDiplomaSerialId(diplomaSerial.getId());
                     diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-                    diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
+                    diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
                     diplomaNew.setDegreeId(2);
                     diplomaNew.setEduDurationId(duration.getDurationId());
+                    diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
                     diplomaNew.setEduDurationName(duration.getNameOz());
                     diplomaNew.setDegreeName("Bakalavr");
                     diplomaNew.setEduFormId(request.getEduFormId());
@@ -142,6 +145,7 @@ public class DiplomaService {
                 }
                 Diploma diplomaNew = new Diploma();
                 diplomaNew.setUser(user);
+                diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
                 diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
                 diplomaNew.setCountryId(country.getId());
                 diplomaNew.setCountryName(country.getName());
@@ -193,15 +197,17 @@ public class DiplomaService {
                 diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
             }
             DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
+            DiplomaSerial diplomaSerial = diplomaSerialRepository.findById(request.getDiplomaSerialId()).get();
             diplomaNew.setUser(user);
-            diplomaNew.setDiplomaSerialId(request.getDiplomaSerialId());
+            diplomaNew.setDiplomaSerialId(diplomaSerial.getId());
             diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-            diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
+            diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
             diplomaNew.setDegreeId(2);
             diplomaNew.setModifiedDate(LocalDateTime.now());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
             diplomaNew.setDegreeName("Bakalavr");
+            diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
             diplomaNew.setEduFormId(request.getEduFormId());
             diplomaNew.setEduFormName(eduForm.getNameOz());
             diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
@@ -232,6 +238,7 @@ public class DiplomaService {
         diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
         diplomaNew.setDegreeId(2);
         diplomaNew.setDegreeName("Bakalavr");
+            diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
 //            diplomaNew.setEduFormId(eduForm.getId());
         diplomaNew.setEduFormName(request.getEduFormName());
         diplomaNew.setEduDurationId(duration.getDurationId());
