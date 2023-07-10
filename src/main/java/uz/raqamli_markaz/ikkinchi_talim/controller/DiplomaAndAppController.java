@@ -67,6 +67,11 @@ public class DiplomaAndAppController {
         Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
+    @GetMapping("applicationDetails")
+    public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) {
+        Result result = applicationService.getApplicationByPrincipal(token);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
 
 
 }
