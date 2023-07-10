@@ -18,6 +18,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -100,7 +101,7 @@ public class DiplomaService {
                 EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
                 if (request.getCountryId() == 1) {
                     Diploma diplomaNew = new Diploma();
-                    if (request.getSpecialityId()!=null){
+                    if (request.getSpecialityId() != null) {
                         DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
                         diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
                         diplomaNew.setSpecialityId(diplomaSpeciality.getSpecialitiesId());
@@ -154,6 +155,7 @@ public class DiplomaService {
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                 diplomaNew.setEduStartingDate(request.getEduStartingDate());
                 diplomaNew.setInstitutionName(request.getForeignOtmName());
+                diplomaNew.setInstitutionOldName(request.getForeignOtmName());
                 diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
                 diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
@@ -171,76 +173,78 @@ public class DiplomaService {
     @Transactional
     public Result updateDiploma(String token, Integer id, DiplomaRequest request) {
 //        try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer userId = (Integer) result.getObject();
-            User user = userRepository.findById(id).get();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
-            Country country = countryRepository.findById(request.getCountryId()).get();
-            Duration duration = durationRepository.findById(request.getEduDurationId()).get();
-            EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
-            if (request.getCountryId() == 1) {
-                if (request.getSpecialityId()!=null){
-                    DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
-                    diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
-                    diplomaNew.setSpecialityId(diplomaSpeciality.getSpecialitiesId());
-                    diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
-                }
-                DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
-                diplomaNew.setUser(user);
-                diplomaNew.setDiplomaSerialId(request.getDiplomaSerialId());
-                diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-                diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
-                diplomaNew.setDegreeId(2);
-                diplomaNew.setEduDurationId(duration.getDurationId());
-                diplomaNew.setEduDurationName(duration.getNameOz());
-                diplomaNew.setDegreeName("Bakalavr");
-                diplomaNew.setEduFormId(request.getEduFormId());
-                diplomaNew.setEduFormName(eduForm.getNameOz());
-                diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
-                diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
-                diplomaNew.setEduStartingDate(request.getEduStartingDate());
-                diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
-                diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
-                diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
-                diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
 
-                diplomaNew.setCountryId(country.getId());
-                diplomaNew.setCountryName(country.getName());
-                diplomaNew.setIlovaUrl(request.getIlovaUrl());
-                diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
-
-                diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
-                if (request.getSpeciality_custom_name() != null) {
-                    diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
-                }
-                diplomaRepository.save(diplomaNew);
-                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+        Result result = userService.checkUser(token);
+        if (!result.isSuccess()) {
+            return result;
+        }
+        Integer userId = (Integer) result.getObject();
+        User user = userRepository.findById(userId).get();
+        Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
+        Country country = countryRepository.findById(request.getCountryId()).get();
+        Duration duration = durationRepository.findById(request.getEduDurationId()).get();
+        EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
+        if (request.getCountryId() == 1) {
+            if (request.getSpecialityId() != null) {
+                DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
+                diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
+                diplomaNew.setSpecialityId(diplomaSpeciality.getSpecialitiesId());
+                diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
             }
+            DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
             diplomaNew.setUser(user);
+            diplomaNew.setDiplomaSerialId(request.getDiplomaSerialId());
             diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-            diplomaNew.setCountryId(country.getId());
-            diplomaNew.setCountryName(country.getName());
             diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
-            diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
             diplomaNew.setDegreeId(2);
-            diplomaNew.setDegreeName("Bakalavr");
-//            diplomaNew.setEduFormId(eduForm.getId());
-            diplomaNew.setEduFormName(request.getEduFormName());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
+            diplomaNew.setDegreeName("Bakalavr");
+            diplomaNew.setEduFormId(request.getEduFormId());
+            diplomaNew.setEduFormName(eduForm.getNameOz());
+            diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
+            diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
             diplomaNew.setEduStartingDate(request.getEduStartingDate());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
-            diplomaNew.setInstitutionName(request.getForeignOtmName());
-            diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+            diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
+            diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
+            diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
+
+            diplomaNew.setCountryId(country.getId());
+            diplomaNew.setCountryName(country.getName());
             diplomaNew.setIlovaUrl(request.getIlovaUrl());
             diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
-            diplomaNew.setCountryName(country.getName());
-            diplomaRepository.save(diplomaNew);
 
+            diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
+            if (request.getSpeciality_custom_name() != null) {
+                diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+            }
+            diplomaRepository.save(diplomaNew);
             return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+        }
+        diplomaNew.setUser(user);
+        diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
+        diplomaNew.setCountryId(country.getId());
+        diplomaNew.setCountryName(country.getName());
+        diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
+        diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
+        diplomaNew.setDegreeId(2);
+        diplomaNew.setDegreeName("Bakalavr");
+//            diplomaNew.setEduFormId(eduForm.getId());
+        diplomaNew.setEduFormName(request.getEduFormName());
+        diplomaNew.setEduDurationId(duration.getDurationId());
+        diplomaNew.setEduDurationName(duration.getNameOz());
+        diplomaNew.setEduStartingDate(request.getEduStartingDate());
+        diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+        diplomaNew.setInstitutionName(request.getForeignOtmName());
+        diplomaNew.setInstitutionOldName(request.getForeignOtmName());
+        diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+        diplomaNew.setIlovaUrl(request.getIlovaUrl());
+        diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
+        diplomaNew.setCountryName(country.getName());
+        diplomaRepository.save(diplomaNew);
+
+        return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
 //        } catch (Exception exception) {
 //            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
@@ -309,6 +313,7 @@ public class DiplomaService {
     @Transactional
     public Result deleteDiploma(Integer id, String token) {
         try {
+
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;

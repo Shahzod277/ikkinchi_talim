@@ -22,7 +22,7 @@ public class DiplomaAndAppController {
     @PostMapping("createApplication")
     public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
                                                @RequestParam(value = "kvotaId") Integer kvotaId) {
-        Result result = applicationService.createApplication(token, kvotaId);
+        Result result = applicationService. createApplication(token, kvotaId);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
