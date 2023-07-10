@@ -76,7 +76,10 @@ public class DiplomaResponse {
         }
         this.statusName = diploma.getStatusName();
         this.diplomaSerial = diploma.getDiplomaSerial();
-        this.diplomaNumber = diploma.getDiplomaNumber();
+        if (diploma.getDiplomaNumber() != null) {
+            this.diplomaNumber = diploma.getDiplomaNumber();
+
+        }
         if (diploma.getDiplomaUrl() != null) {
             this.ilovaUrl = diploma.getIlovaUrl();
             this.diplomaUrl = diploma.getDiplomaUrl();
