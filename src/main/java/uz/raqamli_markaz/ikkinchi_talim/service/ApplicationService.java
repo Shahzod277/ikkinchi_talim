@@ -104,7 +104,7 @@ public class ApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public Result getApplicationByPrincipal(String token) {
+    public Result getApplicationByPrincipal(String token) throws Exception {
 
         Result result = userService.checkUser(token);
         if (!result.isSuccess()) {

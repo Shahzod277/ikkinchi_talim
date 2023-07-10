@@ -36,8 +36,8 @@ public class UserService {
     String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
 
     @Transactional
-    public Result checkUser(String token) {
-        try {
+    public Result checkUser(String token) throws Exception {
+//        try {
             String decode = decode(token);
             if (decode != null) {
                 String pinfl = decode.substring(0, decode.indexOf("|"));
@@ -68,10 +68,10 @@ public class UserService {
 
             }
             return new Result("token is null", false);
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR.getMessage(), false);
-        }
+//        } catch (Exception e) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR.getMessage(), false);
+//        }
     }
 
     public String decode(String token) throws Exception {

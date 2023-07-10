@@ -30,7 +30,7 @@ public class DiplomaAndAppController {
     @PostMapping("createDiploma")
     public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
                                            @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.createDiploma(token, request);
+            Result result = diplomaService.createDiploma(token, request);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
@@ -77,7 +77,7 @@ public class DiplomaAndAppController {
     }
 
     @GetMapping("applicationDetails")
-    public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) {
+    public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) throws Exception {
         Result result = applicationService.getApplicationByPrincipal(token);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
