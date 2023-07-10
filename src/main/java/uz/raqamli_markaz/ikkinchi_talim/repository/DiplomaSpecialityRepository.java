@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface DiplomaSpecialityRepository extends JpaRepository<DiplomaSpeciality, Integer> {
-    @Query(nativeQuery = true, value = "select ds.id specialityId ,ds.name_oz specialityName ,d.id institutionId  from diploma_speciality ds inner join diploma_institution d on ds.institution_id = d.classificator_id where d.id=?1 ")
+    @Query(nativeQuery = true, value = "select ds.id specialityId ,ds.name_oz specialityName ,d.id institutionId  from diploma_speciality ds inner join diploma_old_institution d on ds.institution_id = d.classificator_id where d.id=?1 ")
     List<SpecialityProjection> findDiplomaSpecialitiesByInstitutionId(Integer id);
 
     @Query("select d from DiplomaSpeciality d where d.id = ?1")
