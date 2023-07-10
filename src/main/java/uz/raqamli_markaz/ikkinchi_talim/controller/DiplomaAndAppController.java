@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaAndIlovaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.service.ApplicationService;
@@ -22,7 +23,7 @@ public class DiplomaAndAppController {
     @PostMapping("createApplication")
     public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
                                                @RequestParam(value = "kvotaId") Integer kvotaId) {
-        Result result = applicationService. createApplication(token, kvotaId);
+        Result result = applicationService.createApplication(token, kvotaId);
         return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
     }
 
@@ -40,11 +41,19 @@ public class DiplomaAndAppController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
+    @PutMapping("addDiplomaAndIlova")
+    public ResponseEntity<?> addDiplomaAndIlova(@RequestParam(value = "token") String token,
+                                               @RequestParam(value = "id") Integer id,
+                                               @RequestBody DiplomaAndIlovaRequest request) {
+        Result result = diplomaService.addDiplomaAndIlova(token, id, request);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
+
     @PutMapping("updateDiploma")
     public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
                                            @RequestParam(value = "id") Integer id,
                                            @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.updateDiploma(token,id, request);
+        Result result = diplomaService.updateDiploma(token, id, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
@@ -67,6 +76,7 @@ public class DiplomaAndAppController {
         Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
+
     @GetMapping("applicationDetails")
     public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) {
         Result result = applicationService.getApplicationByPrincipal(token);
