@@ -116,6 +116,7 @@ public class ApplicationService {
         Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
         ApplicationResponse applicationResponse = new ApplicationResponse();
         applicationResponse.setDiplomaResponse(new DiplomaResponse(diploma));
+        applicationResponse.setUserResponse(new UserResponse(user));
         applicationResponse.setStatus(userApplication.getApplicationStatus());
         applicationResponse.setMessage(userApplication.getApplicationMessage());
         applicationResponse.setKvota(userApplication.getKvota());

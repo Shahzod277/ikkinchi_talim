@@ -34,8 +34,8 @@ public class AdminService {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
             Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(institutionId, diplomaId).get();
-            diploma.setStatusId(3);
-            diploma.setStatusName("Diplom tasdiqlangan");
+            diploma.setStatusId(1);
+            diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
             diplomaRepository.save(diploma);
             DiplomaRequestApi diplomaRequestApi = new DiplomaRequestApi(diploma);
             Citizen citizen = new Citizen(diploma.getUser());

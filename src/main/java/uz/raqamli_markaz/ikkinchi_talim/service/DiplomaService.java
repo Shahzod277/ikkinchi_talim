@@ -34,13 +34,11 @@ public class DiplomaService {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final UserService userService;
-    private final ApplicationRepository applicationRepository;
     private final DiplomaSpecialityRepository diplomaSpecialityRepository;
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final EduFormRepository eduFormRepository;
     private final DurationRepository durationRepository;
     private final DiplomaSerialRepository diplomaSerialRepository;
-//private String tokena="Mm0Q8nSW2sr6Vv2K9RK0FmUbwlXzD6BcBgdQ0l2OZhSMqlAYDhBRtuY2SD0XPYctuITQFLGE+R1+kIMjWms6lHJ02ZgDIsmjQpyRaCGB8jmoEn/7MyKO1R502lGgRMkg230HCRGIf4kO4w7UIp9a/WxlQ4iEg6nr00e1QoTsVLk=";
 
     @Transactional
     public Result saveAndGetDiplomaByDiplomaApi(String token) {
