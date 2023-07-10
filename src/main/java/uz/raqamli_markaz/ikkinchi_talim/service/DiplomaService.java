@@ -19,6 +19,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -172,7 +173,7 @@ public class DiplomaService {
 
     @Transactional
     public Result updateDiploma(String token, Integer id, DiplomaRequest request) {
-//        try {
+        try {
 
         Result result = userService.checkUser(token);
         if (!result.isSuccess()) {
@@ -197,6 +198,7 @@ public class DiplomaService {
             diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
             diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
             diplomaNew.setDegreeId(2);
+            diplomaNew.setModifiedDate(LocalDateTime.now());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
             diplomaNew.setDegreeName("Bakalavr");
@@ -245,10 +247,10 @@ public class DiplomaService {
         diplomaRepository.save(diplomaNew);
 
         return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//        } catch (Exception exception) {
-//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
+        } catch (Exception exception) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+        }
     }
 
 

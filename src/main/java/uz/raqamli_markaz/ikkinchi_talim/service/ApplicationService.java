@@ -13,6 +13,8 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -75,6 +77,7 @@ public class ApplicationService {
             Kvota kvota = kvotaRepository.findById(kvotaId).get();
             application.setUser(user);
             application.setKvota(kvota);
+            application.setModifiedDate(LocalDateTime.now());
             Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
             application.setApplicationStatus("Diplom "+diploma.getStatusName());
             application.setKvota(kvota);
