@@ -21,6 +21,8 @@ public class DiplomaResponse {
     private Integer specialityId;
     private String specialityName;
     private String eduFinishingDate;
+    private String eduStartingDate;
+    private String diplomaGivenDate;
     private Integer diplomaSerialId;
     private String diplomaSerial;
     private Integer diplomaNumber;
@@ -41,6 +43,15 @@ public class DiplomaResponse {
         this.countryName = diploma.getCountryName();
         if (diploma.getInstitutionId() != null) {
             this.institutionId = diploma.getInstitutionIdDb();
+        }
+        if (diploma.getDiplomaGivenDate() != null) {
+            this.diplomaGivenDate = diploma.getDiplomaGivenDate();
+        }
+        if (diploma.getEduStartingDate() != null) {
+            this.eduStartingDate = diploma.getEduStartingDate();
+        }
+        if (diploma.getEduFinishingDate() != null) {
+            this.eduFinishingDate = diploma.getEduFinishingDate();
         }
         this.countryId = diploma.getCountryId();
         this.institutionName = diploma.getInstitutionName();
@@ -63,7 +74,6 @@ public class DiplomaResponse {
             this.specialityCustomName = diploma.getSpecialityCustomName();
 
         }
-        this.eduFinishingDate = diploma.getEduFinishingDate();
         this.statusName = diploma.getStatusName();
         this.diplomaSerial = diploma.getDiplomaSerial();
         this.diplomaNumber = diploma.getDiplomaNumber();
