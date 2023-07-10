@@ -1,6 +1,5 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.ApiConstant;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.*;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.DiplomaRequest;
@@ -20,9 +18,6 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -149,8 +144,8 @@ public class DiplomaService {
                 diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
                 diplomaNew.setDegreeId(2);
                 diplomaNew.setDegreeName("Bakalavr");
-                diplomaNew.setEduFormId(eduForm.getId());
-                diplomaNew.setEduFormName(eduForm.getNameOz());
+//                diplomaNew.setEduFormId(eduForm.getId());
+                diplomaNew.setEduFormName(request.getEduFormName());
                 diplomaNew.setEduDurationId(duration.getDurationId());
                 diplomaNew.setEduDurationName(duration.getNameOz());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
@@ -225,8 +220,8 @@ public class DiplomaService {
             diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
             diplomaNew.setDegreeId(2);
             diplomaNew.setDegreeName("Bakalavr");
-            diplomaNew.setEduFormId(eduForm.getId());
-            diplomaNew.setEduFormName(eduForm.getNameOz());
+//            diplomaNew.setEduFormId(eduForm.getId());
+            diplomaNew.setEduFormName(request.getEduFormName());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
@@ -300,13 +295,6 @@ public class DiplomaService {
         diplomaNew.setEduDurationName(diplomaResponseApi.getEduDurationName());
         diplomaNew.setEduDurationId(diplomaResponseApi.getEduDurationId());
         return diplomaNew;
-    }
-
-    @Transactional(readOnly = true)
-    public Page<DiplomaResponse> getAllDiploma(int page, int size) {
-        if (page > 0) page = page - 1;
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        return diplomaRepository.findAll(pageable).map(DiplomaResponse::new);
     }
 
     @Transactional

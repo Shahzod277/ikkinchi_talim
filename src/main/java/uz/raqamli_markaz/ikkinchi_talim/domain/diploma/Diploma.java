@@ -28,11 +28,14 @@ public class Diploma extends AbstractEntity {
     private Integer eduFormId;
     private String eduFormName;
     private Integer specialityId;
+    private String specialityCode;
     private Integer specialityIdDb;
     private String specialityName;
+    private String eduStartingDate;
     private String eduFinishingDate;
     private Integer diplomaSerialId;
     private String diplomaSerial;
+    private String diplomaGivenDate;
     private Integer diplomaNumber;
     private Integer countryId;
     private String countryName;
