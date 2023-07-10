@@ -110,10 +110,10 @@ public class DiplomaService {
                         diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
                     }
                     DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
-                    DiplomaSerial diplomaSerial = diplomaSerialRepository.findById(request.getDiplomaSerialId()).get();
+                    DiplomaSerial diplomaSerial = diplomaSerialRepository.findDiplomaSerialBySerialId(request.getDiplomaSerialId()).get();
 
                     diplomaNew.setUser(user);
-                    diplomaNew.setDiplomaSerialId(diplomaSerial.getId());
+                    diplomaNew.setDiplomaSerialId(diplomaSerial.getSerialId());
                     diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
                     diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
                     diplomaNew.setDegreeId(2);
@@ -197,9 +197,9 @@ public class DiplomaService {
                 diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
             }
             DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
-            DiplomaSerial diplomaSerial = diplomaSerialRepository.findById(request.getDiplomaSerialId()).get();
+            DiplomaSerial diplomaSerial = diplomaSerialRepository.findDiplomaSerialBySerialId(request.getDiplomaSerialId()).get();
             diplomaNew.setUser(user);
-            diplomaNew.setDiplomaSerialId(diplomaSerial.getId());
+            diplomaNew.setDiplomaSerialId(diplomaSerial.getSerialId());
             diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
             diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
             diplomaNew.setDegreeId(2);
