@@ -111,12 +111,12 @@ public class DiplomaService {
                     diplomaNew.setEduDurationId(duration.getDurationId());
                     diplomaNew.setEduDurationName(duration.getNameOz());
                     diplomaNew.setDegreeName("Bakalavr");
-                    diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                     diplomaNew.setEduFormId(request.getEduFormId());
                     diplomaNew.setEduFormName(eduForm.getNameOz());
                     diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
                     diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
-
+                    diplomaNew.setEduStartingDate(request.getEduStartingDate());
+                    diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                     diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
                     diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
                     diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
@@ -149,6 +149,7 @@ public class DiplomaService {
                 diplomaNew.setEduDurationId(duration.getDurationId());
                 diplomaNew.setEduDurationName(duration.getNameOz());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+                diplomaNew.setEduStartingDate(request.getEduStartingDate());
                 diplomaNew.setInstitutionName(request.getForeignOtmName());
                 diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
@@ -188,12 +189,12 @@ public class DiplomaService {
                 diplomaNew.setEduDurationId(duration.getDurationId());
                 diplomaNew.setEduDurationName(duration.getNameOz());
                 diplomaNew.setDegreeName("Bakalavr");
-                diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                 diplomaNew.setEduFormId(request.getEduFormId());
                 diplomaNew.setEduFormName(eduForm.getNameOz());
                 diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
                 diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
-
+                diplomaNew.setEduStartingDate(request.getEduStartingDate());
+                diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                 diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
                 diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
                 diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
@@ -224,6 +225,7 @@ public class DiplomaService {
             diplomaNew.setEduFormName(request.getEduFormName());
             diplomaNew.setEduDurationId(duration.getDurationId());
             diplomaNew.setEduDurationName(duration.getNameOz());
+            diplomaNew.setEduStartingDate(request.getEduStartingDate());
             diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
             diplomaNew.setInstitutionName(request.getForeignOtmName());
             diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
@@ -282,6 +284,7 @@ public class DiplomaService {
         diplomaNew.setDegreeId(diplomaResponseApi.getDegreeId());
         diplomaNew.setDegreeName(diplomaResponseApi.getDegreeName());
         diplomaNew.setEduFinishingDate(diplomaResponseApi.getEduFinishingDate());
+        diplomaNew.setEduStartingDate(diplomaResponseApi.getEduStartingDate());
         diplomaNew.setEduFormId(diplomaResponseApi.getEduFormId());
         diplomaNew.setEduFormName(diplomaResponseApi.getEduFormName());
         diplomaNew.setInstitutionId(diplomaResponseApi.getInstitutionId());
