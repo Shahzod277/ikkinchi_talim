@@ -55,7 +55,7 @@ public class ApplicationService {
         });
         thread.start();
         thread.join(5000);
-        return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), false);
+        return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
         } catch (Exception ex) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
