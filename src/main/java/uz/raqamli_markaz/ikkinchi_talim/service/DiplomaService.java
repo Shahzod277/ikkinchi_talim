@@ -292,6 +292,7 @@ public class DiplomaService {
         Optional<DiplomaSpeciality> speciality = diplomaSpecialityRepository.findDiplomaSpecialitiesById(diplomaResponseApi.getSpecialityId());
         speciality.ifPresent(diplomaSpeciality -> diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId()));
         diplomaNew.setCountryId(1);
+        diplomaNew.setDiplomaGivenDate(diplomaResponseApi.getDiplomaGivenDate());
         diplomaNew.setCountryName(country.getName());
         diplomaNew.setDiplomaSerialId(diplomaResponseApi.getDiplomaSerialId());
         diplomaNew.setDiplomaId(diplomaResponseApi.getId());
