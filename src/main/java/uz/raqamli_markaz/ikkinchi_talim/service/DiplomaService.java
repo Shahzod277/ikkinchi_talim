@@ -166,7 +166,7 @@ public class DiplomaService {
 
     @Transactional
     public Result updateDiploma(String token, Integer id, DiplomaRequest request) {
-        try {
+//        try {
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
@@ -233,10 +233,10 @@ public class DiplomaService {
             diplomaRepository.save(diplomaNew);
 
             return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-        } catch (Exception exception) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-        }
+//        } catch (Exception exception) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+//        }
     }
 
 
