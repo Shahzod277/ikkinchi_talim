@@ -23,7 +23,9 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.RoleRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 import uz.raqamli_markaz.ikkinchi_talim.security.JwtTokenProvider;
 import uz.raqamli_markaz.ikkinchi_talim.security.UserDetailsImpl;
+
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,26 +54,16 @@ public class AuthService {
             }
             OneIdResponseUserInfo oneIdUserInfo = oneIdServiceApi.getUserInfo(oneIdToken.getAccess_token());
             Optional<User> user = userRepository.findUserByPinfl(oneIdUserInfo.getPin());
-            if (user.isEmpty()) {
-                User userNew = new User();
-                userNew.setGender(oneIdUserInfo.getGd());
-                userNew.setFullName(oneIdUserInfo.getFullName());
-                userNew.setPermanentAddress(oneIdUserInfo.getPerAdr());
-                userNew.setPassportGivenDate(oneIdUserInfo.getPportIssueDate());
-                userNew.setDateOfBirth(oneIdUserInfo.getBirthDate());
-                userNew.setPhoneNumber(oneIdUserInfo.getMobPhoneNo().substring(1));
-                userNew.setCitizenship(oneIdUserInfo.getCtzn());
-                userNew.setPinfl(oneIdUserInfo.getPin());
-                Role role = roleRepository.findByName(DefaultRole.ROLE_UADMIN.getMessage()).get();
-                userNew.setRole(role);
-                userNew.setPassword(passwordEncoder.encode(userNew.getPinfl()));
-                userRepository.save(userNew);
-                JwtResponse jwtResponse = getJwtResponse(userNew.getPinfl(), userNew.getPinfl());
-                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, jwtResponse);
-            } else {
+            if (user.isPresent()) {
+                if (user.get().getPassword() == null) {
+                    user.get().setPassword(passwordEncoder.encode(user.get().getPinfl()));
+                    user.get().setModifiedDate(LocalDateTime.now());
+                    userRepository.save(user.get());
+                }
                 JwtResponse jwtResponse = getJwtResponse(user.get().getPinfl(), user.get().getPinfl());
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, jwtResponse);
             }
+            return new Result("Sizga bu tizimga kirishga ruxsat yo'q", false);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
