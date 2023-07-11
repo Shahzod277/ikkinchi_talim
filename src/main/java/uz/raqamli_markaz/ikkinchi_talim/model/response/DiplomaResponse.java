@@ -11,6 +11,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DiplomaResponse {
+
     private Integer id;
     private Integer institutionId;
     private String institutionName;
