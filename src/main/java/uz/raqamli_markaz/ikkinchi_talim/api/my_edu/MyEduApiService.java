@@ -32,7 +32,7 @@ public class MyEduApiService {
     }
     public CreateAppRequestMyEdu updateApp(String token,CreateAppRequestMyEdu request) {
         return this.webClient.post()
-                .uri(ApiConstant.CREATE_APP_MYEDU+request.getExternalId())
+                .uri(ApiConstant.CREATE_APP_MYEDU+request.getExternalId()+"/")
                 .headers(httpHeader -> httpHeader.set("Authorization", "Local " + token))
                 .bodyValue(request)
                 .retrieve()
