@@ -11,14 +11,12 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -37,7 +35,7 @@ public class UserService {
 
     @Transactional
     public Result checkUser(String token) throws Exception {
-//        try {
+        try {
             String decode = decode(token);
             if (decode != null) {
                 String pinfl = decode.substring(0, decode.indexOf("|"));
@@ -68,10 +66,10 @@ public class UserService {
 
             }
             return new Result("token is null", false);
-//        } catch (Exception e) {
-//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-//            return new Result(ResponseMessage.ERROR.getMessage(), false);
-//        }
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR.getMessage(), false);
+        }
     }
 
     public String decode(String token) throws Exception {
