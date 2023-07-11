@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.raqamli_markaz.ikkinchi_talim.domain.Kvota;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Country;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaOldInstitution;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Duration;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaInstitutionResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.EduFormResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.OtmProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialityProjection;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

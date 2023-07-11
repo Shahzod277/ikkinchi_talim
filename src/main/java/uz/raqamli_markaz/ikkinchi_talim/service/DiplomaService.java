@@ -99,8 +99,8 @@ public class DiplomaService {
             if (diplomaList.size() == 0) {
                 Country country = countryRepository.findById(request.getCountryId()).get();
                 Duration duration = durationRepository.findById(request.getEduDurationId()).get();
-                EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
                 if (request.getCountryId() == 1) {
+                    EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
                     Diploma diplomaNew = new Diploma();
                     if (request.getSpecialityId() != null) {
                         DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
@@ -144,26 +144,26 @@ public class DiplomaService {
                 }
                 Diploma diplomaNew = new Diploma();
                 diplomaNew.setUser(user);
-                diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
-                diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
                 diplomaNew.setCountryId(country.getId());
                 diplomaNew.setCountryName(country.getName());
+                diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
+                diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
                 diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
                 diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
                 diplomaNew.setDegreeId(2);
+                if (request.getSpeciality_custom_name() != null) {
+                    diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+                }
                 diplomaNew.setDegreeName("Bakalavr");
-//                diplomaNew.setEduFormId(eduForm.getId());
-                diplomaNew.setEduFormName(request.getEduFormName());
+                diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
                 diplomaNew.setEduDurationId(duration.getDurationId());
                 diplomaNew.setEduDurationName(duration.getNameOz());
+                diplomaNew.setEduFormName(request.getEduFormName());
                 diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
                 diplomaNew.setEduStartingDate(request.getEduStartingDate());
                 diplomaNew.setInstitutionName(request.getForeignOtmName());
                 diplomaNew.setInstitutionOldName(request.getForeignOtmName());
-                diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
-                diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
-                diplomaNew.setCountryName(country.getName());
                 diplomaRepository.save(diplomaNew);
                 return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
             }
@@ -206,8 +206,8 @@ public class DiplomaService {
             Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
             Country country = countryRepository.findById(request.getCountryId()).get();
             Duration duration = durationRepository.findById(request.getEduDurationId()).get();
-            EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
             if (request.getCountryId() == 1) {
+                EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
                 if (request.getSpecialityId() != null) {
                     DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
                     diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
