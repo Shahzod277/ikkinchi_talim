@@ -14,12 +14,12 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
-    @Query(value = "select a.id,u.full_name fullName,k.speciality_name speciality,k.university_name universityName ," +
-            "a.modified_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+    @Query(value = "select a.id,u.full_name fullName,k.speciality_name speciality,k.university_name university," +
+            "a.modified_date createDate createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             "where k.university_code=?1 and a.application_status=?2",nativeQuery = true)
     Page<AppResponseProjection> findAllApplicationByUniversity(String universityCode, String status, Pageable pageable);
-    @Query(value = "select a.id,u.full_name fullName,k.speciality_name speciality,k.university_name universityName ," +
-            "a.modified_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+    @Query(value = "select a.id,u.full_name fullName,k.speciality_name speciality,k.university_name university," +
+            "a.modified_date createDate createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
           "where k.university_code=?1 and a.application_status=?2 and (a.id::varchar ilike %?3% or u.full_name ilike %?3%)",nativeQuery = true)
     Page<AppResponseProjection> findAllSearchApplicationByUniversity(String universityCode, String status,String search, Pageable pageable);
 
