@@ -164,8 +164,8 @@ public class DiplomaService {
                 diplomaNew.setInstitutionName(request.getForeignOtmName());
                 diplomaNew.setInstitutionOldName(request.getForeignOtmName());
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
-                diplomaRepository.save(diplomaNew);
-                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+                Diploma save = diplomaRepository.save(diplomaNew);
+                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true,save.getId());
             }
             return new Result("Sizda diplom mavjud", false);
         } catch (Exception exception) {
@@ -245,8 +245,8 @@ public class DiplomaService {
                 if (request.getSpeciality_custom_name() != null) {
                     diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
                 }
-                diplomaRepository.save(diplomaNew);
-                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+                Diploma save = diplomaRepository.save(diplomaNew);
+                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
             }
             diplomaNew.setUser(user);
             diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
