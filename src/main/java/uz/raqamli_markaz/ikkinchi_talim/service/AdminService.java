@@ -15,6 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaRequestApi
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmAppRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
@@ -109,17 +110,20 @@ public class AdminService {
     }
 
     @Transactional
-    public Result confirmApplication(Principal principal, Integer applicationId, String message) {
+    public Result confirmApplication(Principal principal, ConfirmAppRequest request) {
         try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             String universityCode = user.getUniversity().getCode();
             Application application = applicationRepository
-                    .findApplicationByUniversityAndId(universityCode, applicationId).get();
-            User appUser = application.getUser();
-            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
-            if (diploma.getStatusId() == 1) {
+                    .findApplicationByUniversityAndId(universityCode, request.getApplicationId()).get();
+            if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza tasdiqlandi");
-                application.setApplicationMessage(message);
+                application.setApplicationMessage(request.getMessage());
+                applicationRepository.save(application);
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            } else if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                application.setApplicationStatus("Ariza rad etildi");
+                application.setApplicationMessage(request.getMessage());
                 applicationRepository.save(application);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
@@ -131,13 +135,15 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ApplicationResponse> getAllApplicationByUAdmin(Principal principal, int page, int size, String status) {
+    public Page<AppResponseProjection> getAllApplicationByUAdmin(Principal principal, int page, int size, String status, String search) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         String universityCode = user.getUniversity().getCode();
-        return applicationRepository.findAllApplicationByUniversity(universityCode, status, pageable)
-                .map(a -> new ApplicationResponse(a, a.getUser()));
+        if (search.equals("null")) {
+            return applicationRepository.findAllApplicationByUniversity(universityCode, status, pageable);
+        }
+        return applicationRepository.findAllSearchApplicationByUniversity(universityCode, status, search, pageable);
     }
 
     @Transactional(readOnly = true)

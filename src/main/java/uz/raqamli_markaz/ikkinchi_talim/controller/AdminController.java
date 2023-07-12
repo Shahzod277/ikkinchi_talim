@@ -64,9 +64,8 @@ public class AdminController {
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> confirmApplication(Principal principal,
-                                                @PathVariable Integer applicationId,
-                                                @RequestParam(value = "message") String message) {
-        Result result = adminService.confirmApplication(principal, applicationId, message);
+                                                @RequestBody ConfirmAppRequest request) {
+        Result result = adminService.confirmApplication(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
@@ -76,8 +75,10 @@ public class AdminController {
     public ResponseEntity<?> getAllApplicationByUAdmin(Principal principal,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "20") int size,
-                                                       @RequestParam(value = "status", defaultValue = "") String status) {
-        Page<ApplicationResponse> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status);
+                                                       @RequestParam(value = "status") String status,
+                                                       @RequestParam(value = "search", defaultValue = "null") String search
+                                                       ) {
+        Page<AppResponseProjection> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status,search);
         return ResponseEntity.ok(responses);
     }
 
