@@ -12,6 +12,8 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.Citizen;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaRequestApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.CreateAppRequestMyEdu;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
@@ -29,7 +31,8 @@ public class AdminService {
     private final DiplomaRepository diplomaRepository;
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
-    private final DiplomaApi diplomaApi;
+    private final MyEduApiService myEduApiService;
+    private final UserService userService;
 
     @Transactional
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) {
@@ -49,7 +52,13 @@ public class AdminService {
                     application.setApplicationStatus("Diplom Rad etildi");
                 }
                 diplomaRepository.save(diploma);
-                applicationRepository.save(application);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
             String code = user.getUniversity().getCode();
@@ -65,7 +74,13 @@ public class AdminService {
                 application.setApplicationStatus("Diplom Rad etildi");
             }
             diplomaRepository.save(diploma);
-            applicationRepository.save(application);
+            Application save = applicationRepository.save(application);
+            String encode = userService.encode(user.getPinfl());
+            CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+            requestMyEdu.setExternalId(save.getId().toString());
+            requestMyEdu.setStatus(save.getApplicationStatus());
+            requestMyEdu.setData(save.getKvota());
+            myEduApiService.updateApp(encode, requestMyEdu);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -119,12 +134,24 @@ public class AdminService {
             if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza tasdiqlandi");
                 application.setApplicationMessage(request.getMessage());
-                applicationRepository.save(application);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             } else if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza rad etildi");
                 application.setApplicationMessage(request.getMessage());
-                applicationRepository.save(application);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
             return new Result("Diplom tasdiqlanmagan ", false);
