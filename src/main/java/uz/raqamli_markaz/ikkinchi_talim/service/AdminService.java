@@ -93,7 +93,7 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
 
-        int code = Integer.parseInt(user.getUniversity().getCode());
+        String code = user.getUniversity().getCode();
         if (search.equals("null")) {
             return diplomaRepository.getAllForeignDiplomaByStatus(code, status, pageable);
         }
