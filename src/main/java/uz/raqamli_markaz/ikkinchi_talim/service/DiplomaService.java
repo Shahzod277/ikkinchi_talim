@@ -139,8 +139,8 @@ public class DiplomaService {
                     if (request.getSpeciality_custom_name() != null) {
                         diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
                     }
-                    diplomaRepository.save(diplomaNew);
-                    return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true);
+                    Diploma save = diplomaRepository.save(diplomaNew);
+                    return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true,save.getId());
                 }
                 Diploma diplomaNew = new Diploma();
                 diplomaNew.setUser(user);
@@ -269,9 +269,9 @@ public class DiplomaService {
             diplomaNew.setIlovaUrl(request.getIlovaUrl());
             diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
             diplomaNew.setCountryName(country.getName());
-            diplomaRepository.save(diplomaNew);
+            Diploma save = diplomaRepository.save(diplomaNew);
 
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
         } catch (Exception exception) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
