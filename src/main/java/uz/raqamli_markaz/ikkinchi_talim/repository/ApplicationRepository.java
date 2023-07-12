@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 
 import java.util.Optional;
 
@@ -17,4 +18,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query("select a from Application a where a.kvota.universityCode= ?1 and a.id= ?2")
     Optional<Application> findApplicationByUniversityAndId(String universityCode, Integer applicationId);
+
+    @Query("select a from Application a where a.user.id = ?1")
+    Optional<Application> findByUserId(Integer user_id);
 }

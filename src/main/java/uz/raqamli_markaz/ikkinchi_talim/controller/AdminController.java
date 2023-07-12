@@ -21,26 +21,39 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("confirmDiploma/{diplomaId}")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
-    public ResponseEntity<?> confirmDiploma(Principal principal, @PathVariable Integer diplomaId) {
-        Result result = adminService.confirmDiploma(principal, diplomaId);
+    public ResponseEntity<?> confirmDiploma(Principal principal, @RequestBody ConfirmDiplomaRequest request) {
+        Result result = adminService.confirmDiploma(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-    @GetMapping("getAllDiplomaByUAdmin")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @GetMapping("diplomaByUAdmin")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllDiplomaByUAdmin(Principal principal,
-                                            @RequestParam(value = "page", defaultValue = "0") int page,
-                                            @RequestParam(value = "size", defaultValue = "20") int size,
-                                            @RequestParam(value = "status", defaultValue = "") String status) {
-        Page<DiplomaResponse> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status);
+                                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                                   @RequestParam(value = "size", defaultValue = "20") int size,
+                                                   @RequestParam(value = "status") String status,
+                                                   @RequestParam(value = "search",defaultValue = "null") String search) {
+        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status,search);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("diplomaForeignByUAdmin")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasRole('UADMIN')")
+    public ResponseEntity<?> getAllDiplomaForeignByUAdmin(Principal principal,
+                                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                                   @RequestParam(value = "size", defaultValue = "20") int size,
+                                                   @RequestParam(value = "status") String status,
+                                                   @RequestParam(value = "search",defaultValue = "null") String search) {
+        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaForeignByUAdmin(principal, page, size, status,search);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("getDiplomaByIdUAdmin/{diplomaId}")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getDiplomaByIdUAdmin(Principal principal, @PathVariable Integer diplomaId) {
         DiplomaResponse response = adminService.getDiplomaByIdUAdmin(principal, diplomaId);
@@ -48,7 +61,7 @@ public class AdminController {
     }
 
     @PostMapping("confirmApplication/{applicationId}")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> confirmApplication(Principal principal,
                                                 @PathVariable Integer applicationId,
@@ -58,18 +71,18 @@ public class AdminController {
     }
 
     @GetMapping("getAllApplicationByUAdmin")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllApplicationByUAdmin(Principal principal,
-                                                   @RequestParam(value = "page", defaultValue = "0") int page,
-                                                   @RequestParam(value = "size", defaultValue = "20") int size,
-                                                   @RequestParam(value = "status", defaultValue = "") String status) {
+                                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                                       @RequestParam(value = "size", defaultValue = "20") int size,
+                                                       @RequestParam(value = "status", defaultValue = "") String status) {
         Page<ApplicationResponse> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status);
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("getApplicationByIdUAdmin/{applicationId}")
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getApplicationByIdUAdmin(Principal principal, @PathVariable Integer applicationId) {
         ApplicationResponse response = adminService.getApplicationByIdUAdmin(principal, applicationId);
