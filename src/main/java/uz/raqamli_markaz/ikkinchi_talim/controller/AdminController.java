@@ -20,7 +20,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @PostMapping("confirmDiploma/{diplomaId}")
+    @PostMapping("confirmDiploma")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> confirmDiploma(Principal principal, @RequestBody ConfirmDiplomaRequest request) {
@@ -60,7 +60,7 @@ public class AdminController {
         return ResponseEntity.status(response != null ? 200 : 404).body(response);
     }
 
-    @PostMapping("confirmApplication/{applicationId}")
+    @PostMapping("confirmApplication")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> confirmApplication(Principal principal,
