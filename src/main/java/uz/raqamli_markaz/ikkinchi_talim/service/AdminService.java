@@ -23,6 +23,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -117,9 +118,11 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaByIdUAdmin(Principal principal, Integer diplomaId) {
-        return diplomaRepository
-                .findById(diplomaId)
-                .map(DiplomaResponse::new).orElse(null);
+        Optional<Diploma> diploma = diplomaRepository
+                .findById(diplomaId);
+        DiplomaResponse diplomaResponse = diploma.map(DiplomaResponse::new).get();
+        diplomaResponse.setUserResponse(new UserResponse(diploma.get().getUser()));
+        return diplomaResponse;
     }
 
 
