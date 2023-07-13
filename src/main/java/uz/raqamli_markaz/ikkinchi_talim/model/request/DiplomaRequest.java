@@ -20,7 +20,7 @@ public class DiplomaRequest {
 
 
     @JsonProperty("diploma_number")
-    private Integer diplomaNumber;
+    private String diplomaNumber;
 
     @JsonProperty("diploma_given_date")
     private String diplomaGivenDate;

@@ -26,7 +26,7 @@ public class DiplomaResponse {
     private String diplomaGivenDate;
     private Integer diplomaSerialId;
     private String diplomaSerial;
-    private Integer diplomaNumber;
+    private String diplomaNumber;
     private Integer countryId;
     private String countryName;
     private String specialityCustomName;
@@ -37,6 +37,7 @@ public class DiplomaResponse {
     private Boolean isActive;
     private Integer eduDurationId;
     private String eduDurationName;
+    private UserResponse userResponse;
 
 
     public DiplomaResponse(Diploma diploma) {

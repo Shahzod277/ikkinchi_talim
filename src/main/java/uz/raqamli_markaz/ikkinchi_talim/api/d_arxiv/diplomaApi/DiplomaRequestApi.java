@@ -31,7 +31,7 @@ public class DiplomaRequestApi {
 	private String eduStartingDate;
 
 	@JsonProperty("diploma_number")
-	private Integer diplomaNumber;
+	private String diplomaNumber;
 
 	@JsonProperty("edu_form_id")
 	private Integer eduFormId ;

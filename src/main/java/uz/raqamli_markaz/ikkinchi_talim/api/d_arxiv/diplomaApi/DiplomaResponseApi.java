@@ -87,7 +87,7 @@ public class DiplomaResponseApi {
 	private String eduTypeName;
 
 	@JsonProperty("diploma_number")
-	private Integer diplomaNumber;
+	private String diplomaNumber;
 
 	@JsonProperty("institution_old_name")
 	private String institutionOldName;
