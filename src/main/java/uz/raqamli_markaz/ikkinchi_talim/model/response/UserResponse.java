@@ -14,6 +14,10 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+
+    @JsonProperty("id")
+    private Integer id;
+
     @JsonProperty("pinfl")
     private String pinfl;
 
@@ -32,18 +36,14 @@ public class UserResponse {
     @JsonProperty("photo")
     private String photo;
 
-
-
-
-
     @JsonProperty("phone_number")
     private String phoneNumber;
 
-    @JsonProperty("id")
-    private Integer id;
     private String fullName;
 
     public UserResponse(User user) {
+
+        this.id = user.getId();
         this.pinfl = user.getPinfl();
         this.fullName = user.getFullName();
         this.citizenship = user.getCitizenship();
