@@ -20,7 +20,6 @@ public class ApplicationResponse {
     private String message;
     private Kvota kvota;
     private DiplomaResponse diplomaResponse;
-    private UserResponse userResponse;
 
     //Page uchun
 

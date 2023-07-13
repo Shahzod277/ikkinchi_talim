@@ -188,8 +188,7 @@ public class AdminService {
         response.setStatus(application.getApplicationStatus());
         response.setMessage(application.getApplicationMessage());
         response.setKvota(application.getKvota());
-        response.setUserResponse(new UserResponse(appUser));
-        response.setDiplomaResponse(new DiplomaResponse(diploma));
+        response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
         return response;
     }
 }
