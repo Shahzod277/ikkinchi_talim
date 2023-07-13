@@ -117,12 +117,11 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public DiplomaResponse getDiplomaByIdUAdmin(Principal principal, Integer diplomaId) {
-        User user = userRepository.findUserByPinfl(principal.getName()).get();
-        Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
         return diplomaRepository
-                .findDiplomaByInstitutionAndId(institutionId, diplomaId)
+                .findById(diplomaId)
                 .map(DiplomaResponse::new).orElse(null);
     }
+
 
     @Transactional
     public Result confirmApplication(Principal principal, ConfirmAppRequest request) {
