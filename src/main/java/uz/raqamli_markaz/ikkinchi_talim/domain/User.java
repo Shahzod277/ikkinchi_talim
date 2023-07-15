@@ -32,11 +32,9 @@ public class User extends AbstractEntity {
     private Integer myEduId;
     private String fotoUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private DiplomaInstitution diplomaInstitution;
+    private Integer diplomaInstitutionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private University university;
+    private Integer universityCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Role role;
