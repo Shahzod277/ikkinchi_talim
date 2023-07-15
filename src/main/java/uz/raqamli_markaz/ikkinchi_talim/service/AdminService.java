@@ -205,13 +205,13 @@ public class AdminService {
         diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
         diploma.put("Diplom Rad etildi", 0);
         diploma.put("Diplom Tasdiqlangan", 0);
-        diploma.put("Jami", 0);
+        diploma.put("total", 0);
 
         diplomaStatisticProjections.forEach(d -> {
             diploma.put(d.getStatus(), d.getCount());
         });
         int sum = diploma.values().stream().mapToInt(d -> d).sum();
-        diploma.put("Jami", sum);
+        diploma.put("total", sum);
         List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
         Map<String, Integer> app = new HashMap<>();
         app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
@@ -219,24 +219,24 @@ public class AdminService {
         app.put("Diplom Tasdiqlangan", 0);
         app.put("Ariza tasdiqlandi", 0);
         app.put("Ariza rad etildi", 0);
-        app.put("Jami", 0);
+        app.put("total", 0);
         appStatisticCount.forEach(a -> {
             app.put(a.getStatus(), a.getCount());
         });
         int appSum = app.values().stream().mapToInt(d -> d).sum();
-        app.put("Jami", appSum);
+        app.put("total", appSum);
 
         List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
         Map<String, Integer> diplomaForeign = new HashMap<>();
         diplomaForeign.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
         diplomaForeign.put("Diplom Rad etildi", 0);
         diplomaForeign.put("Diplom Tasdiqlangan", 0);
-        diplomaForeign.put("Jami", 0);
+        diplomaForeign.put("total", 0);
         diplomaForeignStatisticCount.forEach(df -> {
             diplomaForeign.put(df.getStatus(), df.getCount());
         });
-        int appForeignSum = app.values().stream().mapToInt(d -> d).sum();
-        diplomaForeign.put("Jami", appForeignSum);
+        int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+        diplomaForeign.put("total", appForeignSum);
 
         statisticCountUAdmin.setDiploma(diploma);
         statisticCountUAdmin.setDiplomaForeign(diplomaForeign);
