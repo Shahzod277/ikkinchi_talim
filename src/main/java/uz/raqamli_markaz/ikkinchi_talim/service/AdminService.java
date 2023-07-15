@@ -200,6 +200,8 @@ public class AdminService {
         diplomaStatisticProjections.forEach(d -> {
             diploma.put(d.getStatus(), d.getCount());
         });
+        int sum = diploma.values().stream().mapToInt(d -> d).sum();
+        diploma.put("Jami", sum);
         List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
         Map<String, Integer> app = new HashMap<>();
         diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
@@ -209,6 +211,8 @@ public class AdminService {
         appStatisticCount.forEach(a -> {
             app.put(a.getStatus(), a.getCount());
         });
+        int appSum = app.values().stream().mapToInt(d -> d).sum();
+        app.put("Jami", sum);
         StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
         statisticCountUAdmin.setDiploma(diploma);
         statisticCountUAdmin.setApp(app);
