@@ -66,9 +66,9 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     //statistic
 
     @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
-            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 group by a.application_status order by a.application_status ")
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaStatisticCount(Integer id);
-    @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
+    @Query(nativeQuery = true, value = "select count(d.id) count,d.status_name status from application a inner join users u on u.id = a.user_id " +
             " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaForeignStatisticCount(String count);
