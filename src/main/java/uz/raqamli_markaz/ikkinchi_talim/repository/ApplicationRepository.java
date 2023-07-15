@@ -1,5 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.repository;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Repository;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaStatisticProjection;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,4 +31,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query("select a from Application a where a.user.id = ?1")
     Optional<Application> findByUserId(Integer user_id);
+    @Query(nativeQuery = true,value = "select count(d.id),a.application_status from application a inner join users u on u.id = a.user_id " +
+            "    inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
+            " where d.is_active=true and k.university_code=?1 group by a.application_status order by a.application_status ")
+    List<DiplomaStatisticProjection> appStatisticCount(String code);
 }

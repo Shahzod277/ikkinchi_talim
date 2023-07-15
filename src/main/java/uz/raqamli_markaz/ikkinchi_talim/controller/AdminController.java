@@ -35,8 +35,8 @@ public class AdminController {
                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "size", defaultValue = "20") int size,
                                                    @RequestParam(value = "status") String status,
-                                                   @RequestParam(value = "search",defaultValue = "null") String search) {
-        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status,search);
+                                                   @RequestParam(value = "search", defaultValue = "null") String search) {
+        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status, search);
         return ResponseEntity.ok(responses);
     }
 
@@ -44,11 +44,11 @@ public class AdminController {
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllDiplomaForeignByUAdmin(Principal principal,
-                                                   @RequestParam(value = "page", defaultValue = "0") int page,
-                                                   @RequestParam(value = "size", defaultValue = "20") int size,
-                                                   @RequestParam(value = "status") String status,
-                                                   @RequestParam(value = "search",defaultValue = "null") String search) {
-        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaForeignByUAdmin(principal, page, size, status,search);
+                                                          @RequestParam(value = "page", defaultValue = "0") int page,
+                                                          @RequestParam(value = "size", defaultValue = "20") int size,
+                                                          @RequestParam(value = "status") String status,
+                                                          @RequestParam(value = "search", defaultValue = "null") String search) {
+        Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaForeignByUAdmin(principal, page, size, status, search);
         return ResponseEntity.ok(responses);
     }
 
@@ -77,8 +77,8 @@ public class AdminController {
                                                        @RequestParam(value = "size", defaultValue = "20") int size,
                                                        @RequestParam(value = "status") String status,
                                                        @RequestParam(value = "search", defaultValue = "null") String search
-                                                       ) {
-        Page<AppResponseProjection> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status,search);
+    ) {
+        Page<AppResponseProjection> responses = adminService.getAllApplicationByUAdmin(principal, page, size, status, search);
         return ResponseEntity.ok(responses);
     }
 
@@ -90,4 +90,12 @@ public class AdminController {
         return ResponseEntity.status(response != null ? 200 : 404).body(response);
     }
 
+    //////////////////////////statistic........................
+    @GetMapping("getStatisticCount")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasRole('UADMIN')")
+    public ResponseEntity<?> getStatistic(Principal principal) {
+        StatisticCountUAdmin statistic = adminService.getStatistic(principal);
+        return ResponseEntity.ok(statistic);
+    }
 }

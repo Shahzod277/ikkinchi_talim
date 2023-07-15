@@ -7,11 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.Citizen;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaRequest;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.CreateDiplomaResponse;
-import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaRequestApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.CreateAppRequestMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
@@ -23,6 +18,9 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -39,31 +37,10 @@ public class AdminService {
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) throws Exception {
 //        try {
 
-            User user = userRepository.findUserByPinfl(principal.getName()).get();
-            if (request.getIsNational() == 1) {
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        if (request.getIsNational() == 1) {
 
-                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
-                Integer userId = diploma.getUser().getId();
-                Application application = applicationRepository.findByUserId(userId).get();
-                if (request.getIsConfirm() == 1) {
-                    diploma.setStatusId(1);
-                    diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
-                    application.setApplicationStatus("Diplom Tasdiqlangan");
-                } else {
-                    diploma.setStatusName("Rad etildi");//d arxivni statusi
-                    application.setApplicationStatus("Diplom Rad etildi");
-                }
-                diplomaRepository.save(diploma);
-                Application save = applicationRepository.save(application);
-                String encode = userService.encode(save.getUser().getPinfl());
-                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-                requestMyEdu.setExternalId(save.getId().toString());
-                requestMyEdu.setStatus(save.getApplicationStatus());
-                requestMyEdu.setData(save.getKvota());
-                myEduApiService.updateApp(encode, requestMyEdu);
-                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-            }
-            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
+            Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
             Integer userId = diploma.getUser().getId();
             Application application = applicationRepository.findByUserId(userId).get();
             if (request.getIsConfirm() == 1) {
@@ -83,6 +60,27 @@ public class AdminService {
             requestMyEdu.setData(save.getKvota());
             myEduApiService.updateApp(encode, requestMyEdu);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+        }
+        Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
+        Integer userId = diploma.getUser().getId();
+        Application application = applicationRepository.findByUserId(userId).get();
+        if (request.getIsConfirm() == 1) {
+            diploma.setStatusId(1);
+            diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
+            application.setApplicationStatus("Diplom Tasdiqlangan");
+        } else {
+            diploma.setStatusName("Rad etildi");//d arxivni statusi
+            application.setApplicationStatus("Diplom Rad etildi");
+        }
+        diplomaRepository.save(diploma);
+        Application save = applicationRepository.save(application);
+        String encode = userService.encode(save.getUser().getPinfl());
+        CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+        requestMyEdu.setExternalId(save.getId().toString());
+        requestMyEdu.setStatus(save.getApplicationStatus());
+        requestMyEdu.setData(save.getKvota());
+        myEduApiService.updateApp(encode, requestMyEdu);
+        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
 //        } catch (Exception e) {
 //            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            return new Result(ResponseMessage.ERROR.getMessage(), false);
@@ -187,5 +185,33 @@ public class AdminService {
         response.setKvota(application.getKvota());
         response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
         return response;
+    }
+
+    /////////////////////................statistic
+    @Transactional(readOnly = true)
+    public StatisticCountUAdmin getStatistic(Principal principal) {
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
+        Map<String, Integer> diploma = new HashMap<>();
+        diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+        diploma.put("Diplom Rad etildi", 0);
+        diploma.put("Diplom Tasdiqlangan", 0);
+        diploma.put("Jami", 0);
+        diplomaStatisticProjections.forEach(d -> {
+            diploma.put(d.getStatus(), d.getCount());
+        });
+        List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
+        Map<String, Integer> app = new HashMap<>();
+        diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+        diploma.put("Diplom Rad etildi", 0);
+        diploma.put("Diplom Tasdiqlangan", 0);
+        diploma.put("Jami", 0);
+        appStatisticCount.forEach(a -> {
+            app.put(a.getStatus(), a.getCount());
+        });
+        StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
+        statisticCountUAdmin.setDiploma(diploma);
+        statisticCountUAdmin.setApp(app);
+        return statisticCountUAdmin;
     }
 }
