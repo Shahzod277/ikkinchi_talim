@@ -38,6 +38,7 @@ public class AdminService {
     @Transactional
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) throws Exception {
 //        try {
+
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             if (request.getIsNational() == 1) {
 
