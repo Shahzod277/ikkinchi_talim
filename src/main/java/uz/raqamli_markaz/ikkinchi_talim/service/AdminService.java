@@ -197,9 +197,8 @@ public class AdminService {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         if (user.getUniversityCode() != null) {
             University university = universityRepository.findByCode(user.getUniversityCode()).get();
-            Map<String, String> info = new HashMap<>();
-            info.put(user.getFullName(), university.getName());
-            statisticCountUAdmin.setInfo(info);
+            statisticCountUAdmin.setUniversity(university.getName());
+            statisticCountUAdmin.setFullName(user.getFullName());
         }
         List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
         Map<String, Integer> diploma = new HashMap<>();
