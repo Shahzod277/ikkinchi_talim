@@ -238,9 +238,9 @@ public class AdminService {
         int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
         diplomaForeign.put("total", appForeignSum);
 
-        statisticCountUAdmin.setDiploma(diploma);
+        statisticCountUAdmin.setNationalDiploma(diploma);
         statisticCountUAdmin.setDiplomaForeign(diplomaForeign);
-        statisticCountUAdmin.setApp(app);
+        statisticCountUAdmin.setApplication(app);
         return statisticCountUAdmin;
     }
 }

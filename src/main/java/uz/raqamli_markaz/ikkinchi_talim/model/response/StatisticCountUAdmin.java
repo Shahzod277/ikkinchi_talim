@@ -14,9 +14,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StatisticCountUAdmin {
-    private Map<String, Integer> diploma = new HashMap<>();
+    private Map<String, Integer> nationalDiploma = new HashMap<>();
     private Map<String, Integer> diplomaForeign = new HashMap<>();
-    private Map<String, Integer> app = new HashMap<>();
+    private Map<String, Integer> application = new HashMap<>();
     private String fullName;
     private String university;
 
