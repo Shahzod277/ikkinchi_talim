@@ -202,9 +202,9 @@ public class AdminService {
         }
         List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
         Map<String, Integer> diploma = new HashMap<>();
-        diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
-        diploma.put("Diplom Rad etildi", 0);
-        diploma.put("Diplom Tasdiqlangan", 0);
+        diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+        diploma.put("Rad etildi", 0);
+        diploma.put("Tasdiqlangan", 0);
         diploma.put("total", 0);
 
         diplomaStatisticProjections.forEach(d -> {
@@ -228,9 +228,9 @@ public class AdminService {
 
         List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
         Map<String, Integer> diplomaForeign = new HashMap<>();
-        diplomaForeign.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
-        diplomaForeign.put("Diplom Rad etildi", 0);
-        diplomaForeign.put("Diplom Tasdiqlangan", 0);
+        diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
+        diplomaForeign.put("Rad etildi", 0);
+        diplomaForeign.put("Tasdiqlangan", 0);
         diplomaForeign.put("total", 0);
         diplomaForeignStatisticCount.forEach(df -> {
             diplomaForeign.put(df.getStatus(), df.getCount());

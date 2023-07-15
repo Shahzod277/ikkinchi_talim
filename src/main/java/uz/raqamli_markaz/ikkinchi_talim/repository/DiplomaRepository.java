@@ -16,25 +16,25 @@ import java.util.Optional;
 public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             "u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and a.application_status=?2")
+            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllDiplomaByStatus(Integer instId, String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and a.application_status=?2 and " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearch(Integer instId, String status, String search, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
-            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and a.application_status=?2 ")
+            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllForeignDiplomaByStatus(String instId, String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
-            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and a.application_status=?2 and " +
+            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllForeignDiplomaSearch(String instId, String status, String search, Pageable pageable);
 
@@ -65,12 +65,12 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     Optional<Diploma> findActiveDiplomaByUser(Integer id);
     //statistic
 
-    @Query(nativeQuery = true, value = "select count(d.id) count ,a.application_status status from application a inner join users u on u.id = a.user_id " +
+    @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 group by a.application_status order by a.application_status ")
     List<DiplomaStatisticProjection> diplomaStatisticCount(Integer id);
-    @Query(nativeQuery = true, value = "select count(d.id) count ,a.application_status status from application a inner join users u on u.id = a.user_id " +
+    @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
             " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
-            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 group by a.application_status order by a.application_status ")
+            " where d.country_id!=1 and d.is_active=true and k.university_code=?1 group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaForeignStatisticCount(String count);
 
 
