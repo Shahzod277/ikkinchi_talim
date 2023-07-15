@@ -72,6 +72,9 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaForeignStatisticCount(String count);
+    //test
+    @Query("select d from Diploma d where d.diplomaId is not null")
+    List<Diploma> findAllByDiplomaIdIsNotNull();
 
 
 }

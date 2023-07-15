@@ -1,10 +1,12 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.sqm.mutation.internal.cte.CteInsertStrategy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.DiplomaApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diplomaApi.DiplomaResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DataItemSerials;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerialResponse;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.diploma_serials.DiplomaSerials;
@@ -19,12 +21,15 @@ import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.InstitutionResp
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.institutions.Institutions;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialitiesResponseApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.d_arxiv.specialities.SpecialityDataItem;
+import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -36,6 +41,7 @@ public class Utils {
     private final DiplomaSerialRepository diplomaSerialRepository;
     private final EduFormRepository eduFormRepository;
     private final DiplomaApi diplomaApi;
+    private final DiplomaRepository diplomaRepository;
 
     @Transactional
     public void saveInstitution() {
@@ -181,4 +187,25 @@ public class Utils {
         }
     }
 
+    @Transactional
+    public void test() {
+        try {
+            List<Diploma> diploma = diplomaRepository.findAllByDiplomaIdIsNotNull();
+            diploma.forEach(d -> {
+                User user = d.getUser();
+                List<DiplomaResponseApi> apiDiploma = diplomaApi.getDiploma(user.getPinfl());
+                Optional<DiplomaResponseApi> any = apiDiploma.stream().filter(diplomaResponseApi -> diplomaResponseApi.getId().equals(d.getDiplomaId())).findAny();
+                if (any.isPresent()) {
+                    if (!any.get().getDiplomaNumber().equals(d.getDiplomaNumber())) {
+                        d.setDiplomaNumber(any.get().getDiplomaNumber());
+                        d.setModifiedDate(LocalDateTime.now());
+                        diplomaRepository.save(d);
+                    }
+                }
+
+            });
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+    }
 }
