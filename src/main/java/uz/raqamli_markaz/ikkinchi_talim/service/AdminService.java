@@ -239,7 +239,7 @@ public class AdminService {
         diplomaForeign.put("total", appForeignSum);
 
         statisticCountUAdmin.setNationalDiploma(diploma);
-        statisticCountUAdmin.setDiplomaForeign(diplomaForeign);
+        statisticCountUAdmin.setForeignDiploma(diplomaForeign);
         statisticCountUAdmin.setApplication(app);
         return statisticCountUAdmin;
     }
