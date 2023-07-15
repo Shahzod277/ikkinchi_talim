@@ -206,6 +206,7 @@ public class AdminService {
         diploma.put("Diplom Rad etildi", 0);
         diploma.put("Diplom Tasdiqlangan", 0);
         diploma.put("Jami", 0);
+
         diplomaStatisticProjections.forEach(d -> {
             diploma.put(d.getStatus(), d.getCount());
         });
@@ -216,13 +217,29 @@ public class AdminService {
         app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
         app.put("Diplom Rad etildi", 0);
         app.put("Diplom Tasdiqlangan", 0);
+        app.put("Ariza tasdiqlandi", 0);
+        app.put("Ariza rad etildi", 0);
         app.put("Jami", 0);
         appStatisticCount.forEach(a -> {
             app.put(a.getStatus(), a.getCount());
         });
         int appSum = app.values().stream().mapToInt(d -> d).sum();
         app.put("Jami", appSum);
+
+        List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
+        Map<String, Integer> diplomaForeign = new HashMap<>();
+        diplomaForeign.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+        diplomaForeign.put("Diplom Rad etildi", 0);
+        diplomaForeign.put("Diplom Tasdiqlangan", 0);
+        diplomaForeign.put("Jami", 0);
+        diplomaForeignStatisticCount.forEach(df -> {
+            diplomaForeign.put(df.getStatus(), df.getCount());
+        });
+        int appForeignSum = app.values().stream().mapToInt(d -> d).sum();
+        diplomaForeign.put("Jami", appForeignSum);
+
         statisticCountUAdmin.setDiploma(diploma);
+        statisticCountUAdmin.setDiplomaForeign(diplomaForeign);
         statisticCountUAdmin.setApp(app);
         return statisticCountUAdmin;
     }
