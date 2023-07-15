@@ -16,6 +16,7 @@ import java.util.Map;
 public class StatisticCountUAdmin {
     private Map<String, Integer> diploma = new HashMap<>();
     private Map<String, Integer> app = new HashMap<>();
+    private Map<String, String> info = new HashMap<>();
 
 
 }

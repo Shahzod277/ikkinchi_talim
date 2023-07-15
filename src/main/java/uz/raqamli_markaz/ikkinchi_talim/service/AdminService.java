@@ -12,6 +12,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmAppRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
@@ -32,6 +33,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final MyEduApiService myEduApiService;
     private final UserService userService;
+    private final UniversityRepository universityRepository;
 
     @Transactional
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) throws Exception {
@@ -190,7 +192,15 @@ public class AdminService {
     /////////////////////................statistic
     @Transactional(readOnly = true)
     public StatisticCountUAdmin getStatistic(Principal principal) {
+        StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
+
         User user = userRepository.findUserByPinfl(principal.getName()).get();
+        if (user.getUniversityCode() != null) {
+            University university = universityRepository.findByCode(user.getUniversityCode()).get();
+            Map<String, String> info = new HashMap<>();
+            info.put(user.getFullName(), university.getName());
+            statisticCountUAdmin.setInfo(info);
+        }
         List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
         Map<String, Integer> diploma = new HashMap<>();
         diploma.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
@@ -213,7 +223,6 @@ public class AdminService {
         });
         int appSum = app.values().stream().mapToInt(d -> d).sum();
         app.put("Jami", appSum);
-        StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
         statisticCountUAdmin.setDiploma(diploma);
         statisticCountUAdmin.setApp(app);
         return statisticCountUAdmin;
