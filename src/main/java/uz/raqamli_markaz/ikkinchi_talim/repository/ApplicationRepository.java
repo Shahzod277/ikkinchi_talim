@@ -31,8 +31,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query("select a from Application a where a.user.id = ?1")
     Optional<Application> findByUserId(Integer user_id);
-    @Query(nativeQuery = true,value = "select count(d.id),a.application_status from application a inner join users u on u.id = a.user_id " +
-            "    inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
+    @Query(nativeQuery = true,value = "select count(d.id) id ,a.application_status status from application a inner join users u on u.id = a.user_id " +
+            " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.is_active=true and k.university_code=?1 group by a.application_status order by a.application_status ")
     List<DiplomaStatisticProjection> appStatisticCount(String code);
 }
