@@ -135,7 +135,7 @@ public class AdminService {
                 application.setApplicationStatus("Ariza tasdiqlandi");
                 application.setApplicationMessage(request.getMessage());
                 Application save = applicationRepository.save(application);
-                String encode = userService.encode(user.getPinfl());
+                String encode = userService.encode(save.getUser().getPinfl());
                 CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
                 requestMyEdu.setExternalId(save.getId().toString());
                 requestMyEdu.setStatus(save.getApplicationStatus());
