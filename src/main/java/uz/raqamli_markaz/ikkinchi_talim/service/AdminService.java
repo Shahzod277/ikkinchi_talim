@@ -36,8 +36,8 @@ public class AdminService {
     private final UserService userService;
 
     @Transactional
-    public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) {
-        try {
+    public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) throws Exception {
+//        try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             if (request.getIsNational() == 1) {
 
@@ -82,10 +82,10 @@ public class AdminService {
             requestMyEdu.setData(save.getKvota());
             myEduApiService.updateApp(encode, requestMyEdu);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR.getMessage(), false);
-        }
+//        } catch (Exception e) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR.getMessage(), false);
+//        }
     }
 
     @Transactional(readOnly = true)
