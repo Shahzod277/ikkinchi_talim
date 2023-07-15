@@ -36,13 +36,36 @@ public class AdminService {
     private final UniversityRepository universityRepository;
 
     @Transactional
-    public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request)  {
+    public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) {
         try {
 
-        User user = userRepository.findUserByPinfl(principal.getName()).get();
-        if (request.getIsNational() == 1) {
+            User user = userRepository.findUserByPinfl(principal.getName()).get();
+            if (request.getIsNational() == 1) {
 
-            Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
+                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
+                Integer userId = diploma.getUser().getId();
+                Application application = applicationRepository.findByUserId(userId).get();
+                if (request.getIsConfirm() == 1) {
+                    diploma.setStatusId(1);
+                    diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
+                    application.setApplicationStatus("Diplom Tasdiqlangan");
+                    application.setDiplomaMessage(request.getMessage());
+                } else {
+                    diploma.setStatusName("Rad etildi");//d arxivni statusi
+                    application.setApplicationStatus("Diplom Rad etildi");
+                    application.setDiplomaMessage(request.getMessage());
+                }
+                diplomaRepository.save(diploma);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(save.getUser().getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            }
+            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
             Integer userId = diploma.getUser().getId();
             Application application = applicationRepository.findByUserId(userId).get();
             if (request.getIsConfirm() == 1) {
@@ -50,10 +73,12 @@ public class AdminService {
                 diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
                 application.setApplicationStatus("Diplom Tasdiqlangan");
                 application.setDiplomaMessage(request.getMessage());
+
             } else {
                 diploma.setStatusName("Rad etildi");//d arxivni statusi
                 application.setApplicationStatus("Diplom Rad etildi");
                 application.setDiplomaMessage(request.getMessage());
+
             }
             diplomaRepository.save(diploma);
             Application save = applicationRepository.save(application);
@@ -64,31 +89,6 @@ public class AdminService {
             requestMyEdu.setData(save.getKvota());
             myEduApiService.updateApp(encode, requestMyEdu);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-        }
-        Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
-        Integer userId = diploma.getUser().getId();
-        Application application = applicationRepository.findByUserId(userId).get();
-        if (request.getIsConfirm() == 1) {
-            diploma.setStatusId(1);
-            diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
-            application.setApplicationStatus("Diplom Tasdiqlangan");
-            application.setDiplomaMessage(request.getMessage());
-
-        } else {
-            diploma.setStatusName("Rad etildi");//d arxivni statusi
-            application.setApplicationStatus("Diplom Rad etildi");
-            application.setDiplomaMessage(request.getMessage());
-
-        }
-        diplomaRepository.save(diploma);
-        Application save = applicationRepository.save(application);
-        String encode = userService.encode(save.getUser().getPinfl());
-        CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-        requestMyEdu.setExternalId(save.getId().toString());
-        requestMyEdu.setStatus(save.getApplicationStatus());
-        requestMyEdu.setData(save.getKvota());
-        myEduApiService.updateApp(encode, requestMyEdu);
-        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
@@ -189,15 +189,31 @@ public class AdminService {
         ApplicationResponse response = new ApplicationResponse();
         response.setId(application.getId());
         response.setStatus(application.getApplicationStatus());
-        if (application.getApplicationMessage()!=null){
+        if (application.getApplicationMessage() != null) {
             response.setApplicationMessage(application.getApplicationMessage());
         }
-        if (application.getDiplomaMessage()!=null){
+        if (application.getDiplomaMessage() != null) {
             response.setDiplomaMessage(application.getDiplomaMessage());
         }
         response.setKvota(application.getKvota());
         response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
         return response;
+    }
+@Transactional
+    public Result updateDiplomaNumber(Principal principal, Integer id, String diplomaNumber) {
+        try {
+            User user = userRepository.findUserByPinfl(principal.getName()).get();
+            Optional<Diploma> diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), id);
+            if (diploma.isPresent()) {
+                diploma.get().setDiplomaNumber(diplomaNumber);
+                diplomaRepository.save(diploma.get());
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            }
+            return new Result(ResponseMessage.NOT_FOUND.getMessage(), false);
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR.getMessage(), false);
+        }
     }
 
     /////////////////////................statistic

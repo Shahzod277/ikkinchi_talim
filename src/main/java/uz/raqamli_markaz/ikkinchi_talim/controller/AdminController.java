@@ -98,4 +98,14 @@ public class AdminController {
         StatisticCountUAdmin statistic = adminService.getStatistic(principal);
         return ResponseEntity.ok(statistic);
     }
+
+    @PatchMapping("updateDiplomaNumber")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasRole('UADMIN')")
+    public ResponseEntity<?> updateDiplomaNumber(Principal principal,
+                                          @RequestParam(value = "diplomaId") int diplomaId,
+                                          @RequestParam(value = "diplomaNumber") String diplomaNumber) {
+        Result statistic = adminService.updateDiplomaNumber(principal, diplomaId, diplomaNumber);
+        return ResponseEntity.status(statistic != null ? 200 : 404).body(statistic);
+    }
 }
