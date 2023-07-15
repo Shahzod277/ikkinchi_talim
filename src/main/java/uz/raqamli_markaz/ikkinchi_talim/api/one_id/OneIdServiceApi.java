@@ -14,7 +14,7 @@ public class OneIdServiceApi {
 
     private final String client_id = "ikkilamchitalim_edu_uz";
     private final String scope = "ikkinchitalim.edu.uz";
-    private final String redirect_uri = "http://localhost:4500/auth/code";
+    private final String redirect_uri = "http://admin.ikkinchitalim.edu.uz/auth/code";
     private final String client_secret = "58T0vHQnAfB0XN2eLIyPzy9U";
     public static final String ONE_ID_LOGIN = "khm_qabul";
     public static final String ONE_ID_PASSWORD = "pmQgROZaRRaNHqdY";
