@@ -17,7 +17,8 @@ public class ApplicationResponse {
 
     private Integer id;
     private String status;
-    private String message;
+    private String applicationMessage;
+    private String diplomaMessage;
     private Kvota kvota;
     private DiplomaResponse diplomaResponse;
 

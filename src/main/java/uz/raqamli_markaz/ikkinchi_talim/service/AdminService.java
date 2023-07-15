@@ -49,9 +49,11 @@ public class AdminService {
                 diploma.setStatusId(1);
                 diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
                 application.setApplicationStatus("Diplom Tasdiqlangan");
+                application.setDiplomaMessage(request.getMessage());
             } else {
                 diploma.setStatusName("Rad etildi");//d arxivni statusi
                 application.setApplicationStatus("Diplom Rad etildi");
+                application.setDiplomaMessage(request.getMessage());
             }
             diplomaRepository.save(diploma);
             Application save = applicationRepository.save(application);
@@ -70,9 +72,13 @@ public class AdminService {
             diploma.setStatusId(1);
             diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
             application.setApplicationStatus("Diplom Tasdiqlangan");
+            application.setDiplomaMessage(request.getMessage());
+
         } else {
             diploma.setStatusName("Rad etildi");//d arxivni statusi
             application.setApplicationStatus("Diplom Rad etildi");
+            application.setDiplomaMessage(request.getMessage());
+
         }
         diplomaRepository.save(diploma);
         Application save = applicationRepository.save(application);
@@ -183,7 +189,12 @@ public class AdminService {
         ApplicationResponse response = new ApplicationResponse();
         response.setId(application.getId());
         response.setStatus(application.getApplicationStatus());
-        response.setMessage(application.getApplicationMessage());
+        if (application.getApplicationMessage()!=null){
+            response.setApplicationMessage(application.getApplicationMessage());
+        }
+        if (application.getDiplomaMessage()!=null){
+            response.setDiplomaMessage(application.getDiplomaMessage());
+        }
         response.setKvota(application.getKvota());
         response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
         return response;

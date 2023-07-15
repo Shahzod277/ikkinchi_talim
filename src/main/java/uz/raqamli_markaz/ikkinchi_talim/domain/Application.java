@@ -18,6 +18,7 @@ public class Application extends AbstractEntity {
 
     private String applicationStatus;
     private String applicationMessage;
+    private String diplomaMessage;
 
     @ManyToOne
     private Kvota kvota;

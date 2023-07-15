@@ -120,8 +120,12 @@ public class ApplicationService {
         ApplicationResponse applicationResponse = new ApplicationResponse();
         applicationResponse.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(user)));
         applicationResponse.setStatus(userApplication.getApplicationStatus());
-        applicationResponse.setMessage(userApplication.getApplicationMessage());
-        applicationResponse.setKvota(userApplication.getKvota());
+        if (userApplication.getApplicationMessage()!=null){
+            applicationResponse.setApplicationMessage(userApplication.getApplicationMessage());
+        }
+        if (userApplication.getDiplomaMessage()!=null){
+            applicationResponse.setDiplomaMessage(userApplication.getDiplomaMessage());
+        }        applicationResponse.setKvota(userApplication.getKvota());
         return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, applicationResponse);
     }
 
