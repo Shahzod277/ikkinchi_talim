@@ -40,8 +40,8 @@ public class AdminService {
         try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             if (request.getIsNational() == 1) {
-                Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
-                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(institutionId, request.getDiplomaId()).get();
+
+                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
                 Integer userId = diploma.getUser().getId();
                 Application application = applicationRepository.findByUserId(userId).get();
                 if (request.getIsConfirm() == 1) {
@@ -62,8 +62,7 @@ public class AdminService {
                 myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
-            String code = user.getUniversity().getCode();
-            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(code, request.getDiplomaId()).get();
+            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
             Integer userId = diploma.getUser().getId();
             Application application = applicationRepository.findByUserId(userId).get();
             if (request.getIsConfirm() == 1) {
@@ -94,12 +93,12 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        Integer institutionId = user.getDiplomaInstitution().getClassificatorId();
+
 
         if (search.equals("null")) {
-            return diplomaRepository.getAllDiplomaByStatus(institutionId, status, pageable);
+            return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
         }
-        return diplomaRepository.getAllDiplomaSearch(institutionId, status, search, pageable);
+        return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
     }
 
 
@@ -109,11 +108,10 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
 
-        String code = user.getUniversity().getCode();
         if (search.equals("null")) {
-            return diplomaRepository.getAllForeignDiplomaByStatus(code, status, pageable);
+            return diplomaRepository.getAllForeignDiplomaByStatus(user.getUniversityCode(), status, pageable);
         }
-        return diplomaRepository.getAllForeignDiplomaSearch(code, status, search, pageable);
+        return diplomaRepository.getAllForeignDiplomaSearch(user.getUniversityCode(), status, search, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -130,9 +128,8 @@ public class AdminService {
     public Result confirmApplication(Principal principal, ConfirmAppRequest request) {
         try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
-            String universityCode = user.getUniversity().getCode();
             Application application = applicationRepository
-                    .findApplicationByUniversityAndId(universityCode, request.getApplicationId()).get();
+                    .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
             if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza tasdiqlandi");
                 application.setApplicationMessage(request.getMessage());
@@ -168,19 +165,18 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        String universityCode = user.getUniversity().getCode();
         if (search.equals("null")) {
-            return applicationRepository.findAllApplicationByUniversity(universityCode, status, pageable);
+            return applicationRepository.findAllApplicationByUniversity(user.getUniversityCode(), status, pageable);
         }
-        return applicationRepository.findAllSearchApplicationByUniversity(universityCode, status, search, pageable);
+        return applicationRepository.findAllSearchApplicationByUniversity(user.getUniversityCode(), status, search, pageable);
     }
 
     @Transactional(readOnly = true)
     public ApplicationResponse getApplicationByIdUAdmin(Principal principal, Integer applicationId) {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        String universityCode = user.getUniversity().getCode();
+
         Application application = applicationRepository
-                .findApplicationByUniversityAndId(universityCode, applicationId).get();
+                .findApplicationByUniversityAndId(user.getUniversityCode(), applicationId).get();
         User appUser = application.getUser();
         Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
         ApplicationResponse response = new ApplicationResponse();
