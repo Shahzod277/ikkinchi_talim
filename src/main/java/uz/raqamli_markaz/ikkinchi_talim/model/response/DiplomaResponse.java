@@ -88,4 +88,54 @@ public class DiplomaResponse {
         }
         this.isActive = diploma.getIsActive();
     }
+
+    public DiplomaResponse(Diploma diploma, UserResponse userResponse) {
+        this.id = diploma.getId();
+        this.countryName = diploma.getCountryName();
+        if (diploma.getInstitutionId() != null) {
+            this.institutionId = diploma.getInstitutionIdDb();
+        }
+        if (diploma.getDiplomaGivenDate() != null) {
+            this.diplomaGivenDate = diploma.getDiplomaGivenDate();
+        }
+        if (diploma.getEduStartingDate() != null) {
+            this.eduStartingDate = diploma.getEduStartingDate();
+        }
+        if (diploma.getEduFinishingDate() != null) {
+            this.eduFinishingDate = diploma.getEduFinishingDate();
+        }
+        this.countryId = diploma.getCountryId();
+        this.institutionName = diploma.getInstitutionName();
+        this.institutionOldName = diploma.getInstitutionOldName();
+        this.eduFormId = diploma.getEduFormId();
+        this.eduFormName = diploma.getEduFormName();
+        this.degreeName = diploma.getDegreeName();
+        this.eduDurationId = diploma.getEduDurationId();
+        this.eduDurationName = diploma.getEduDurationName();
+        if (diploma.getSpecialityIdDb() != null) {
+            this.specialityId = diploma.getSpecialityIdDb();
+        }
+        if (diploma.getSpecialityIdDb() != null) {
+            this.specialityName = diploma.getSpecialityName();
+        }
+        if (diploma.getDiplomaSerialId() != null) {
+            this.diplomaSerialId = diploma.getDiplomaSerialId();
+        }
+        if (diploma.getSpecialityCustomName() != null) {
+            this.specialityCustomName = diploma.getSpecialityCustomName();
+
+        }
+        this.statusName = diploma.getStatusName();
+        this.diplomaSerial = diploma.getDiplomaSerial();
+        if (diploma.getDiplomaNumber() != null) {
+            this.diplomaNumber = diploma.getDiplomaNumber();
+
+        }
+        if (diploma.getDiplomaUrl() != null) {
+            this.ilovaUrl = diploma.getIlovaUrl();
+            this.diplomaUrl = diploma.getDiplomaUrl();
+        }
+        this.isActive = diploma.getIsActive();
+        this.userResponse = userResponse;
+    }
 }
