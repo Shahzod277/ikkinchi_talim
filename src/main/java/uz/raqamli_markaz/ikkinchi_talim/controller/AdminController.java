@@ -124,6 +124,8 @@ public class AdminController {
     /////////////////////////// Export To Excel
 
     @GetMapping("reportToExcel")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<Resource> reportToExcel(Principal principal,
                                                   @RequestParam(value = "status", defaultValue = "null") String status,
                                                   @RequestParam(value = "key") String key) {
