@@ -17,46 +17,46 @@ import java.util.Optional;
 @Repository
 public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            "u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllDiplomaByStatus(Integer instId, String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearch(Integer instId, String status, String search, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 ")
-    List<DiplomaResponseProjection> allllDiplomaToExcelByStatus(Integer instId, String status);
+    List<DiplomaResponseProjection> allDiplomaToExcelByStatus(Integer instId, String status);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 ")
     List<DiplomaResponseProjection> allDiplomaToExcel(Integer instId);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber,  d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 ")
     List<DiplomaResponseProjection> allForeignDiplomaToExcelByStatus(String instId, String status);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 ")
     List<DiplomaResponseProjection> allForeignDiplomaToExcel(String instId);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllForeignDiplomaByStatus(String instId, String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName,d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")

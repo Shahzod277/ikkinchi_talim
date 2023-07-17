@@ -42,7 +42,7 @@ public class ExcelHelper {
             if (status.equals("null")) {
                 return reportsDiplomasToExcel(diplomaRepository.allDiplomaToExcel(user.getDiplomaInstitutionId()));
             }
-            List<DiplomaResponseProjection> projections = diplomaRepository.allllDiplomaToExcelByStatus(user.getDiplomaInstitutionId(), status);
+            List<DiplomaResponseProjection> projections = diplomaRepository.allDiplomaToExcelByStatus(user.getDiplomaInstitutionId(), status);
             return reportsDiplomasToExcel(projections);
         }
         else if (key.equals("foreignDiploma")) {

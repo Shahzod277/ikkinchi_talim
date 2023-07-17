@@ -9,6 +9,7 @@ public interface DiplomaResponseProjection {
     String getDiplomaAndSerial();
 
     String getFullName();
+    String getPhoneNumber();
 
     String getInstitutionName();
 
