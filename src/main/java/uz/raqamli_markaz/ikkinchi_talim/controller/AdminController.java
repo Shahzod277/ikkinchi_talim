@@ -103,7 +103,7 @@ public class AdminController {
         StatisticCountUAdmin statistic = adminService.getStatistic(principal);
         return ResponseEntity.ok(statistic);
     }
-    @GetMapping("getAllDateAndGenderStatic")
+    @GetMapping("getAllDateAndGenderStatistic")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
     public ResponseEntity<?> getAllDateStatic(Principal principal) {
