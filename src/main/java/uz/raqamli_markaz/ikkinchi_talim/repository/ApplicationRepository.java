@@ -19,17 +19,17 @@ import java.util.Optional;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Integer> {
 
-    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber " +
+    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 and a.application_status=?2 ",nativeQuery = true)
     Page<AppResponseProjection> findAllApplicationByUniversity(String universityCode, String status, Pageable pageable);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 and a.application_status=?2 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatus(String universityCode, String status);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcel(String universityCode);
