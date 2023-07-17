@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -89,6 +90,7 @@ public class ExcelHelper {
 
     private ByteArrayInputStream reportsAppsToExcel(List<AppResponseProjection> appResponseProjections) {
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(SHEET);
@@ -105,7 +107,7 @@ public class ExcelHelper {
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getFullName());
                 row.createCell(3).setCellValue(responses.getUniversity());
-                row.createCell(4).setCellValue(responses.getCreateDate());
+                row.createCell(4).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
