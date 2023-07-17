@@ -111,12 +111,12 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
 
     @Query(nativeQuery = true, value = " select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id " +
             " inner join users u on u.id = a.user_id inner join diploma d on u.id = d.user_id " +
-            " where d.country_id=1 d.institution_id=?1 and d.is_active=true group by u.gender")
+            " where d.country_id=1 and d.institution_id=?1 and d.is_active=true group by u.gender ")
     List<GetAppByGender> getCountNationalDiplomaVByGender(Integer id);
 
     @Query(nativeQuery = true, value = " select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id\n" +
-            "inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id\n" +
-            "where d.country_id!=1 and k.university_code=?1  and  d.is_active=true group by u.gender ")
+            " inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
+            " where d.country_id!=1 and k.university_code=?1 and d.is_active=true group by u.gender ")
     List<GetAppByGender> getCountForeignDiplomaVByGender(String code);
 
 
