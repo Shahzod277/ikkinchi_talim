@@ -100,8 +100,6 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-
-
         if (search.equals("null")) {
             return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
         }
