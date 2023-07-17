@@ -125,7 +125,7 @@ public class AdminController {
 
     @GetMapping("reportToExcel")
     public ResponseEntity<Resource> reportToExcel(Principal principal,
-                                                  @RequestParam(value = "status") String status,
+                                                  @RequestParam(value = "status", defaultValue = "null") String status,
                                                   @RequestParam(value = "key") String key) {
         String filename = "report.xlsx";
         InputStreamResource file = new InputStreamResource(excelHelper.loadReportsToExcel(principal, status, key));

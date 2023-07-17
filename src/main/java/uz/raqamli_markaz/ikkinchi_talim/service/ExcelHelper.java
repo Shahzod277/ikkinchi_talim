@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection;
@@ -32,6 +33,7 @@ public class ExcelHelper {
     static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "University", "Create Date" };
     static String SHEET = "Report";
 
+    @Transactional
     public ByteArrayInputStream loadReportsToExcel(Principal principal, String status, String key) {
 
         User user = userRepository.findUserByPinfl(principal.getName()).get();
