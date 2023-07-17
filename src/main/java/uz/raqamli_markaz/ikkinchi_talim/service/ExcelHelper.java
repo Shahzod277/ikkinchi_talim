@@ -30,8 +30,8 @@ public class ExcelHelper {
     private final ApplicationRepository applicationRepository;
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "Diploma Number and Serial", "Full Name", "Institution Name" };
-    static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "University", "Create Date" };
+    static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name" };
+    static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date" };
     static String SHEET = "Report";
 
     @Transactional
@@ -79,7 +79,8 @@ public class ExcelHelper {
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getDiplomaAndSerial());
                 row.createCell(3).setCellValue(responses.getFullName());
-                row.createCell(4).setCellValue(responses.getInstitutionName());
+                row.createCell(4).setCellValue(responses.getPhoneNumber());
+                row.createCell(5).setCellValue(responses.getInstitutionName());
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
@@ -106,8 +107,9 @@ public class ExcelHelper {
                 row.createCell(0).setCellValue(responses.getId() == null? 0 : responses.getId());
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getFullName());
-                row.createCell(3).setCellValue(responses.getUniversity());
-                row.createCell(4).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+                row.createCell(3).setCellValue(responses.getPhoneNumber());
+                row.createCell(4).setCellValue(responses.getUniversity());
+                row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
