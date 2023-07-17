@@ -10,6 +10,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaStatisticProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.GetCountAppallDate;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +36,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.is_active=true and k.university_code=?1 group by a.application_status order by a.application_status ")
     List<DiplomaStatisticProjection> appStatisticCount(String code);
+    @Query(nativeQuery = true,value = "select  count(a.id) as count , CAST(a.created_date AS DATE) as date from   application as a\n" +
+            " inner join users u on u.id = a.user_id  inner join diploma d on u.id = d.user_id inner join kvota k on k.id = a.kvota_id\n" +
+            " where k.university_code=?1  and  d.is_active=true group by CAST(a.created_date AS DATE) order by date")
+    List<GetCountAppallDate> geetCountAppallDate(String code);
 }

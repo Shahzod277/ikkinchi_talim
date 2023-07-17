@@ -199,7 +199,8 @@ public class AdminService {
         response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
         return response;
     }
-@Transactional
+
+    @Transactional
     public Result updateDiplomaNumber(Principal principal, Integer id, String diplomaNumber) {
         try {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
@@ -270,4 +271,19 @@ public class AdminService {
         statisticCountUAdmin.setApplication(app);
         return statisticCountUAdmin;
     }
+
+    @Transactional(readOnly = true)
+    public CountAllDateStatistic getAllDateStatic(Principal principal) {
+
+        User user = userRepository.findUserByPinfl(principal.getName()).get();
+        List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignlDiplomaDate(user.getUniversityCode());
+        List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDate(user.getDiplomaInstitutionId());
+        List<GetCountAppallDate> countAppallDate = applicationRepository.geetCountAppallDate(user.getUniversityCode());
+        CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
+        countAllDateStatistic.setApplicationDiploma(countAppallDate);
+        countAllDateStatistic.setNationalDiploma(countByNationalDiplomaDate);
+        countAllDateStatistic.setForeignDiploma(countByForeignlDiplomaDate);
+        return countAllDateStatistic;
+    }
+
 }

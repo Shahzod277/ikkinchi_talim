@@ -4,5 +4,5 @@ import java.util.Date;
 
 public interface GetCountAppallDate {
     Integer getCount();
-    Date getSana();
+    Date getDate();
 }
