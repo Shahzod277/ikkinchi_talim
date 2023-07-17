@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaStatisticProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.GetAppByGender;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.GetCountAppallDate;
 
 import java.util.List;
@@ -102,10 +103,22 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             " inner join users u on u.id = a.user_id  inner join diploma d on u.id = d.user_id\n" +
             " where d.country_id=1 and d.institution_id=?1  and  d.is_active=true group by CAST(d.created_date AS DATE) order by date")
     List<GetCountAppallDate> getCountByNationalDiplomaDate(Integer id);
+
     @Query(nativeQuery = true, value = "select  count(d.id) as count , CAST(d.created_date AS DATE) as date from   application as a\n" +
             " inner join users u on u.id = a.user_id  inner join diploma d on u.id = d.user_id inner join kvota k on k.id = a.kvota_id\n" +
             " where d.country_id!=1 and k.university_code=?1  and  d.is_active=true group by CAST(d.created_date AS DATE) order by date")
     List<GetCountAppallDate> getCountByForeignlDiplomaDate(String code);
+
+    @Query(nativeQuery = true, value = " select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id " +
+            " inner join users u on u.id = a.user_id inner join diploma d on u.id = d.user_id " +
+            " where d.country_id=1 d.institution_id=?1 and d.is_active=true group by u.gender")
+    List<GetAppByGender> getCountNationalDiplomaVByGender(Integer id);
+
+    @Query(nativeQuery = true, value = " select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id\n" +
+            "inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id\n" +
+            "where d.country_id!=1 and k.university_code=?1  and  d.is_active=true group by u.gender ")
+    List<GetAppByGender> getCountForeignDiplomaVByGender(String code);
+
 
     //test
     @Query("select d from Diploma d where d.diplomaId is not null")

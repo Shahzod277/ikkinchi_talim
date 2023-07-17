@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Getter
 @Setter
 public class CountAllDateStatistic {
-    List<GetCountAppallDate> nationalDiploma=new ArrayList<>();
-    List<GetCountAppallDate> foreignDiploma=new ArrayList<>();
-    List<GetCountAppallDate> applicationDiploma=new ArrayList<>();
 
+    Map<String,List<GetCountAppallDate>> statisticByDate   =new HashMap();
+    Map<String,List<GetAppByGender>> statisticByGender   =new HashMap();
 }
