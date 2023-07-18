@@ -71,7 +71,7 @@ public class DiplomaAndAppController {
     }
 
     @GetMapping("getDiplomaApi")
-    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) {
+    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) throws Exception {
         Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }

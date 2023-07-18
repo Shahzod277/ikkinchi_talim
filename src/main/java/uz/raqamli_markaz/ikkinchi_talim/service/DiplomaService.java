@@ -42,8 +42,8 @@ public class DiplomaService {
     private final DiplomaSerialRepository diplomaSerialRepository;
 
     @Transactional
-    public Result saveAndGetDiplomaByDiplomaApi(String token) {
-        try {
+    public Result saveAndGetDiplomaByDiplomaApi(String token) throws Exception {
+//        try {
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
@@ -80,10 +80,10 @@ public class DiplomaService {
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
             }
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-        }
+//        } catch (Exception e) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
+//        }
     }
 
     @Transactional
