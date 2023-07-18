@@ -81,6 +81,8 @@ public class ApplicationService {
             Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
             application.setApplicationStatus("Diplom " + diploma.getStatusName());
             application.setKvota(kvota);
+            application.setApplicationMessage(null);
+            application.setDiplomaMessage(null);
             Application save = applicationRepository.save(application);
             Thread thread = new Thread(() -> {
                 try {
