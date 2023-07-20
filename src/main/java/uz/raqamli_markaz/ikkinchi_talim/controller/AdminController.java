@@ -16,6 +16,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.service.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/")
@@ -108,6 +109,13 @@ public class AdminController {
     @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getAllDateStatic(Principal principal) {
         CountAllDateStatistic statistic = adminService.getAllDateStatic(principal);
+        return ResponseEntity.ok(statistic);
+    }
+    @GetMapping("allStatisticUniversity")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
+    public ResponseEntity<?> allStatisticUniversity() {
+        List<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic();
         return ResponseEntity.ok(statistic);
     }
 
