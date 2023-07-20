@@ -13,6 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.domain.Application;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.Diploma;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaInstitution;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmAppRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmDiplomaRequest;
@@ -34,6 +35,7 @@ public class AdminService {
     private final UserService userService;
     private final UniversityRepository universityRepository;
     private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
+    private final DiplomaInstitutionRepository diplomaInstitutionRepository;
 
     @Transactional
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) {
@@ -351,6 +353,9 @@ public class AdminService {
             if (user.getUniversityCode() != null) {
                 University university = universityRepository.findByCode(user.getUniversityCode()).get();
                 statisticCountUAdmin.setUniversity(university.getName());
+            } else {
+                DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findByClassificatorId(user.getDiplomaInstitutionId()).get();
+                statisticCountUAdmin.setUniversity(diplomaInstitution.getInstitutionNameOz());
             }
             if (user.getDiplomaInstitutionId() != null) {
                 List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
@@ -360,9 +365,9 @@ public class AdminService {
                 diploma.put("Tasdiqlangan", 0);
                 diploma.put("total", 0);
 //                Thread thread = new Thread(() -> {
-                    diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
-                    int sum = diploma.values().stream().mapToInt(d -> d).sum();
-                    diploma.put("total", sum);
+                diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+                int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                diploma.put("total", sum);
 //                });
 //                thread.start();
 //                try {
@@ -383,9 +388,9 @@ public class AdminService {
             app.put("Ariza rad etildi", 0);
             app.put("total", 0);
 //            Thread thread1 = new Thread(() -> {
-                appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
-                int appSum = app.values().stream().mapToInt(d -> d).sum();
-                app.put("total", appSum);
+            appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
+            int appSum = app.values().stream().mapToInt(d -> d).sum();
+            app.put("total", appSum);
 //
 //            });
 //            thread1.start();
@@ -402,9 +407,9 @@ public class AdminService {
             diplomaForeign.put("Tasdiqlangan", 0);
             diplomaForeign.put("total", 0);
 //            Thread thread = new Thread(() -> {
-                diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
-                int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
-                diplomaForeign.put("total", appForeignSum);
+            diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
+            int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+            diplomaForeign.put("total", appForeignSum);
 //
 //
 //            });
