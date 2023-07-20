@@ -38,27 +38,59 @@ public class ExcelHelper {
     public ByteArrayInputStream loadReportsToExcel(Principal principal, String status, String key) {
 
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        if (key.equals("nationalDiploma")){
-            if (status.equals("null")) {
-                return reportsDiplomasToExcel(diplomaRepository.allDiplomaToExcel(user.getDiplomaInstitutionId()));
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+            switch (key) {
+                case "nationalDiploma" -> {
+                    if (status.equals("null")) {
+                        return reportsDiplomasToExcel(diplomaRepository.allDiplomaToExcel(user.getDiplomaInstitutionId()));
+                    }
+                    List<DiplomaResponseProjection> projections = diplomaRepository.allDiplomaToExcelByStatus(user.getDiplomaInstitutionId(), status);
+                    return reportsDiplomasToExcel(projections);
+                }
+                case "foreignDiploma" -> {
+                    if (status.equals("null")) {
+                        return reportsDiplomasToExcel(diplomaRepository.allForeignDiplomaToExcel(user.getUniversityCode()));
+                    }
+                    List<DiplomaResponseProjection> projections = diplomaRepository.allForeignDiplomaToExcelByStatus(user.getUniversityCode(), status);
+                    return reportsDiplomasToExcel(projections);
+                }
+                case "application" -> {
+                    if (status.equals("null")) {
+                        return reportsAppsToExcel(applicationRepository.applicationToExcel(user.getUniversityCode()));
+                    }
+                    return reportsAppsToExcel(applicationRepository.applicationToExcelByStatus(user.getUniversityCode(), status));
+                }
+                default -> {
+                    return null;
+                }
             }
-            List<DiplomaResponseProjection> projections = diplomaRepository.allDiplomaToExcelByStatus(user.getDiplomaInstitutionId(), status);
-            return reportsDiplomasToExcel(projections);
         }
-        else if (key.equals("foreignDiploma")) {
-            if (status.equals("null")) {
-               return reportsDiplomasToExcel(diplomaRepository.allForeignDiplomaToExcel(user.getUniversityCode()));
+        // ADMIN ////////////////
+        switch (key) {
+            case "nationalDiploma" -> {
+                if (status.equals("null")) {
+                    return reportsDiplomasToExcel(diplomaRepository.allDiplomaToExcelAdmin());
+                }
+                List<DiplomaResponseProjection> projections = diplomaRepository.allDiplomaToExcelByStatusAdmin(status);
+                return reportsDiplomasToExcel(projections);
             }
-            List<DiplomaResponseProjection> projections = diplomaRepository.allForeignDiplomaToExcelByStatus(user.getUniversityCode(), status);
-            return reportsDiplomasToExcel(projections);
-        }
-        else if (key.equals("application")){
-            if (status.equals("null")) {
-               return reportsAppsToExcel(applicationRepository.applicationToExcel(user.getUniversityCode()));
+            case "foreignDiploma" -> {
+                if (status.equals("null")) {
+                    return reportsDiplomasToExcel(diplomaRepository.allForeignDiplomaToExcelAdmin());
+                }
+                List<DiplomaResponseProjection> projections = diplomaRepository.allForeignDiplomaToExcelByStatusAdmin(status);
+                return reportsDiplomasToExcel(projections);
             }
-            return reportsAppsToExcel(applicationRepository.applicationToExcelByStatus(user.getUniversityCode(), status));
+            case "application" -> {
+                if (status.equals("null")) {
+                    return reportsAppsToExcel(applicationRepository.applicationToExcelAdmin());
+                }
+                return reportsAppsToExcel(applicationRepository.applicationToExcelByStatusAdmin(status));
+            }
+            default -> {
+                return null;
+            }
         }
-        return null;
     }
 
     private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) {
