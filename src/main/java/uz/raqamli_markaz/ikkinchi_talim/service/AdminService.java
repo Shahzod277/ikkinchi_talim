@@ -2,6 +2,7 @@ package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -342,7 +343,10 @@ public class AdminService {
 
     //STATISTIC ADMIN
     @Transactional(readOnly = true)
-    public List<StatisticCountUAdmin> getAllUniversityStatistic() {
+    public Page<StatisticCountUAdmin> getAllUniversityStatistic(int page, int size) {
+        if (page > 0) page = page - 1;
+        Pageable pageable = PageRequest.of(page, size);
+
         List<User> users = userRepository.findAllByUadmin();
         List<StatisticCountUAdmin> list = new ArrayList<>();
         users.forEach(user -> {
@@ -391,7 +395,8 @@ public class AdminService {
             list.add(statisticCountUAdmin);
 
         });
-        return list;
+        return new PageImpl<>(list,pageable,list.size());
+
     }
 
 
