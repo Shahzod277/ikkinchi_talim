@@ -343,7 +343,7 @@ public class AdminService {
 
     //STATISTIC ADMIN
     @Transactional(readOnly = true)
-    public Page<StatisticCountUAdmin> getAllUniversityStatistic(int page, int size) {
+    public List<StatisticCountUAdmin> getAllUniversityStatistic(int page, int size) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         List<User> users = userRepository.findAllByUadmin();
@@ -361,10 +361,19 @@ public class AdminService {
                 diploma.put("Rad etildi", 0);
                 diploma.put("Tasdiqlangan", 0);
                 diploma.put("total", 0);
-                diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
-                int sum = diploma.values().stream().mapToInt(d -> d).sum();
-                diploma.put("total", sum);
+                Thread thread = new Thread(() -> {
+                    diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+                    int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                    diploma.put("total", sum);
+                });
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 statisticCountUAdmin.setNationalDiploma(diploma);
+
             }
 
             List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
@@ -375,9 +384,18 @@ public class AdminService {
             app.put("Ariza tasdiqlandi", 0);
             app.put("Ariza rad etildi", 0);
             app.put("total", 0);
-            appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
-            int appSum = app.values().stream().mapToInt(d -> d).sum();
-            app.put("total", appSum);
+            Thread thread1 = new Thread(() -> {
+                appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
+                int appSum = app.values().stream().mapToInt(d -> d).sum();
+                app.put("total", appSum);
+
+            });
+            thread1.start();
+            try {
+                thread1.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
             List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
             Map<String, Integer> diplomaForeign = new HashMap<>();
@@ -385,22 +403,27 @@ public class AdminService {
             diplomaForeign.put("Rad etildi", 0);
             diplomaForeign.put("Tasdiqlangan", 0);
             diplomaForeign.put("total", 0);
-            diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
-            int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
-            diplomaForeign.put("total", appForeignSum);
+            Thread thread = new Thread(() -> {
+                diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
+                int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+                diplomaForeign.put("total", appForeignSum);
 
+
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             statisticCountUAdmin.setForeignDiploma(diplomaForeign);
             statisticCountUAdmin.setApplication(app);
             list.add(statisticCountUAdmin);
 
+
         });
-        int start = Math.min((int) pageable.getOffset(), list.size());
-        int end = Math.min((start + pageable.getPageSize()), list.size());
 
-        Page<StatisticCountUAdmin> result = new PageImpl<>(list.subList(start, end), pageable, list.size());
-
-        return result;
-
+        return list;
     }
 
 

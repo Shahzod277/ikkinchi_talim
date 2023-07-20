@@ -116,7 +116,7 @@ public class AdminController {
     @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> allStatisticUniversity(  @RequestParam(value = "page", defaultValue = "0") int page,
                                                       @RequestParam(value = "size", defaultValue = "20") int size) {
-        Page<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic(page, size);
+        List<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic(page, size);
         return ResponseEntity.ok(statistic);
     }
 
