@@ -341,6 +341,7 @@ public class AdminService {
     }
 
     //STATISTIC ADMIN
+    @Transactional(readOnly = true)
     public List<StatisticCountUAdmin> getAllUniversityStatistic() {
         List<User> users = userRepository.findAll();
         List<StatisticCountUAdmin> list = new ArrayList<>();
@@ -351,8 +352,6 @@ public class AdminService {
                 statisticCountUAdmin.setUniversity(university.getName());
             }
             if (user.getDiplomaInstitutionId() != null) {
-
-
                 List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
                 Map<String, Integer> diploma = new HashMap<>();
                 diploma.put("Haqiqiyligi tekshirilmoqda", 0);
