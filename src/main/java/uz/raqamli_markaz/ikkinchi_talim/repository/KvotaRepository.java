@@ -16,6 +16,6 @@ public interface KvotaRepository extends JpaRepository<Kvota, Integer> {
    List <OtmProjection> getEduFormByOtmCode(String code);
     @Query(nativeQuery = true, value = "select distinct(k.language_code) languageCode ,k.language_name languageName ,k.edu_form_code eduFormCode, k.university_code otmCode from kvota k where k.edu_form_code=?1 and  k.university_code=?2")
    List <OtmProjection> getLanguageByOtmCodeAndEduFormCode(String code,String otmCode);
-    @Query(nativeQuery = true, value = "select k.id id, k.speciality_code specialityCode ,k.speciality_name specialityName ,k.language_code languageCode ,k.language_name languageName ,k.edu_form_code eduFormCode, k.university_code otmCode  from kvota k where k.language_code=?1 and k.edu_form_code=?2 and  k.university_code=?3")
-    List <OtmProjection> getSpeciality(String languageCode,String code,String otmCode);
+    @Query(nativeQuery = true, value = "select k.id id, k.speciality_code specialityCode ,k.speciality_name specialityName ,k.language_code languageCode ,k.language_name languageName ,k.edu_form_code eduFormCode, k.university_code otmCode from kvota k where k.language_code=?1 and k.edu_form_code=?2 and k.university_code=?3 order by k.speciality_name ")
+    List <OtmProjection> getSpeciality(String languageCode, String code, String otmCode);
 }

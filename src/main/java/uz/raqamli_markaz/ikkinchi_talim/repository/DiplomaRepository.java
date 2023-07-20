@@ -43,8 +43,18 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.status_name=?1 ")
+    List<DiplomaResponseProjection> allDiplomaToExcelByStatusAdmin(String status);
+
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 ")
     List<DiplomaResponseProjection> allDiplomaToExcel(Integer instId);
+
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true ")
+    List<DiplomaResponseProjection> allDiplomaToExcelAdmin();
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber,  d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
@@ -53,10 +63,22 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     List<DiplomaResponseProjection> allForeignDiplomaToExcelByStatus(String instId, String status);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber,  d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
+            " where d.country_id!=1 and d.is_active=true and d.status_name=?1 ")
+    List<DiplomaResponseProjection> allForeignDiplomaToExcelByStatusAdmin(String status);
+
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 ")
     List<DiplomaResponseProjection> allForeignDiplomaToExcel(String instId);
+
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
+            " where d.country_id!=1 and d.is_active=true ")
+    List<DiplomaResponseProjection> allForeignDiplomaToExcelAdmin();
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
