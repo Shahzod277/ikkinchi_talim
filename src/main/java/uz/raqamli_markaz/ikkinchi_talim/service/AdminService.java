@@ -343,7 +343,7 @@ public class AdminService {
     //STATISTIC ADMIN
     @Transactional(readOnly = true)
     public List<StatisticCountUAdmin> getAllUniversityStatistic() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllByUadmin();
         List<StatisticCountUAdmin> list = new ArrayList<>();
         users.forEach(user -> {
             StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
