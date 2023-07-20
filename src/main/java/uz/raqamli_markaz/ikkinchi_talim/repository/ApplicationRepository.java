@@ -23,6 +23,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 and a.application_status=?2 ",nativeQuery = true)
     Page<AppResponseProjection> findAllApplicationByUniversity(String universityCode, String status, Pageable pageable);
+    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber, " +
+            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+            " where and a.application_status=?1 ",nativeQuery = true)
+    Page<AppResponseProjection> findAllApplicationByUniversityAdmin(String status, Pageable pageable);
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
@@ -39,6 +43,10 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
           " where k.university_code=?1 and a.application_status=?2 and (CAST(a.id  AS varchar(255)) ilike %?3% or u.full_name ilike %?3%) ",nativeQuery = true)
     Page<AppResponseProjection> findAllSearchApplicationByUniversity(String universityCode, String status,String search, Pageable pageable);
 
+    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber " +
+            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+            " where a.application_status=?1 and (CAST(a.id  AS varchar(255)) ilike %?2% or u.full_name ilike %?2%) ",nativeQuery = true)
+    Page<AppResponseProjection> findAllSearchApplicationByUniversityAdmin(String status,String search, Pageable pageable);
     @Query("select a from Application a where a.kvota.universityCode= ?1 and a.id= ?2")
     Optional<Application> findApplicationByUniversityAndId(String universityCode, Integer applicationId);
 

@@ -100,10 +100,17 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        if (search.equals("null")) {
-            return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+            if (search.equals("null")) {
+                return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
+            }
+            return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
         }
-        return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
+        if (search.equals("null")) {
+            return diplomaRepository.getAllDiplomaByStatusAdmin(status, pageable);
+        }
+        return diplomaRepository.getAllDiplomaSearchAdmin(status, search, pageable);
+
     }
 
 
@@ -112,11 +119,16 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-
-        if (search.equals("null")) {
-            return diplomaRepository.getAllForeignDiplomaByStatus(user.getUniversityCode(), status, pageable);
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+            if (search.equals("null")) {
+                return diplomaRepository.getAllForeignDiplomaByStatus(user.getUniversityCode(), status, pageable);
+            }
+            return diplomaRepository.getAllForeignDiplomaSearch(user.getUniversityCode(), status, search, pageable);
         }
-        return diplomaRepository.getAllForeignDiplomaSearch(user.getUniversityCode(), status, search, pageable);
+        if (search.equals("null")) {
+            return diplomaRepository.getAllForeignDiplomaByStatusAdmin(status, pageable);
+        }
+        return diplomaRepository.getAllForeignDiplomaSearchAdmin(status, search, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -170,18 +182,41 @@ public class AdminService {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        if (search.equals("null")) {
-            return applicationRepository.findAllApplicationByUniversity(user.getUniversityCode(), status, pageable);
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+            if (search.equals("null")) {
+                return applicationRepository.findAllApplicationByUniversity(user.getUniversityCode(), status, pageable);
+            }
+            return applicationRepository.findAllSearchApplicationByUniversity(user.getUniversityCode(), status, search, pageable);
         }
-        return applicationRepository.findAllSearchApplicationByUniversity(user.getUniversityCode(), status, search, pageable);
+        if (search.equals("null")) {
+            return applicationRepository.findAllApplicationByUniversityAdmin(status, pageable);
+        }
+        return applicationRepository.findAllSearchApplicationByUniversityAdmin(status, search, pageable);
     }
 
     @Transactional(readOnly = true)
     public ApplicationResponse getApplicationByIdUAdmin(Principal principal, Integer applicationId) {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
 
-        Application application = applicationRepository
-                .findApplicationByUniversityAndId(user.getUniversityCode(), applicationId).get();
+            Application application = applicationRepository
+                    .findApplicationByUniversityAndId(user.getUniversityCode(), applicationId).get();
+            User appUser = application.getUser();
+            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
+            ApplicationResponse response = new ApplicationResponse();
+            response.setId(application.getId());
+            response.setStatus(application.getApplicationStatus());
+            if (application.getApplicationMessage() != null) {
+                response.setApplicationMessage(application.getApplicationMessage());
+            }
+            if (application.getDiplomaMessage() != null) {
+                response.setDiplomaMessage(application.getDiplomaMessage());
+            }
+            response.setKvota(application.getKvota());
+            response.setDiplomaResponse(new DiplomaResponse(diploma, new UserResponse(appUser)));
+            return response;
+        }
+        Application application = applicationRepository.findById(applicationId).get();
         User appUser = application.getUser();
         Diploma diploma = diplomaRepository.findActiveDiplomaByUser(appUser.getId()).get();
         ApplicationResponse response = new ApplicationResponse();
@@ -221,53 +256,56 @@ public class AdminService {
         StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
 
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        if (user.getUniversityCode() != null) {
-            University university = universityRepository.findByCode(user.getUniversityCode()).get();
-            statisticCountUAdmin.setUniversity(university.getName());
-            statisticCountUAdmin.setFullName(user.getFullName());
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+
+            if (user.getUniversityCode() != null) {
+                University university = universityRepository.findByCode(user.getUniversityCode()).get();
+                statisticCountUAdmin.setUniversity(university.getName());
+                statisticCountUAdmin.setFullName(user.getFullName());
+            }
+            List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
+            Map<String, Integer> diploma = new HashMap<>();
+            diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+            diploma.put("Rad etildi", 0);
+            diploma.put("Tasdiqlangan", 0);
+            diploma.put("total", 0);
+
+            diplomaStatisticProjections.forEach(d -> {
+                diploma.put(d.getStatus(), d.getCount());
+            });
+            int sum = diploma.values().stream().mapToInt(d -> d).sum();
+            diploma.put("total", sum);
+            List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
+            Map<String, Integer> app = new HashMap<>();
+            app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+            app.put("Diplom Rad etildi", 0);
+            app.put("Diplom Tasdiqlangan", 0);
+            app.put("Ariza tasdiqlandi", 0);
+            app.put("Ariza rad etildi", 0);
+            app.put("total", 0);
+            appStatisticCount.forEach(a -> {
+                app.put(a.getStatus(), a.getCount());
+            });
+            int appSum = app.values().stream().mapToInt(d -> d).sum();
+            app.put("total", appSum);
+
+            List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
+            Map<String, Integer> diplomaForeign = new HashMap<>();
+            diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
+            diplomaForeign.put("Rad etildi", 0);
+            diplomaForeign.put("Tasdiqlangan", 0);
+            diplomaForeign.put("total", 0);
+            diplomaForeignStatisticCount.forEach(df -> {
+                diplomaForeign.put(df.getStatus(), df.getCount());
+            });
+            int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+            diplomaForeign.put("total", appForeignSum);
+
+            statisticCountUAdmin.setNationalDiploma(diploma);
+            statisticCountUAdmin.setForeignDiploma(diplomaForeign);
+            statisticCountUAdmin.setApplication(app);
+            return statisticCountUAdmin;
         }
-        List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
-        Map<String, Integer> diploma = new HashMap<>();
-        diploma.put("Haqiqiyligi tekshirilmoqda", 0);
-        diploma.put("Rad etildi", 0);
-        diploma.put("Tasdiqlangan", 0);
-        diploma.put("total", 0);
-
-        diplomaStatisticProjections.forEach(d -> {
-            diploma.put(d.getStatus(), d.getCount());
-        });
-        int sum = diploma.values().stream().mapToInt(d -> d).sum();
-        diploma.put("total", sum);
-        List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
-        Map<String, Integer> app = new HashMap<>();
-        app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
-        app.put("Diplom Rad etildi", 0);
-        app.put("Diplom Tasdiqlangan", 0);
-        app.put("Ariza tasdiqlandi", 0);
-        app.put("Ariza rad etildi", 0);
-        app.put("total", 0);
-        appStatisticCount.forEach(a -> {
-            app.put(a.getStatus(), a.getCount());
-        });
-        int appSum = app.values().stream().mapToInt(d -> d).sum();
-        app.put("total", appSum);
-
-        List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
-        Map<String, Integer> diplomaForeign = new HashMap<>();
-        diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
-        diplomaForeign.put("Rad etildi", 0);
-        diplomaForeign.put("Tasdiqlangan", 0);
-        diplomaForeign.put("total", 0);
-        diplomaForeignStatisticCount.forEach(df -> {
-            diplomaForeign.put(df.getStatus(), df.getCount());
-        });
-        int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
-        diplomaForeign.put("total", appForeignSum);
-
-        statisticCountUAdmin.setNationalDiploma(diploma);
-        statisticCountUAdmin.setForeignDiploma(diplomaForeign);
-        statisticCountUAdmin.setApplication(app);
-        return statisticCountUAdmin;
     }
 
     @Transactional(readOnly = true)

@@ -20,12 +20,21 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllDiplomaByStatus(Integer instId, String status, Pageable pageable);
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.status_name=?1 ")
+    Page<DiplomaResponseProjection> getAllDiplomaByStatusAdmin( String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearch(Integer instId, String status, String search, Pageable pageable);
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and  d.status_name=?1 and " +
+            " (u.full_name ilike %?2% or CAST(d.id  AS varchar(255)) ilike %?2% or concat(d.diploma_serial,d.diploma_number) ilike %?2%) ")
+    Page<DiplomaResponseProjection> getAllDiplomaSearchAdmin(String status, String search, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
@@ -54,6 +63,11 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllForeignDiplomaByStatus(String instId, String status, Pageable pageable);
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
+            " where d.country_id!=1 and d.is_active=true and d.status_name=?1 ")
+    Page<DiplomaResponseProjection> getAllForeignDiplomaByStatusAdmin( String status, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
@@ -61,6 +75,12 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             " where d.country_id!=1 and d.is_active=true and k.university_code=?1 and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllForeignDiplomaSearch(String instId, String status, String search, Pageable pageable);
+    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_custom_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id  inner join kvota k on k.id = a.kvota_id " +
+            " where d.country_id!=1 and d.is_active=true and d.status_name=?1 and " +
+            " (u.full_name ilike %?2% or CAST(d.id  AS varchar(255)) ilike %?2% or concat(d.diploma_serial,d.diploma_number) ilike %?2%) ")
+    Page<DiplomaResponseProjection> getAllForeignDiplomaSearchAdmin( String status, String search, Pageable pageable);
 
     @Query("select d from Diploma d where d.user.id = ?1 ")
     List<Diploma> findAllDiplomaByUser(Integer id);
