@@ -20,10 +20,7 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import javax.swing.plaf.PanelUI;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -342,25 +339,61 @@ public class AdminService {
         statisticCountUAdmin.setFullName(user.getFullName());
         return statisticCountUAdmin;
     }
+
     //STATISTIC ADMIN
-//    public List<StatisticCountUAdmin> getAllUniversityStatistic(){
-//        List<Integer> allDiplomaInst = diplomaOldInstitutionRepository.getAllDiplomaInst();
-//        allDiplomaInst.forEach(integer -> {
-//            StatisticCountUAdmin statisticCountUAdmin=new StatisticCountUAdmin();
-//            List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(integer);
-//            Map<String, Integer> diploma = new HashMap<>();
-//            diploma.put("Haqiqiyligi tekshirilmoqda", 0);
-//            diploma.put("Rad etildi", 0);
-//            diploma.put("Tasdiqlangan", 0);
-//            diploma.put("total", 0);
-//
-//            diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
-//            int sum = diploma.values().stream().mapToInt(d -> d).sum();
-//            diploma.put("total", sum);
-//            statisticCountUAdmin.setNationalDiploma(diploma);
-//
-//        });
-//    }
+    public List<StatisticCountUAdmin> getAllUniversityStatistic() {
+        List<User> users = userRepository.findAll();
+        List<StatisticCountUAdmin> list = new ArrayList<>();
+        users.forEach(user -> {
+            StatisticCountUAdmin statisticCountUAdmin = new StatisticCountUAdmin();
+            if (user.getUniversityCode() != null) {
+                University university = universityRepository.findByCode(user.getUniversityCode()).get();
+                statisticCountUAdmin.setUniversity(university.getName());
+            }
+            if (user.getDiplomaInstitutionId() != null) {
+
+
+                List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
+                Map<String, Integer> diploma = new HashMap<>();
+                diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+                diploma.put("Rad etildi", 0);
+                diploma.put("Tasdiqlangan", 0);
+                diploma.put("total", 0);
+                diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+                int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                diploma.put("total", sum);
+                statisticCountUAdmin.setNationalDiploma(diploma);
+            }
+
+            List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
+            Map<String, Integer> app = new HashMap<>();
+            app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+            app.put("Diplom Rad etildi", 0);
+            app.put("Diplom Tasdiqlangan", 0);
+            app.put("Ariza tasdiqlandi", 0);
+            app.put("Ariza rad etildi", 0);
+            app.put("total", 0);
+            appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
+            int appSum = app.values().stream().mapToInt(d -> d).sum();
+            app.put("total", appSum);
+
+            List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
+            Map<String, Integer> diplomaForeign = new HashMap<>();
+            diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
+            diplomaForeign.put("Rad etildi", 0);
+            diplomaForeign.put("Tasdiqlangan", 0);
+            diplomaForeign.put("total", 0);
+            diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
+            int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+            diplomaForeign.put("total", appForeignSum);
+
+            statisticCountUAdmin.setForeignDiploma(diplomaForeign);
+            statisticCountUAdmin.setApplication(app);
+            list.add(statisticCountUAdmin);
+
+        });
+        return list;
+    }
 
 
     @Transactional(readOnly = true)
