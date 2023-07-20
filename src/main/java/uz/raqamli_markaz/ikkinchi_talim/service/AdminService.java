@@ -343,9 +343,7 @@ public class AdminService {
 
     //STATISTIC ADMIN
     @Transactional(readOnly = true)
-    public List<StatisticCountUAdmin> getAllUniversityStatistic(int page, int size) {
-        if (page > 0) page = page - 1;
-        Pageable pageable = PageRequest.of(page, size);
+    public List<StatisticCountUAdmin> getAllUniversityStatistic() {
         List<User> users = userRepository.findAllByUadmin();
         List<StatisticCountUAdmin> list = new ArrayList<>();
         users.forEach(user -> {

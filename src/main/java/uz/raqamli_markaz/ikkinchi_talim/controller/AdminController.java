@@ -114,9 +114,8 @@ public class AdminController {
     @GetMapping("allStatisticUniversity")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
-    public ResponseEntity<?> allStatisticUniversity(  @RequestParam(value = "page", defaultValue = "0") int page,
-                                                      @RequestParam(value = "size", defaultValue = "20") int size) {
-        List<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic(page, size);
+    public ResponseEntity<?> allStatisticUniversity() {
+        List<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic();
         return ResponseEntity.ok(statistic);
     }
 
