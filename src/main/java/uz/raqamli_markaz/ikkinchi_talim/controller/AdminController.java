@@ -113,7 +113,7 @@ public class AdminController {
     }
     @GetMapping("allStatisticUniversity")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> allStatisticUniversity() {
         List<StatisticCountUAdmin> statistic = adminService.getAllUniversityStatistic();
         return ResponseEntity.ok(statistic);
