@@ -25,7 +25,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
     Page<AppResponseProjection> findAllApplicationByUniversity(String universityCode, String status, Pageable pageable);
     @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
-            " where and a.application_status=?1 ",nativeQuery = true)
+            " where a.application_status=?1 ",nativeQuery = true)
     Page<AppResponseProjection> findAllApplicationByUniversityAdmin(String status, Pageable pageable);
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +

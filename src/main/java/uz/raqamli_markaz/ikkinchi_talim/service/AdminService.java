@@ -18,6 +18,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
+import javax.swing.plaf.PanelUI;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ public class AdminService {
     private final MyEduApiService myEduApiService;
     private final UserService userService;
     private final UniversityRepository universityRepository;
+    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
 
     @Transactional
     public Result confirmDiploma(Principal principal, ConfirmDiplomaRequest request) {
@@ -340,6 +342,26 @@ public class AdminService {
         statisticCountUAdmin.setFullName(user.getFullName());
         return statisticCountUAdmin;
     }
+    //STATISTIC ADMIN
+//    public List<StatisticCountUAdmin> getAllUniversityStatistic(){
+//        List<Integer> allDiplomaInst = diplomaOldInstitutionRepository.getAllDiplomaInst();
+//        allDiplomaInst.forEach(integer -> {
+//            StatisticCountUAdmin statisticCountUAdmin=new StatisticCountUAdmin();
+//            List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(integer);
+//            Map<String, Integer> diploma = new HashMap<>();
+//            diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+//            diploma.put("Rad etildi", 0);
+//            diploma.put("Tasdiqlangan", 0);
+//            diploma.put("total", 0);
+//
+//            diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+//            int sum = diploma.values().stream().mapToInt(d -> d).sum();
+//            diploma.put("total", sum);
+//            statisticCountUAdmin.setNationalDiploma(diploma);
+//
+//        });
+//    }
+
 
     @Transactional(readOnly = true)
     public CountAllDateStatistic getAllDateStatic(Principal principal) {
