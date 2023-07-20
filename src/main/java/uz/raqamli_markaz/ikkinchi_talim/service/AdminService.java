@@ -346,7 +346,6 @@ public class AdminService {
     public Page<StatisticCountUAdmin> getAllUniversityStatistic(int page, int size) {
         if (page > 0) page = page - 1;
         Pageable pageable = PageRequest.of(page, size);
-
         List<User> users = userRepository.findAllByUadmin();
         List<StatisticCountUAdmin> list = new ArrayList<>();
         users.forEach(user -> {
@@ -395,7 +394,12 @@ public class AdminService {
             list.add(statisticCountUAdmin);
 
         });
-        return new PageImpl<>(list,pageable,list.size());
+        int start = Math.min((int) pageable.getOffset(), list.size());
+        int end = Math.min((start + pageable.getPageSize()), list.size());
+
+        Page<StatisticCountUAdmin> result = new PageImpl<>(list.subList(start, end), pageable, list.size());
+
+        return result;
 
     }
 
