@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping("diplomaByUAdmin")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getAllDiplomaByUAdmin(Principal principal,
                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "size", defaultValue = "20") int size,
@@ -47,7 +47,7 @@ public class AdminController {
 
     @GetMapping("diplomaForeignByUAdmin")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getAllDiplomaForeignByUAdmin(Principal principal,
                                                           @RequestParam(value = "page", defaultValue = "0") int page,
                                                           @RequestParam(value = "size", defaultValue = "20") int size,
@@ -59,7 +59,7 @@ public class AdminController {
 
     @GetMapping("getDiplomaByIdUAdmin/{diplomaId}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getDiplomaByIdUAdmin(Principal principal, @PathVariable Integer diplomaId) {
         DiplomaResponse response = adminService.getDiplomaByIdUAdmin(principal, diplomaId);
         return ResponseEntity.status(response != null ? 200 : 404).body(response);
@@ -76,7 +76,7 @@ public class AdminController {
 
     @GetMapping("getAllApplicationByUAdmin")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getAllApplicationByUAdmin(Principal principal,
                                                        @RequestParam(value = "page", defaultValue = "0") int page,
                                                        @RequestParam(value = "size", defaultValue = "20") int size,
@@ -89,7 +89,7 @@ public class AdminController {
 
     @GetMapping("getApplicationByIdUAdmin/{applicationId}")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getApplicationByIdUAdmin(Principal principal, @PathVariable Integer applicationId) {
         ApplicationResponse response = adminService.getApplicationByIdUAdmin(principal, applicationId);
         return ResponseEntity.status(response != null ? 200 : 404).body(response);
@@ -98,14 +98,14 @@ public class AdminController {
     //////////////////////////statistic........................
     @GetMapping("getStatisticCount")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getStatistic(Principal principal) {
         StatisticCountUAdmin statistic = adminService.getStatistic(principal);
         return ResponseEntity.ok(statistic);
     }
     @GetMapping("getAllDateAndGenderStatistic")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> getAllDateStatic(Principal principal) {
         CountAllDateStatistic statistic = adminService.getAllDateStatic(principal);
         return ResponseEntity.ok(statistic);
@@ -125,7 +125,7 @@ public class AdminController {
 
     @GetMapping("reportToExcel")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<Resource> reportToExcel(Principal principal,
                                                   @RequestParam(value = "status", defaultValue = "null") String status,
                                                   @RequestParam(value = "key") String key) {

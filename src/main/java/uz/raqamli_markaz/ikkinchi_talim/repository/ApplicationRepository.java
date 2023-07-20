@@ -56,12 +56,25 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.is_active=true and k.university_code=?1 group by a.application_status order by a.application_status ")
     List<DiplomaStatisticProjection> appStatisticCount(String code);
+    @Query(nativeQuery = true,value = "select count(a.id) count ,a.application_status status from application a inner join users u on u.id = a.user_id " +
+            " inner join kvota k on k.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
+            " where d.is_active=true group by a.application_status order by a.application_status ")
+    List<DiplomaStatisticProjection> appStatisticCountAdmin();
     @Query(nativeQuery = true,value = "select  count(a.id) as count , CAST(a.created_date AS DATE) as date from   application as a\n" +
             " inner join users u on u.id = a.user_id  inner join diploma d on u.id = d.user_id inner join kvota k on k.id = a.kvota_id\n" +
             " where k.university_code=?1 and d.is_active=true group by CAST(a.created_date AS DATE) order by date")
     List<GetCountAppallDate> geetCountAppallDate(String code);
+    @Query(nativeQuery = true,value = "select  count(a.id) as count , CAST(a.created_date AS DATE) as date from   application as a\n" +
+            " inner join users u on u.id = a.user_id  inner join diploma d on u.id = d.user_id inner join kvota k on k.id = a.kvota_id\n" +
+            " where d.is_active=true group by CAST(a.created_date AS DATE) order by date")
+    List<GetCountAppallDate> getCountAppallDateAdmin();
+
 @Query(nativeQuery = true,value = "select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id\n" +
         " inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
         " where k.university_code=?1 and d.is_active=true group by u.gender ")
     List<GetAppByGender> getCountAppByGender(String code);
+    @Query(nativeQuery = true,value = "select count(u.gender) count ,u.gender gender from application a inner join kvota k on k.id = a.kvota_id\n" +
+            " inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
+            " where d.is_active=true group by u.gender ")
+    List<GetAppByGender> getCountAppByGenderAdmin();
 }

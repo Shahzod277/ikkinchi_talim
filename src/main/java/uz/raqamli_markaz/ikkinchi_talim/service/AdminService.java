@@ -283,9 +283,7 @@ public class AdminService {
             app.put("Ariza tasdiqlandi", 0);
             app.put("Ariza rad etildi", 0);
             app.put("total", 0);
-            appStatisticCount.forEach(a -> {
-                app.put(a.getStatus(), a.getCount());
-            });
+            appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
             int appSum = app.values().stream().mapToInt(d -> d).sum();
             app.put("total", appSum);
 
@@ -295,9 +293,7 @@ public class AdminService {
             diplomaForeign.put("Rad etildi", 0);
             diplomaForeign.put("Tasdiqlangan", 0);
             diplomaForeign.put("total", 0);
-            diplomaForeignStatisticCount.forEach(df -> {
-                diplomaForeign.put(df.getStatus(), df.getCount());
-            });
+            diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
             int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
             diplomaForeign.put("total", appForeignSum);
 
@@ -306,15 +302,76 @@ public class AdminService {
             statisticCountUAdmin.setApplication(app);
             return statisticCountUAdmin;
         }
+        List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCountAdmin();
+        Map<String, Integer> diploma = new HashMap<>();
+        diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+        diploma.put("Rad etildi", 0);
+        diploma.put("Tasdiqlangan", 0);
+        diploma.put("total", 0);
+
+        diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+        int sum = diploma.values().stream().mapToInt(d -> d).sum();
+        diploma.put("total", sum);
+        List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCountAdmin();
+        Map<String, Integer> app = new HashMap<>();
+        app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+        app.put("Diplom Rad etildi", 0);
+        app.put("Diplom Tasdiqlangan", 0);
+        app.put("Ariza tasdiqlandi", 0);
+        app.put("Ariza rad etildi", 0);
+        app.put("total", 0);
+        appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
+        int appSum = app.values().stream().mapToInt(d -> d).sum();
+        app.put("total", appSum);
+
+        List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCountAdmin();
+        Map<String, Integer> diplomaForeign = new HashMap<>();
+        diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
+        diplomaForeign.put("Rad etildi", 0);
+        diplomaForeign.put("Tasdiqlangan", 0);
+        diplomaForeign.put("total", 0);
+        diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
+        int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+        diplomaForeign.put("total", appForeignSum);
+
+        statisticCountUAdmin.setNationalDiploma(diploma);
+        statisticCountUAdmin.setForeignDiploma(diplomaForeign);
+        statisticCountUAdmin.setApplication(app);
+        statisticCountUAdmin.setFullName(user.getFullName());
+        return statisticCountUAdmin;
     }
 
     @Transactional(readOnly = true)
     public CountAllDateStatistic getAllDateStatic(Principal principal) {
 
         User user = userRepository.findUserByPinfl(principal.getName()).get();
-        List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignlDiplomaDate(user.getUniversityCode());
-        List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDate(user.getDiplomaInstitutionId());
-        List<GetCountAppallDate> countAppallDate = applicationRepository.geetCountAppallDate(user.getUniversityCode());
+        if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+
+            List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignlDiplomaDate(user.getUniversityCode());
+            List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDate(user.getDiplomaInstitutionId());
+            List<GetCountAppallDate> countAppallDate = applicationRepository.geetCountAppallDate(user.getUniversityCode());
+            CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
+            Map<String, List<GetCountAppallDate>> map = new HashMap();
+
+            map.put("application", countAppallDate);
+            map.put("foreignDiploma", countByForeignlDiplomaDate);
+            map.put("nationalDiploma", countByNationalDiplomaDate);
+            countAllDateStatistic.setStatisticByDate(map);
+
+            Map<String, List<GetAppByGender>> hashMap = new HashMap();
+
+            List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGender(user.getDiplomaInstitutionId());
+            List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGender(user.getUniversityCode());
+            List<GetAppByGender> appByGender = applicationRepository.getCountAppByGender(user.getUniversityCode());
+            hashMap.put("application", appByGender);
+            hashMap.put("foreignDiploma", foreignDiplomaVByGender);
+            hashMap.put("nationalDiploma", nationalDiplomaVByGender);
+            countAllDateStatistic.setStatisticByGender(hashMap);
+            return countAllDateStatistic;
+        }
+        List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignDiplomaDateAdmin();
+        List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDateAdmin();
+        List<GetCountAppallDate> countAppallDate = applicationRepository.getCountAppallDateAdmin();
         CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
         Map<String, List<GetCountAppallDate>> map = new HashMap();
 
@@ -325,9 +382,9 @@ public class AdminService {
 
         Map<String, List<GetAppByGender>> hashMap = new HashMap();
 
-        List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGender(user.getDiplomaInstitutionId());
-        List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGender(user.getUniversityCode());
-        List<GetAppByGender> appByGender = applicationRepository.getCountAppByGender(user.getUniversityCode());
+        List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGenderAdmin();
+        List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGenderAdmin();
+        List<GetAppByGender> appByGender = applicationRepository.getCountAppByGenderAdmin();
         hashMap.put("application", appByGender);
         hashMap.put("foreignDiploma", foreignDiplomaVByGender);
         hashMap.put("nationalDiploma", nationalDiplomaVByGender);
