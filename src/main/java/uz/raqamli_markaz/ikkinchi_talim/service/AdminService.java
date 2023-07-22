@@ -50,14 +50,16 @@ public class AdminService {
                 if (request.getIsConfirm() == 1) {
                     diploma.setStatusId(1);
                     diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
+                    diplomaRepository.save(diploma);
                     application.setApplicationStatus("Diplom Tasdiqlangan");
                     application.setDiplomaMessage(request.getMessage());
                 } else {
                     diploma.setStatusName("Rad etildi");//d arxivni statusi
+                    diplomaRepository.save(diploma);
                     application.setApplicationStatus("Diplom Rad etildi");
                     application.setDiplomaMessage(request.getMessage());
                 }
-                diplomaRepository.save(diploma);
+
                 Application save = applicationRepository.save(application);
                 String encode = userService.encode(save.getUser().getPinfl());
                 CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
@@ -73,16 +75,15 @@ public class AdminService {
             if (request.getIsConfirm() == 1) {
                 diploma.setStatusId(1);
                 diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
+                diplomaRepository.save(diploma);
                 application.setApplicationStatus("Diplom Tasdiqlangan");
                 application.setDiplomaMessage(request.getMessage());
-
             } else {
                 diploma.setStatusName("Rad etildi");//d arxivni statusi
+                diplomaRepository.save(diploma);
                 application.setApplicationStatus("Diplom Rad etildi");
                 application.setDiplomaMessage(request.getMessage());
-
             }
-            diplomaRepository.save(diploma);
             Application save = applicationRepository.save(application);
             String encode = userService.encode(save.getUser().getPinfl());
             CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();

@@ -47,7 +47,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelAdmin();
 
-    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber , " +
+    @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
           " where k.university_code=?1 and a.application_status=?2 and (CAST(a.id  AS varchar(255)) ilike %?3% or u.full_name ilike %?3%) ",nativeQuery = true)
     Page<AppResponseProjection> findAllSearchApplicationByUniversity(String universityCode, String status,String search, Pageable pageable);
