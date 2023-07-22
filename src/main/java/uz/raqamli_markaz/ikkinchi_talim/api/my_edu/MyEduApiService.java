@@ -30,7 +30,7 @@ public class MyEduApiService {
                 .bodyToMono(CreateAppRequestMyEdu.class)
                 .block();
     }
-    public CreateAppRequestMyEdu updateApp(String token,CreateAppRequestMyEdu request) {
+    public CreateAppRequestMyEdu updateApp(String token, CreateAppRequestMyEdu request) {
         return this.webClient.put()
                 .uri(ApiConstant.CREATE_APP_MYEDU+request.getExternalId()+"/")
                 .headers(httpHeader -> httpHeader.set("Authorization", "Local " + token))

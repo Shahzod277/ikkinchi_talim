@@ -29,7 +29,7 @@ public class AdminController {
     @PostMapping("confirmDiploma")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
     @PreAuthorize("hasRole('UADMIN')")
-    public ResponseEntity<?> confirmDiploma(Principal principal, @RequestBody ConfirmDiplomaRequest request) throws Exception {
+    public ResponseEntity<?> confirmDiploma(Principal principal, @RequestBody ConfirmDiplomaRequest request) {
         Result result = adminService.confirmDiploma(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
