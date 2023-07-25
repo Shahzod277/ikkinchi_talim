@@ -171,13 +171,23 @@ public class AdminService {
     @Transactional
     public Result confirmApplication(Principal principal, ConfirmAppRequest request) {
         try {
-
             User user = userRepository.findUserByPinfl(principal.getName()).get();
 
-            //Admin uchun
-            if (user.getRole().getName().equals("ROLE_ADMIN")) {
-                Application application = applicationRepository.findById(request.getApplicationId()).get();
-                if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+            if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+                Application application = applicationRepository
+                        .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
+                if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                    application.setApplicationStatus("Ariza tasdiqlandi");
+                    application.setApplicationMessage(request.getMessage());
+                    Application save = applicationRepository.save(application);
+                    String encode = userService.encode(save.getUser().getPinfl());
+                    CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                    requestMyEdu.setExternalId(save.getId().toString());
+                    requestMyEdu.setStatus(save.getApplicationStatus());
+                    requestMyEdu.setData(save.getKvota());
+                    myEduApiService.updateApp(encode, requestMyEdu);
+                    return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+                } else if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                     application.setApplicationStatus("Ariza rad etildi");
                     application.setApplicationMessage(request.getMessage());
                     Application save = applicationRepository.save(application);
@@ -189,22 +199,10 @@ public class AdminService {
                     myEduApiService.updateApp(encode, requestMyEdu);
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
                 }
+                return new Result("Diplom tasdiqlanmagan ", false);
             }
-
-            Application application = applicationRepository
-                    .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
-            if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
-                application.setApplicationStatus("Ariza tasdiqlandi");
-                application.setApplicationMessage(request.getMessage());
-                Application save = applicationRepository.save(application);
-                String encode = userService.encode(save.getUser().getPinfl());
-                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-                requestMyEdu.setExternalId(save.getId().toString());
-                requestMyEdu.setStatus(save.getApplicationStatus());
-                requestMyEdu.setData(save.getKvota());
-                myEduApiService.updateApp(encode, requestMyEdu);
-                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-            } else if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+            Application application = applicationRepository.findById(request.getApplicationId()).get();
+            if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza rad etildi");
                 application.setApplicationMessage(request.getMessage());
                 Application save = applicationRepository.save(application);
@@ -244,7 +242,6 @@ public class AdminService {
     public ApplicationResponse getApplicationByIdUAdmin(Principal principal, Integer applicationId) {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         if (!user.getRole().getName().equals("ROLE_ADMIN")) {
-
             Application application = applicationRepository
                     .findApplicationByUniversityAndId(user.getUniversityCode(), applicationId).get();
             User appUser = application.getUser();
