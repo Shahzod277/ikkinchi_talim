@@ -217,6 +217,7 @@ public class AdminService {
                 }
                 return new Result("Diplom tasdiqlanmagan ", false);
             }
+            //Admin uchun
             Application application = applicationRepository.findById(request.getApplicationId()).get();
                 application.setApplicationStatus("Ariza rad etildi");
                 application.setApplicationMessage(request.getMessage());
