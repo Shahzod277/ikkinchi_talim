@@ -47,6 +47,14 @@ public class AdminService {
                 Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
                 Integer userId = diploma.getUser().getId();
                 Application application = applicationRepository.findByUserId(userId).get();
+
+                if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                    diploma.setStatusName("Rad etildi");//d arxivni statusi
+                    diplomaRepository.save(diploma);
+                    application.setApplicationStatus("Diplom Rad etildi");
+                    application.setDiplomaMessage(request.getMessage());
+                }
+
                 if (request.getIsConfirm() == 1) {
                     diploma.setStatusId(1);
                     diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
@@ -72,6 +80,14 @@ public class AdminService {
             Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
             Integer userId = diploma.getUser().getId();
             Application application = applicationRepository.findByUserId(userId).get();
+
+            if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                diploma.setStatusName("Rad etildi");//d arxivni statusi
+                diplomaRepository.save(diploma);
+                application.setApplicationStatus("Diplom Rad etildi");
+                application.setDiplomaMessage(request.getMessage());
+            }
+
             if (request.getIsConfirm() == 1) {
                 diploma.setStatusId(1);
                 diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
@@ -150,6 +166,21 @@ public class AdminService {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             Application application = applicationRepository
                     .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
+            if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                    application.setApplicationStatus("Ariza rad etildi");
+                    application.setApplicationMessage(request.getMessage());
+                    Application save = applicationRepository.save(application);
+                    String encode = userService.encode(save.getUser().getPinfl());
+                    CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                    requestMyEdu.setExternalId(save.getId().toString());
+                    requestMyEdu.setStatus(save.getApplicationStatus());
+                    requestMyEdu.setData(save.getKvota());
+                    myEduApiService.updateApp(encode, requestMyEdu);
+                    return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+                }
+            }
+
             if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza tasdiqlandi");
                 application.setApplicationMessage(request.getMessage());
