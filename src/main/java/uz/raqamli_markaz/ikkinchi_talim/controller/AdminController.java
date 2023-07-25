@@ -28,7 +28,7 @@ public class AdminController {
 
     @PostMapping("confirmDiploma")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> confirmDiploma(Principal principal, @RequestBody ConfirmDiplomaRequest request) {
         Result result = adminService.confirmDiploma(principal, request);
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
@@ -68,7 +68,7 @@ public class AdminController {
 
     @PostMapping("confirmApplication")
     @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasRole('UADMIN')")
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<?> confirmApplication(Principal principal,
                                                 @RequestBody ConfirmAppRequest request) {
         Result result = adminService.confirmApplication(principal, request);
