@@ -1,11 +1,15 @@
 package uz.raqamli_markaz.ikkinchi_talim.api.my_edu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateAppRequestMyEdu {
 
     @JsonProperty("data")

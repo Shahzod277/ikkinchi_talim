@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConfirmDiplomaRequest {
+
     private Integer diplomaId;
     private Integer isConfirm;//1 tasdiqlangan ,0 rad etilgan
     private String message;

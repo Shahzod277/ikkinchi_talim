@@ -1,10 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -19,7 +15,6 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponse;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
