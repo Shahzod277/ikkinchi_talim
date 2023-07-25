@@ -44,16 +44,20 @@ public class AdminService {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             if (request.getIsNational() == 1) {
 
-                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
-                Integer userId = diploma.getUser().getId();
-                Application application = applicationRepository.findByUserId(userId).get();
-
+                // Admin uchun
                 if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                    Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
+                    Integer userId = diploma.getUser().getId();
+                    Application application = applicationRepository.findByUserId(userId).get();
                     diploma.setStatusName("Rad etildi");//d arxivni statusi
                     diplomaRepository.save(diploma);
                     application.setApplicationStatus("Diplom Rad etildi");
                     application.setDiplomaMessage(request.getMessage());
                 }
+
+                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
+                Integer userId = diploma.getUser().getId();
+                Application application = applicationRepository.findByUserId(userId).get();
 
                 if (request.getIsConfirm() == 1) {
                     diploma.setStatusId(1);
@@ -77,16 +81,20 @@ public class AdminService {
                 myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
-            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
-            Integer userId = diploma.getUser().getId();
-            Application application = applicationRepository.findByUserId(userId).get();
-
+            // Admin uchun
             if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
+                Integer userId = diploma.getUser().getId();
+                Application application = applicationRepository.findByUserId(userId).get();
                 diploma.setStatusName("Rad etildi");//d arxivni statusi
                 diplomaRepository.save(diploma);
                 application.setApplicationStatus("Diplom Rad etildi");
                 application.setDiplomaMessage(request.getMessage());
             }
+
+            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
+            Integer userId = diploma.getUser().getId();
+            Application application = applicationRepository.findByUserId(userId).get();
 
             if (request.getIsConfirm() == 1) {
                 diploma.setStatusId(1);
@@ -163,10 +171,12 @@ public class AdminService {
     @Transactional
     public Result confirmApplication(Principal principal, ConfirmAppRequest request) {
         try {
+
             User user = userRepository.findUserByPinfl(principal.getName()).get();
-            Application application = applicationRepository
-                    .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
+
+            //Admin uchun
             if (user.getRole().getName().equals("ROLE_ADMIN")) {
+                Application application = applicationRepository.findById(request.getApplicationId()).get();
                 if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                     application.setApplicationStatus("Ariza rad etildi");
                     application.setApplicationMessage(request.getMessage());
@@ -181,6 +191,8 @@ public class AdminService {
                 }
             }
 
+            Application application = applicationRepository
+                    .findApplicationByUniversityAndId(user.getUniversityCode(), request.getApplicationId()).get();
             if (request.getIsConfirm() == 1 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza tasdiqlandi");
                 application.setApplicationMessage(request.getMessage());
