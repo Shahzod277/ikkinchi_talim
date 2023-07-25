@@ -219,16 +219,16 @@ public class AdminService {
             }
             //Admin uchun
             Application application = applicationRepository.findById(request.getApplicationId()).get();
-            application.setApplicationStatus("Ariza rad etildi");
-            application.setApplicationMessage(request.getMessage());
-            Application save = applicationRepository.save(application);
-            String encode = userService.encode(save.getUser().getPinfl());
-            CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-            requestMyEdu.setExternalId(save.getId().toString());
-            requestMyEdu.setStatus(save.getApplicationStatus());
-            requestMyEdu.setData(save.getKvota());
-            myEduApiService.updateApp(encode, requestMyEdu);
-            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+                application.setApplicationStatus("Ariza rad etildi");
+                application.setApplicationMessage(request.getMessage());
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(save.getUser().getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
@@ -408,6 +408,32 @@ public class AdminService {
             if (user.getUniversityCode() != null) {
                 University university = universityRepository.findByCode(user.getUniversityCode()).get();
                 statisticCountUAdmin.setUniversity(university.getName());
+            } else {
+                DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findByClassificatorId(user.getDiplomaInstitutionId()).get();
+                statisticCountUAdmin.setUniversity(diplomaInstitution.getInstitutionNameOz());
+            }
+            if (user.getDiplomaInstitutionId() != null) {
+                List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
+                Map<String, Integer> diploma = new HashMap<>();
+                diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+                diploma.put("Rad etildi", 0);
+                diploma.put("Tasdiqlangan", 0);
+                diploma.put("total", 0);
+                Thread thread = new Thread(() -> {
+                diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+                int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                diploma.put("total", sum);
+                });
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                statisticCountUAdmin.setNationalDiploma(diploma);
+
+            }
+            if (user.getUniversityCode() != null) {
                 List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
                 Map<String, Integer> app = new HashMap<>();
                 app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
@@ -425,9 +451,12 @@ public class AdminService {
                 thread1.start();
                 try {
                     thread1.join();
+                    statisticCountUAdmin.setApplication(app);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+            }
+            if (user.getUniversityCode() != null) {
                 List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
                 Map<String, Integer> diplomaForeign = new HashMap<>();
                 diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
@@ -442,37 +471,13 @@ public class AdminService {
 
                 });
                 thread.start();
-                statisticCountUAdmin.setForeignDiploma(diplomaForeign);
-                statisticCountUAdmin.setApplication(app);
                 try {
                     thread.join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findByClassificatorId(user.getDiplomaInstitutionId()).get();
-                statisticCountUAdmin.setUniversity(diplomaInstitution.getInstitutionNameOz());
-            }
-            if (user.getDiplomaInstitutionId() != null) {
-                List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
-                Map<String, Integer> diploma = new HashMap<>();
-                diploma.put("Haqiqiyligi tekshirilmoqda", 0);
-                diploma.put("Rad etildi", 0);
-                diploma.put("Tasdiqlangan", 0);
-                diploma.put("total", 0);
-                Thread thread = new Thread(() -> {
-                    diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
-                    int sum = diploma.values().stream().mapToInt(d -> d).sum();
-                    diploma.put("total", sum);
-                });
-                thread.start();
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                statisticCountUAdmin.setNationalDiploma(diploma);
+                    statisticCountUAdmin.setForeignDiploma(diplomaForeign);
 
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             list.add(statisticCountUAdmin);
 
