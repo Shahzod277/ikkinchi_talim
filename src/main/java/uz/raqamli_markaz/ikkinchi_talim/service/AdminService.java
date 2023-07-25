@@ -44,18 +44,53 @@ public class AdminService {
             User user = userRepository.findUserByPinfl(principal.getName()).get();
             if (request.getIsNational() == 1) {
 
-                // Admin uchun
-                if (user.getRole().getName().equals("ROLE_ADMIN")) {
-                    Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
+                if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+                    Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
                     Integer userId = diploma.getUser().getId();
                     Application application = applicationRepository.findByUserId(userId).get();
-                    diploma.setStatusName("Rad etildi");//d arxivni statusi
-                    diplomaRepository.save(diploma);
-                    application.setApplicationStatus("Diplom Rad etildi");
-                    application.setDiplomaMessage(request.getMessage());
-                }
 
-                Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
+                    if (request.getIsConfirm() == 1) {
+                        diploma.setStatusId(1);
+                        diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
+                        diplomaRepository.save(diploma);
+                        application.setApplicationStatus("Diplom Tasdiqlangan");
+                        application.setDiplomaMessage(request.getMessage());
+                    } else {
+                        diploma.setStatusName("Rad etildi");//d arxivni statusi
+                        diplomaRepository.save(diploma);
+                        application.setApplicationStatus("Diplom Rad etildi");
+                        application.setDiplomaMessage(request.getMessage());
+                    }
+
+                    Application save = applicationRepository.save(application);
+                    String encode = userService.encode(save.getUser().getPinfl());
+                    CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                    requestMyEdu.setExternalId(save.getId().toString());
+                    requestMyEdu.setStatus(save.getApplicationStatus());
+                    requestMyEdu.setData(save.getKvota());
+                    myEduApiService.updateApp(encode, requestMyEdu);
+                    return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+                }
+                //Admin uchun
+                Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
+                Integer userId = diploma.getUser().getId();
+                Application application = applicationRepository.findByUserId(userId).get();
+                diploma.setStatusName("Rad etildi");//d arxivni statusi
+                diplomaRepository.save(diploma);
+                application.setApplicationStatus("Diplom Rad etildi");
+                application.setDiplomaMessage(request.getMessage());
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(save.getUser().getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(save.getId().toString());
+                requestMyEdu.setStatus(save.getApplicationStatus());
+                requestMyEdu.setData(save.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
+                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            }
+
+            if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+                Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
                 Integer userId = diploma.getUser().getId();
                 Application application = applicationRepository.findByUserId(userId).get();
 
@@ -71,7 +106,6 @@ public class AdminService {
                     application.setApplicationStatus("Diplom Rad etildi");
                     application.setDiplomaMessage(request.getMessage());
                 }
-
                 Application save = applicationRepository.save(application);
                 String encode = userService.encode(save.getUser().getPinfl());
                 CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
@@ -81,33 +115,14 @@ public class AdminService {
                 myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
-            // Admin uchun
-            if (user.getRole().getName().equals("ROLE_ADMIN")) {
-                Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
-                Integer userId = diploma.getUser().getId();
-                Application application = applicationRepository.findByUserId(userId).get();
-                diploma.setStatusName("Rad etildi");//d arxivni statusi
-                diplomaRepository.save(diploma);
-                application.setApplicationStatus("Diplom Rad etildi");
-                application.setDiplomaMessage(request.getMessage());
-            }
-
-            Diploma diploma = diplomaRepository.findDiplomaBykvotaUniverCodeAndId(user.getUniversityCode(), request.getDiplomaId()).get();
+            //Admin uchun
+            Diploma diploma = diplomaRepository.findById(request.getDiplomaId()).get();
             Integer userId = diploma.getUser().getId();
             Application application = applicationRepository.findByUserId(userId).get();
-
-            if (request.getIsConfirm() == 1) {
-                diploma.setStatusId(1);
-                diploma.setStatusName("Tasdiqlangan");//d arxivni statusi
-                diplomaRepository.save(diploma);
-                application.setApplicationStatus("Diplom Tasdiqlangan");
-                application.setDiplomaMessage(request.getMessage());
-            } else {
-                diploma.setStatusName("Rad etildi");//d arxivni statusi
-                diplomaRepository.save(diploma);
-                application.setApplicationStatus("Diplom Rad etildi");
-                application.setDiplomaMessage(request.getMessage());
-            }
+            diploma.setStatusName("Rad etildi");//d arxivni statusi
+            diplomaRepository.save(diploma);
+            application.setApplicationStatus("Diplom Rad etildi");
+            application.setDiplomaMessage(request.getMessage());
             Application save = applicationRepository.save(application);
             String encode = userService.encode(save.getUser().getPinfl());
             CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
@@ -116,6 +131,7 @@ public class AdminService {
             requestMyEdu.setData(save.getKvota());
             myEduApiService.updateApp(encode, requestMyEdu);
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
