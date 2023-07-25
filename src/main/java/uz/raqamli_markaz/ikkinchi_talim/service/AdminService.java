@@ -218,7 +218,6 @@ public class AdminService {
                 return new Result("Diplom tasdiqlanmagan ", false);
             }
             Application application = applicationRepository.findById(request.getApplicationId()).get();
-            if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
                 application.setApplicationStatus("Ariza rad etildi");
                 application.setApplicationMessage(request.getMessage());
                 Application save = applicationRepository.save(application);
@@ -229,8 +228,6 @@ public class AdminService {
                 requestMyEdu.setData(save.getKvota());
                 myEduApiService.updateApp(encode, requestMyEdu);
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-            }
-            return new Result("Diplom tasdiqlanmagan ", false);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
