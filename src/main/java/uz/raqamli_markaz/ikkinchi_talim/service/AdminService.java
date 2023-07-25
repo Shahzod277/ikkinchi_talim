@@ -219,16 +219,16 @@ public class AdminService {
             }
             //Admin uchun
             Application application = applicationRepository.findById(request.getApplicationId()).get();
-                application.setApplicationStatus("Ariza rad etildi");
-                application.setApplicationMessage(request.getMessage());
-                Application save = applicationRepository.save(application);
-                String encode = userService.encode(save.getUser().getPinfl());
-                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-                requestMyEdu.setExternalId(save.getId().toString());
-                requestMyEdu.setStatus(save.getApplicationStatus());
-                requestMyEdu.setData(save.getKvota());
-                myEduApiService.updateApp(encode, requestMyEdu);
-                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            application.setApplicationStatus("Ariza rad etildi");
+            application.setApplicationMessage(request.getMessage());
+            Application save = applicationRepository.save(application);
+            String encode = userService.encode(save.getUser().getPinfl());
+            CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+            requestMyEdu.setExternalId(save.getId().toString());
+            requestMyEdu.setStatus(save.getApplicationStatus());
+            requestMyEdu.setData(save.getKvota());
+            myEduApiService.updateApp(encode, requestMyEdu);
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
@@ -408,6 +408,47 @@ public class AdminService {
             if (user.getUniversityCode() != null) {
                 University university = universityRepository.findByCode(user.getUniversityCode()).get();
                 statisticCountUAdmin.setUniversity(university.getName());
+                List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
+                Map<String, Integer> app = new HashMap<>();
+                app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
+                app.put("Diplom Rad etildi", 0);
+                app.put("Diplom Tasdiqlangan", 0);
+                app.put("Ariza tasdiqlandi", 0);
+                app.put("Ariza rad etildi", 0);
+                app.put("total", 0);
+                Thread thread1 = new Thread(() -> {
+                    appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
+                    int appSum = app.values().stream().mapToInt(d -> d).sum();
+                    app.put("total", appSum);
+
+                });
+                thread1.start();
+                try {
+                    thread1.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
+                Map<String, Integer> diplomaForeign = new HashMap<>();
+                diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
+                diplomaForeign.put("Rad etildi", 0);
+                diplomaForeign.put("Tasdiqlangan", 0);
+                diplomaForeign.put("total", 0);
+                Thread thread = new Thread(() -> {
+                    diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
+                    int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
+                    diplomaForeign.put("total", appForeignSum);
+
+
+                });
+                thread.start();
+                statisticCountUAdmin.setForeignDiploma(diplomaForeign);
+                statisticCountUAdmin.setApplication(app);
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 DiplomaInstitution diplomaInstitution = diplomaInstitutionRepository.findByClassificatorId(user.getDiplomaInstitutionId()).get();
                 statisticCountUAdmin.setUniversity(diplomaInstitution.getInstitutionNameOz());
@@ -420,9 +461,9 @@ public class AdminService {
                 diploma.put("Tasdiqlangan", 0);
                 diploma.put("total", 0);
                 Thread thread = new Thread(() -> {
-                diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
-                int sum = diploma.values().stream().mapToInt(d -> d).sum();
-                diploma.put("total", sum);
+                    diplomaStatisticProjections.forEach(d -> diploma.put(d.getStatus(), d.getCount()));
+                    int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                    diploma.put("total", sum);
                 });
                 thread.start();
                 try {
@@ -433,49 +474,6 @@ public class AdminService {
                 statisticCountUAdmin.setNationalDiploma(diploma);
 
             }
-
-            List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
-            Map<String, Integer> app = new HashMap<>();
-            app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
-            app.put("Diplom Rad etildi", 0);
-            app.put("Diplom Tasdiqlangan", 0);
-            app.put("Ariza tasdiqlandi", 0);
-            app.put("Ariza rad etildi", 0);
-            app.put("total", 0);
-            Thread thread1 = new Thread(() -> {
-            appStatisticCount.forEach(a -> app.put(a.getStatus(), a.getCount()));
-            int appSum = app.values().stream().mapToInt(d -> d).sum();
-            app.put("total", appSum);
-
-            });
-            thread1.start();
-            try {
-                thread1.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            List<DiplomaStatisticProjection> diplomaForeignStatisticCount = diplomaRepository.diplomaForeignStatisticCount(user.getUniversityCode());
-            Map<String, Integer> diplomaForeign = new HashMap<>();
-            diplomaForeign.put("Haqiqiyligi tekshirilmoqda", 0);
-            diplomaForeign.put("Rad etildi", 0);
-            diplomaForeign.put("Tasdiqlangan", 0);
-            diplomaForeign.put("total", 0);
-            Thread thread = new Thread(() -> {
-            diplomaForeignStatisticCount.forEach(df -> diplomaForeign.put(df.getStatus(), df.getCount()));
-            int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
-            diplomaForeign.put("total", appForeignSum);
-
-
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            statisticCountUAdmin.setForeignDiploma(diplomaForeign);
-            statisticCountUAdmin.setApplication(app);
             list.add(statisticCountUAdmin);
 
 
