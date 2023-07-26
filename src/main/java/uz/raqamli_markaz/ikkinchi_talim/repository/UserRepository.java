@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @EntityGraph(attributePaths = "role")
     Optional<User> findUserByPinfl(String pinfl);
 
-    @Query(value = "select u from User  u where  u.role.id=1")
+    @Query(value = "select u from User u where u.role.id=1")
     List<User> findAllByUadmin();
 
 }
