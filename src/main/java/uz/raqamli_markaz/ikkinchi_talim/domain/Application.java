@@ -15,7 +15,6 @@ public class Application extends AbstractEntity {
 
     private String applicationStatus;
     private String applicationMessage;
-    @Lob
     private String diplomaMessage;
 
     @ManyToOne
