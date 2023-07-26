@@ -1,9 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +14,9 @@ import lombok.Setter;
 public class Application extends AbstractEntity {
 
     private String applicationStatus;
+    @Column(columnDefinition = "TEXT")
     private String applicationMessage;
+    @Column(columnDefinition = "TEXT")
     private String diplomaMessage;
 
     @ManyToOne
