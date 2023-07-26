@@ -13,6 +13,5 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.AbstractEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Country extends AbstractEntity {
-
     String name;
 }
