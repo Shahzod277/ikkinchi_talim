@@ -144,11 +144,18 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         if (!user.getRole().getName().equals("ROLE_ADMIN")) {
+            if (user.getDiplomaInstitutionId() == 72) {
+                if (search.equals("null")) {
+                    return diplomaRepository.getAllDiplomaByStatusQoqon(user.getDiplomaInstitutionId(), status, pageable);
+                }
+                return diplomaRepository.getAllDiplomaSearchQoqon(user.getDiplomaInstitutionId(), status, search, pageable);
+            }
             if (search.equals("null")) {
                 return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
             }
             return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
         }
+
         if (search.equals("null")) {
             return diplomaRepository.getAllDiplomaByStatusAdmin(status, pageable);
         }
@@ -219,16 +226,16 @@ public class AdminService {
             }
             //Admin uchun
             Application application = applicationRepository.findById(request.getApplicationId()).get();
-                application.setApplicationStatus("Ariza rad etildi");
-                application.setApplicationMessage(request.getMessage());
-                Application save = applicationRepository.save(application);
-                String encode = userService.encode(save.getUser().getPinfl());
-                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
-                requestMyEdu.setExternalId(save.getId().toString());
-                requestMyEdu.setStatus(save.getApplicationStatus());
-                requestMyEdu.setData(save.getKvota());
-                myEduApiService.updateApp(encode, requestMyEdu);
-                return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            application.setApplicationStatus("Ariza rad etildi");
+            application.setApplicationMessage(request.getMessage());
+            Application save = applicationRepository.save(application);
+            String encode = userService.encode(save.getUser().getPinfl());
+            CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+            requestMyEdu.setExternalId(save.getId().toString());
+            requestMyEdu.setStatus(save.getApplicationStatus());
+            requestMyEdu.setData(save.getKvota());
+            myEduApiService.updateApp(encode, requestMyEdu);
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
