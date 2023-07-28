@@ -22,7 +22,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     Page<DiplomaResponseProjection> getAllDiplomaByStatus(Integer instId, String status, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 and d.institution_id=1025  or d.status_name=?2 ")
+            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 or d.institution_id=1025  and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllDiplomaByStatusQoqon(Integer instId, String status, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
