@@ -327,18 +327,35 @@ public class AdminService {
                 statisticCountUAdmin.setUniversity(university.getName());
                 statisticCountUAdmin.setFullName(user.getFullName());
             }
-            List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
-            Map<String, Integer> diploma = new HashMap<>();
-            diploma.put("Haqiqiyligi tekshirilmoqda", 0);
-            diploma.put("Rad etildi", 0);
-            diploma.put("Tasdiqlangan", 0);
-            diploma.put("total", 0);
+            if (user.getDiplomaInstitutionId() == 72) {
+                List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCountQoqon(user.getDiplomaInstitutionId());
+                Map<String, Integer> diploma = new HashMap<>();
+                diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+                diploma.put("Rad etildi", 0);
+                diploma.put("Tasdiqlangan", 0);
+                diploma.put("total", 0);
+                diplomaStatisticProjections.forEach(d -> {
+                    diploma.put(d.getStatus(), d.getCount());
+                });
+                int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                diploma.put("total", sum);
+                statisticCountUAdmin.setNationalDiploma(diploma);
 
-            diplomaStatisticProjections.forEach(d -> {
-                diploma.put(d.getStatus(), d.getCount());
-            });
-            int sum = diploma.values().stream().mapToInt(d -> d).sum();
-            diploma.put("total", sum);
+            } else {
+                List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCount(user.getDiplomaInstitutionId());
+                Map<String, Integer> diploma = new HashMap<>();
+                diploma.put("Haqiqiyligi tekshirilmoqda", 0);
+                diploma.put("Rad etildi", 0);
+                diploma.put("Tasdiqlangan", 0);
+                diploma.put("total", 0);
+                diplomaStatisticProjections.forEach(d -> {
+                    diploma.put(d.getStatus(), d.getCount());
+                });
+                int sum = diploma.values().stream().mapToInt(d -> d).sum();
+                diploma.put("total", sum);
+                statisticCountUAdmin.setNationalDiploma(diploma);
+            }
+
             List<DiplomaStatisticProjection> appStatisticCount = applicationRepository.appStatisticCount(user.getUniversityCode());
             Map<String, Integer> app = new HashMap<>();
             app.put("Diplom Haqiqiyligi tekshirilmoqda", 0);
@@ -361,7 +378,6 @@ public class AdminService {
             int appForeignSum = diplomaForeign.values().stream().mapToInt(d -> d).sum();
             diplomaForeign.put("total", appForeignSum);
 
-            statisticCountUAdmin.setNationalDiploma(diploma);
             statisticCountUAdmin.setForeignDiploma(diplomaForeign);
             statisticCountUAdmin.setApplication(app);
             return statisticCountUAdmin;

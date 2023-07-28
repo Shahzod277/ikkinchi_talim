@@ -22,7 +22,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     Page<DiplomaResponseProjection> getAllDiplomaByStatus(Integer instId, String status, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 or d.institution_id=1025  and d.status_name=?2 ")
+            "inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025)  and d.status_name=?2 ")
     Page<DiplomaResponseProjection> getAllDiplomaByStatusQoqon(Integer instId, String status, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             "u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
@@ -36,7 +36,7 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     Page<DiplomaResponseProjection> getAllDiplomaSearch(Integer instId, String status, String search, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 or d.institution_id=1025 and d.status_name=?2 and " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025) and d.status_name=?2 and " +
             " (u.full_name ilike %?3% or CAST(d.id  AS varchar(255)) ilike %?3% or concat(d.diploma_serial,d.diploma_number) ilike %?3%) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearchQoqon(Integer instId, String status, String search, Pageable pageable);
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
@@ -143,6 +143,11 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and d.institution_id=?1 group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaStatisticCount(Integer id);
+
+    @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025) " +
+            " group by d.status_name order by d.status_name ")
+    List<DiplomaStatisticProjection> diplomaStatisticCountQoqon(Integer id);
     @Query(nativeQuery = true, value = "select count(d.id) count ,d.status_name status from application a inner join users u on u.id = a.user_id " +
             " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true group by d.status_name order by d.status_name ")
     List<DiplomaStatisticProjection> diplomaStatisticCountAdmin();
