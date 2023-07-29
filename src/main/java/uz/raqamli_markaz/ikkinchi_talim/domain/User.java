@@ -33,7 +33,6 @@ public class User extends AbstractEntity {
     private String fotoUrl;
 
     private Integer diplomaInstitutionId;
-
     private String universityCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
