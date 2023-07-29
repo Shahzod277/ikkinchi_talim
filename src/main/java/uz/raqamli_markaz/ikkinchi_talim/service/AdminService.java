@@ -504,17 +504,16 @@ public class AdminService {
 
             List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignlDiplomaDate(user.getUniversityCode());
             List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDate(user.getDiplomaInstitutionId());
-//            List<GetCountAppallDate> countAppallDate = applicationRepository.getCountAppallDate(user.getUniversityCode());
+            List<GetCountAppallDate> countAppallDate = applicationRepository.getCountAppallDate(user.getUniversityCode());
             CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
             Map<String, List<GetCountAppallDate>> map = new HashMap();
 
-//            map.put("application", countAppallDate);
+            map.put("application", countAppallDate);
             map.put("foreignDiploma", countByForeignlDiplomaDate);
             map.put("nationalDiploma", countByNationalDiplomaDate);
             countAllDateStatistic.setStatisticByDate(map);
 
             Map<String, List<GetAppByGender>> hashMap = new HashMap();
-
             List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGender(user.getDiplomaInstitutionId());
             List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGender(user.getUniversityCode());
             List<GetAppByGender> appByGender = applicationRepository.getCountAppByGender(user.getUniversityCode());
