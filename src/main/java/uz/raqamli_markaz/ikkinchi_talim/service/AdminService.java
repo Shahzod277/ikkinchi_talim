@@ -68,7 +68,11 @@ public class AdminService {
                     requestMyEdu.setExternalId(save.getId().toString());
                     requestMyEdu.setStatus(save.getApplicationStatus());
                     requestMyEdu.setData(save.getKvota());
-                    myEduApiService.updateApp(encode, requestMyEdu);
+                    try {
+                        myEduApiService.updateApp(encode, requestMyEdu);
+                    }catch (Exception e ){
+                        myEduApiService.createApp(encode,requestMyEdu);
+                    }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
                 }
                 //Admin uchun
@@ -112,7 +116,11 @@ public class AdminService {
                 requestMyEdu.setExternalId(save.getId().toString());
                 requestMyEdu.setStatus(save.getApplicationStatus());
                 requestMyEdu.setData(save.getKvota());
-                myEduApiService.updateApp(encode, requestMyEdu);
+                try {
+                    myEduApiService.updateApp(encode, requestMyEdu);
+                }catch (Exception e ){
+                    myEduApiService.createApp(encode,requestMyEdu);
+                }
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
             //Admin uchun
@@ -219,7 +227,11 @@ public class AdminService {
                     requestMyEdu.setExternalId(save.getId().toString());
                     requestMyEdu.setStatus(save.getApplicationStatus());
                     requestMyEdu.setData(save.getKvota());
-                    myEduApiService.updateApp(encode, requestMyEdu);
+                    try {
+                        myEduApiService.updateApp(encode, requestMyEdu);
+                    }catch (Exception e ){
+                        myEduApiService.createApp(encode,requestMyEdu);
+                    }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
                 }
                 return new Result("Diplom tasdiqlanmagan ", false);
@@ -234,8 +246,11 @@ public class AdminService {
             requestMyEdu.setExternalId(save.getId().toString());
             requestMyEdu.setStatus(save.getApplicationStatus());
             requestMyEdu.setData(save.getKvota());
-            myEduApiService.updateApp(encode, requestMyEdu);
-            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            try {
+                myEduApiService.updateApp(encode, requestMyEdu);
+            }catch (Exception e ){
+                myEduApiService.createApp(encode,requestMyEdu);
+            }            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
