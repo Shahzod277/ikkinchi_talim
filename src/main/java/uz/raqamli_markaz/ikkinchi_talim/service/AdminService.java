@@ -73,8 +73,8 @@ public class AdminService {
                     requestMyEdu.setData(save.getKvota());
                     try {
                         myEduApiService.updateApp(encode, requestMyEdu);
-                    }catch (Exception e ){
-                        myEduApiService.createApp(encode,requestMyEdu);
+                    } catch (Exception e) {
+                        myEduApiService.createApp(encode, requestMyEdu);
                     }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
                 }
@@ -121,8 +121,8 @@ public class AdminService {
                 requestMyEdu.setData(save.getKvota());
                 try {
                     myEduApiService.updateApp(encode, requestMyEdu);
-                }catch (Exception e ){
-                    myEduApiService.createApp(encode,requestMyEdu);
+                } catch (Exception e) {
+                    myEduApiService.createApp(encode, requestMyEdu);
                 }
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
             }
@@ -232,13 +232,26 @@ public class AdminService {
                     requestMyEdu.setData(save.getKvota());
                     try {
                         myEduApiService.updateApp(encode, requestMyEdu);
-                    }catch (Exception e ){
-                        myEduApiService.createApp(encode,requestMyEdu);
+                    } catch (Exception e) {
+                        myEduApiService.createApp(encode, requestMyEdu);
                     }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+                } else if (request.getIsConfirm() == 2 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                    User applicationUser = application.getUser();
+                    Optional<Diploma> diploma = diplomaRepository.findActiveDiplomaByUser(applicationUser.getId());
+                    if (diploma.isPresent()) {
+                        diploma.get().setStatusName("Rad etildi");//d arxivni statusi
+                        diplomaRepository.save(diploma.get());
+                        application.setApplicationStatus("Diplom Rad etildi");
+                        application.setApplicationMessage(request.getMessage());
+                        applicationRepository.save(application);
+                        return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+
+                    }
                 }
                 return new Result("Diplom tasdiqlanmagan ", false);
             }
+
             //Admin uchun
             Application application = applicationRepository.findById(request.getApplicationId()).get();
             application.setApplicationStatus("Ariza rad etildi");
@@ -251,13 +264,15 @@ public class AdminService {
             requestMyEdu.setData(save.getKvota());
             try {
                 myEduApiService.updateApp(encode, requestMyEdu);
-            }catch (Exception e ){
-                myEduApiService.createApp(encode,requestMyEdu);
-            }            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
+            } catch (Exception e) {
+                myEduApiService.createApp(encode, requestMyEdu);
+            }
+            return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR.getMessage(), false);
         }
+
     }
 
     @Transactional(readOnly = true)
