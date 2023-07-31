@@ -86,4 +86,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " inner join users u on u.id = a.user_id inner join kvota k2 on k2.id = a.kvota_id inner join diploma d on u.id = d.user_id " +
             " where d.is_active=true group by u.gender ")
     List<GetAppByGender> getCountAppByGenderAdmin();
+    @Query(nativeQuery = true, value = "select count(a.id) as count, CAST(a.created_date AS DATE) as date from application as a " +
+            " inner join users u on u.id = a.user_id inner join diploma d on u.id = d.user_id inner join kvota k on k.id = a.kvota_id " +
+            " where k.university_code=?1 and d.is_active=true group by CAST(a.created_date AS DATE) order by date")
+    List<GetCountAppallDate> getCountAppAllDate(String code);
 }
