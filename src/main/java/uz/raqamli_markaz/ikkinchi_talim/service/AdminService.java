@@ -2,7 +2,6 @@ package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import uz.raqamli_markaz.ikkinchi_talim.model.request.ConfirmDiplomaRequest;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
-import javax.swing.plaf.PanelUI;
 import java.security.Principal;
 import java.util.*;
 
@@ -45,7 +43,12 @@ public class AdminService {
             if (request.getIsNational() == 1) {
 
                 if (!user.getRole().getName().equals("ROLE_ADMIN")) {
-                    Diploma diploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId()).get();
+
+                    Optional<Diploma> optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId());
+                    if (optionalDiploma.isEmpty()) {
+                        optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(1025, request.getDiplomaId());
+                    }
+                    Diploma diploma = optionalDiploma.get();
                     Integer userId = diploma.getUser().getId();
                     Application application = applicationRepository.findByUserId(userId).get();
 
@@ -397,6 +400,7 @@ public class AdminService {
             statisticCountUAdmin.setApplication(app);
             return statisticCountUAdmin;
         }
+        //Admin
         List<DiplomaStatisticProjection> diplomaStatisticProjections = diplomaRepository.diplomaStatisticCountAdmin();
         Map<String, Integer> diploma = new HashMap<>();
         diploma.put("Haqiqiyligi tekshirilmoqda", 0);
@@ -516,17 +520,18 @@ public class AdminService {
 
             List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignlDiplomaDate(user.getUniversityCode());
             List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDate(user.getDiplomaInstitutionId());
-            List<GetCountAppallDate> countAppallDate = applicationRepository.geetCountAppallDate(user.getUniversityCode());
-            CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
-            Map<String, List<GetCountAppallDate>> map = new HashMap();
 
-            map.put("application", countAppallDate);
+            List<GetCountAppallDate> countAppAllDate = applicationRepository.getCountAppAllDate(user.getUniversityCode());
+
+            CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
+            Map<String, List<GetCountAppallDate>> map = new HashMap<>();
+
+            map.put("application", countAppAllDate);
             map.put("foreignDiploma", countByForeignlDiplomaDate);
             map.put("nationalDiploma", countByNationalDiplomaDate);
             countAllDateStatistic.setStatisticByDate(map);
 
-            Map<String, List<GetAppByGender>> hashMap = new HashMap();
-
+            Map<String, List<GetAppByGender>> hashMap = new HashMap<>();
             List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGender(user.getDiplomaInstitutionId());
             List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGender(user.getUniversityCode());
             List<GetAppByGender> appByGender = applicationRepository.getCountAppByGender(user.getUniversityCode());
@@ -536,18 +541,19 @@ public class AdminService {
             countAllDateStatistic.setStatisticByGender(hashMap);
             return countAllDateStatistic;
         }
+        //Admin
         List<GetCountAppallDate> countByForeignlDiplomaDate = diplomaRepository.getCountByForeignDiplomaDateAdmin();
         List<GetCountAppallDate> countByNationalDiplomaDate = diplomaRepository.getCountByNationalDiplomaDateAdmin();
         List<GetCountAppallDate> countAppallDate = applicationRepository.getCountAppallDateAdmin();
         CountAllDateStatistic countAllDateStatistic = new CountAllDateStatistic();
-        Map<String, List<GetCountAppallDate>> map = new HashMap();
+        Map<String, List<GetCountAppallDate>> map = new HashMap<>();
 
         map.put("application", countAppallDate);
         map.put("foreignDiploma", countByForeignlDiplomaDate);
         map.put("nationalDiploma", countByNationalDiplomaDate);
         countAllDateStatistic.setStatisticByDate(map);
 
-        Map<String, List<GetAppByGender>> hashMap = new HashMap();
+        Map<String, List<GetAppByGender>> hashMap = new HashMap<>();
 
         List<GetAppByGender> nationalDiplomaVByGender = diplomaRepository.getCountNationalDiplomaVByGenderAdmin();
         List<GetAppByGender> foreignDiplomaVByGender = diplomaRepository.getCountForeignDiplomaVByGenderAdmin();

@@ -13,7 +13,5 @@ public interface DiplomaOldInstitutionRepository extends JpaRepository<DiplomaOl
 
     @Query("select d from DiplomaOldInstitution d where d.classificatorId = ?1 and d.institutionOldId=?2")
     Optional<DiplomaOldInstitution> findDiplomaOldInstitutionByOldId(Integer id,Integer oldId);
-    @Query(value = "select distinct d.classificatorId from DiplomaOldInstitution d ")
-    List<Integer> getAllDiplomaInst();
 
 }

@@ -12,6 +12,6 @@ import java.util.Map;
 @Setter
 public class CountAllDateStatistic {
 
-    Map<String,List<GetCountAppallDate>> statisticByDate   =new HashMap();
-    Map<String,List<GetAppByGender>> statisticByGender   =new HashMap();
+    Map<String, List<GetCountAppallDate>> statisticByDate = new HashMap<>();
+    Map<String, List<GetAppByGender>> statisticByGender = new HashMap<>();
 }
