@@ -220,7 +220,7 @@ public class AdminService {
                     requestMyEdu.setData(save.getKvota());
                     myEduApiService.updateApp(encode, requestMyEdu);
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-                } else if (request.getIsConfirm() == 0 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                } else if (request.getIsConfirm() == 0) {
                     application.setApplicationStatus("Ariza rad etildi");
                     application.setApplicationMessage(request.getMessage());
                     Application save = applicationRepository.save(application);
@@ -235,7 +235,7 @@ public class AdminService {
                         myEduApiService.createApp(encode, requestMyEdu);
                     }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-                } else if (request.getIsConfirm() == 2 && application.getApplicationStatus().equals("Diplom Tasdiqlangan")) {
+                } else if (request.getIsConfirm() == 2) {
                     User applicationUser = application.getUser();
                     Optional<Diploma> diploma = diplomaRepository.findActiveDiplomaByUser(applicationUser.getId());
                     if (diploma.isPresent()) {
