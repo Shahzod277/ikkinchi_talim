@@ -32,7 +32,6 @@ public class AdminService {
     private final MyEduApiService myEduApiService;
     private final UserService userService;
     private final UniversityRepository universityRepository;
-    private final DiplomaOldInstitutionRepository diplomaOldInstitutionRepository;
     private final DiplomaInstitutionRepository diplomaInstitutionRepository;
 
     @Transactional
