@@ -30,7 +30,7 @@ public class ExcelHelper {
     private final ApplicationRepository applicationRepository;
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name" };
+    static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name" };
     static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date" };
     static String SHEET = "Report";
 
@@ -109,10 +109,11 @@ public class ExcelHelper {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(responses.getId() == null? 0 : responses.getId());
                 row.createCell(1).setCellValue(responses.getSpeciality());
-                row.createCell(2).setCellValue(responses.getDiplomaAndSerial());
-                row.createCell(3).setCellValue(responses.getFullName());
-                row.createCell(4).setCellValue(responses.getPhoneNumber());
-                row.createCell(5).setCellValue(responses.getInstitutionName());
+                row.createCell(2).setCellValue(responses.getTalimShakli());
+                row.createCell(3).setCellValue(responses.getDiplomaAndSerial());
+                row.createCell(4).setCellValue(responses.getFullName());
+                row.createCell(5).setCellValue(responses.getPhoneNumber());
+                row.createCell(6).setCellValue(responses.getInstitutionName());
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
