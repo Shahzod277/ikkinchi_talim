@@ -7,6 +7,8 @@ Integer getId();
 String getFullName();
 String getPhoneNumber();
 String getSpeciality();
+String getEduForm();
+String getLang();
 String getUniversity();
 LocalDate getCreateDate();
 }

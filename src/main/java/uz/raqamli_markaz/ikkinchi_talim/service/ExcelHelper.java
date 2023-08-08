@@ -31,7 +31,7 @@ public class ExcelHelper {
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name" };
-    static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date" };
+    static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date","EduForm","EduLanguage" };
     static String SHEET = "Report";
 
     @Transactional
@@ -143,6 +143,8 @@ public class ExcelHelper {
                 row.createCell(3).setCellValue(responses.getPhoneNumber());
                 row.createCell(4).setCellValue(responses.getUniversity());
                 row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+                row.createCell(6).setCellValue(responses.getEduForm());;
+                row.createCell(7).setCellValue(responses.getLang());;
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
