@@ -28,22 +28,26 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " where a.application_status=?1 ",nativeQuery = true)
     Page<AppResponseProjection> findAllApplicationByUniversityAdmin(String status, Pageable pageable);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
+            " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 and a.application_status=?2 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatus(String universityCode, String status);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
+            " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where a.application_status=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatusAdmin(String status);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm," +
+            " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
             " where k.university_code=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcel(String universityCode);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality, k.university_name university, u.phone_number phoneNumber, " +
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
+            " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
             " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelAdmin();
 

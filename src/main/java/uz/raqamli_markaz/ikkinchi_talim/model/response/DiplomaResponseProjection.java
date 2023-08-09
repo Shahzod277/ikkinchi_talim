@@ -13,4 +13,6 @@ public interface DiplomaResponseProjection {
 
     String getInstitutionName();
 
+    String getTalimShakli();
+
 }
