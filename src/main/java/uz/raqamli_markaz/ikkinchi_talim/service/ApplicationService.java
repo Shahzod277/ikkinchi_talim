@@ -62,7 +62,7 @@ public class ApplicationService {
 //            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
 //        }
-        return new Result("(Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
+        return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
     }
 
     @Transactional
