@@ -65,6 +65,7 @@ public class ApplicationService {
         return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
     }
 
+
     @Transactional
     public Result updateApplication(String token, Integer kvotaId) {
         try {
