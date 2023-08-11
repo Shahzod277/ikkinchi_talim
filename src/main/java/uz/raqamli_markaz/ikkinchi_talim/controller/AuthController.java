@@ -26,7 +26,6 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthService authService;
-
     @PostMapping("signIn")
     public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest){
         try {
