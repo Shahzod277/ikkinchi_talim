@@ -109,7 +109,6 @@ public class UserService {
         System.out.println(encodedMessage);
         return encodedMessage;
     }
-
     @Transactional
     public void test() {
         try {
