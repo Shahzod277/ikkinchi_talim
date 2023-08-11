@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -115,22 +116,29 @@ public class UserService {
     @Transactional
     public void test() {
         try {
-            List<User> users = new ArrayList<>();
-            List<User> all = userRepository.findAllByRoleIsNull();
-            all.forEach(user -> {
-                try {
-                    String encode = encode(user.getPinfl());
-                    UserResponseMyEdu myEdu = myEduApiService.getUserByToken(encode);
+        List<User> all = userRepository.findAllByRoleIsNull();
+        AtomicInteger a = new AtomicInteger();
+        all.forEach(user -> {
+            try {
+                String encode = encode(user.getPinfl());
+                UserResponseMyEdu myEdu = myEduApiService.getUserByToken(encode);
+                if (myEdu.getPassport() != null) {
                     Passport passport = myEdu.getPassport();
                     user.setPassportSerial(passport.getSerial());
                     user.setPassportNumber(passport.getNumber());
                     user.setModifiedDate(LocalDateTime.now());
-                    users.add(user);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    a.getAndIncrement();
+                    System.out.println("Aaaaaaa" + a.get());
+                    Thread thread = new Thread(() -> {
+                        userRepository.save(user);
+                    });
+                    thread.start();
+                    thread.join();
                 }
-            });
-            userRepository.saveAll(users);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }

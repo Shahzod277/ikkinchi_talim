@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "select u from User u where u.role.id=1")
     List<User> findAllByUadmin();
-    @Query("select u from User u where u.role.id is null ")
+    @Query("select u from User u where u.application.kvota.specialityCode='60420100' or u.application.kvota.specialityCode='60812000' ")
     List<User> findAllByRoleIsNull();
 
 }
