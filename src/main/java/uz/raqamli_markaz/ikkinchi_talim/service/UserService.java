@@ -21,6 +21,7 @@ import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -110,9 +111,11 @@ public class UserService {
         System.out.println(encodedMessage);
         return encodedMessage;
     }
+
     @Transactional
     public void test() {
         try {
+            List<User> users = new ArrayList<>();
             List<User> all = userRepository.findAllByRoleIsNull();
             all.forEach(user -> {
                 try {
@@ -122,11 +125,12 @@ public class UserService {
                     user.setPassportSerial(passport.getSerial());
                     user.setPassportNumber(passport.getNumber());
                     user.setModifiedDate(LocalDateTime.now());
-                    userRepository.save(user);
+                    users.add(user);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
+            userRepository.saveAll(users);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
