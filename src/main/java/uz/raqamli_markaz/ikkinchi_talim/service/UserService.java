@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
+import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.Passport;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
@@ -115,12 +116,14 @@ public class UserService {
             List<User> all = userRepository.findAllByRoleIsNull();
             all.forEach(user -> {
                 try {
-                    String encode = encode(user.getPinfl());
+                    String encode = encode("31003847100018");
                     UserResponseMyEdu myEdu = myEduApiService.getUserByToken(encode);
-                    user.setPassportSerial(myEdu.getPassport().getSerial());
-                    user.setPassportNumber(myEdu.getPassport().getNumber());
+                    Passport passport = myEdu.getPassport();
+                    user.setPassportSerial(passport.getSerial());
+                    user.setPassportNumber(passport.getNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
+                    System.out.println(myEdu);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
