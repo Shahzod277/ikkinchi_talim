@@ -123,7 +123,6 @@ public class UserService {
                     user.setPassportNumber(passport.getNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
-                    System.out.println(myEdu);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
