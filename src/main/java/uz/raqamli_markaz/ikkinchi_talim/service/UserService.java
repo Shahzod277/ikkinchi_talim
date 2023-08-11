@@ -116,7 +116,7 @@ public class UserService {
             List<User> all = userRepository.findAllByRoleIsNull();
             all.forEach(user -> {
                 try {
-                    String encode = encode("31003847100018");
+                    String encode = encode(user.getPinfl());
                     UserResponseMyEdu myEdu = myEduApiService.getUserByToken(encode);
                     Passport passport = myEdu.getPassport();
                     user.setPassportSerial(passport.getSerial());
