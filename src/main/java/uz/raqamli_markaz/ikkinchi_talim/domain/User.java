@@ -24,7 +24,7 @@ public class User extends AbstractEntity {
     private String dateOfBirth;
     private String gender;
     private String passportSerial;
-    private Integer passportNumber;
+    private String passportNumber;
     private String passportGivenDate;
     private String pinfl;
     private String phoneNumber;

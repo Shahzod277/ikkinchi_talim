@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class Passport{
+public class Passport {
 
-	@JsonProperty("pinfl")
-	private String pinfl;
+    @JsonProperty("pinfl")
+    private String seria;
+    @JsonProperty("serial")
+    private String serial;
+    @JsonProperty("number")
+    private String number;
 }

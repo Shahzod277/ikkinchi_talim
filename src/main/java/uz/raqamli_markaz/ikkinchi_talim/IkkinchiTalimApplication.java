@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import uz.raqamli_markaz.ikkinchi_talim.service.DiplomaService;
+import uz.raqamli_markaz.ikkinchi_talim.service.UserService;
 import uz.raqamli_markaz.ikkinchi_talim.service.Utils;
 
 import javax.crypto.BadPaddingException;
@@ -30,7 +31,7 @@ import java.util.Base64;
 public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Autowired
-	private Utils utils;
+	private UserService userService;
 
 
 	public static void main(String[] args) {
@@ -42,7 +43,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //utils.saveInstitution();
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
-//		utils.test();
+		userService.test();
 	}
 
 //	public void generateKeys() throws NoSuchAlgorithmException {
