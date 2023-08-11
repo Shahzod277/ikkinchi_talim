@@ -27,7 +27,7 @@ public class Citizen{
 
 	public Citizen(User user) {
 		this.pinfl = Long.parseLong(user.getPinfl());
-		this.passportNumber = user.getPassportNumber();
+//		this.passportNumber = user.getPassportNumber();
 		this.passportSerial = user.getPassportSerial();
 		this.givenDate = user.getPassportGivenDate();
 	}
