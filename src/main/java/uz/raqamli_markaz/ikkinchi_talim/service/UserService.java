@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.Passport;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
+import uz.raqamli_markaz.ikkinchi_talim.model.request.PinflRequest;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.PinflResponse1;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
@@ -34,6 +37,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MyEduApiService myEduApiService;
+    private final IIBServiceApi iibServiceApi;
     String myEduPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCe6PeC7/ufFdTfIr00axHB+vGAJxlH8X0HG6pMixXQgDL95AcBZO/e6wFkfZ/oh0J9WD7am1v1ASUtocx3XeGLelxZfAaiOInQ+Qn/EcjSlKqO+uckxcFKac6iBcoahrymFWQVvcbN6p5xdcOBdj6nO1onRvsWkk2sxcRAlzrUHwIDAQAB";
     String privateKey = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAISfguHXlZp2BzVrUaT+8blLPepjhxjozOCk8BJu6TteMBynTOT7EAC5H00h5MZwT7TgRkImwbk2FcFeAeGQjvSDsVTUbZlakC/wB1AA4UqcUm3OJlC77o6//pTb9wBH+lKlsAvY+PrAiAKwAMTDHFs6Q/ACY74ZbIFLY3O4MFNfAgMBAAECgYAQ8aQyIG3/pvayz3xF3UCa0M8fRAn9l7idNtVpNXxc1mLFNmavlpfrz7r9CsiExdKZJFI1n2f+trc+1jjdTa/FxHshzVB2q29GfeHR/Iu8tjw6ypWcXT4kJdj6wNRYpgMsYRV/f6Sk7Ngp+M9+NeXOj+xX1+EH7UiyDpNSXRwAmQJBALrnl0q/Z2wJiK4XN+8aHTEgroJmhb+NpC0mVDu5DldJWswdK4s/Kvh4C4SHhduEDeC541hjA3CXaUo1AFs9hBsCQQC1psj9VeV/qicN1FYf2coVSChTKp8lhC/yifakPoLp0UX9iHaKzypzTqYWTUdsSZ63d4dKnUa9+Iy6yZZbj7oNAkBEmAIaWKyoJceXvMW2ZqsYAJqLGP01E9KRD2QSlxQATNeZ2YrFi+VFUylG9kXWDlzZgN9C7POyOp9VsKX01lrJAkEAgoNN328K0HoBS1dndcT2A+pvRqnV5I+gH4PumL1tM++veOTGPx9voZ89h8KIcY5HogwYQYzU2gMtobra8/hFNQJAa+NCJazCnUhwL7Nt+jS/wzHToLTWV1ZtLUo3iiMA6R5IegdnxfW6R8LAHNcx/ZhXEbv9ZCV08kU/dtMgSfzqoA==";
     String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
@@ -113,35 +117,22 @@ public class UserService {
         return encodedMessage;
     }
 
+
     @Transactional
     public void test() {
-        try {
         List<User> all = userRepository.findAllByRoleIsNull();
-        AtomicInteger a = new AtomicInteger();
-        all.forEach(user -> {
-            try {
-                String encode = encode(user.getPinfl());
-                UserResponseMyEdu myEdu = myEduApiService.getUserByToken(encode);
-                if (myEdu.getPassport() != null) {
-                    Passport passport = myEdu.getPassport();
-                    user.setPassportSerial(passport.getSerial());
-                    user.setPassportNumber(passport.getNumber());
-                    user.setModifiedDate(LocalDateTime.now());
-                    a.getAndIncrement();
-                    System.out.println("Aaaaaaa" + a.get());
-                    Thread thread = new Thread(() -> {
-                        userRepository.save(user);
-                    });
-                    thread.start();
-                    thread.join();
-                }
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        List<String> list = all.stream().map(User::getPinfl).toList();
+        PinflRequest request = new PinflRequest();
+        request.setPinfls(list);
+        List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
+        response.forEach(pinflResponse1 -> {
+            User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
+            if (pinflResponse1.getPassportSerial().isEmpty()) {
+                user.setPassportSerial(pinflResponse1.getPassportSerial());
+                user.setPassportSerial(pinflResponse1.getPassportNumber());
+                user.setModifiedDate(LocalDateTime.now());
+                userRepository.save(user);
             }
         });
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-        }
     }
-
 }
