@@ -129,7 +129,7 @@ public class UserService {
                 User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
                 if (pinflResponse1.getPassportSerial().isEmpty()) {
                     user.setPassportSerial(pinflResponse1.getPassportSerial());
-                    user.setPassportSerial(pinflResponse1.getPassportNumber());
+                    user.setPassportNumber(pinflResponse1.getPassportNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
 
