@@ -119,10 +119,9 @@ public class UserService {
 
 
     public void test() {
-        List<User> all = userRepository.findAllByRoleIsNull();
-        List<String> list = all.stream().map(User::getPinfl).toList();
+        List<String> all = userRepository.findAllByRoleIsNull();
         PinflRequest request = new PinflRequest();
-        request.setPinfls(list);
+        request.setPinfls(all);
         List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
 
         response.forEach(pinflResponse1 -> {
@@ -133,6 +132,7 @@ public class UserService {
                     user.setPassportSerial(pinflResponse1.getPassportNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
+                    System.out.println(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
                 }
             });
             thread.start();
