@@ -132,6 +132,7 @@ public class UserService {
                     user.setPassportSerial(pinflResponse1.getPassportNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
+
                     System.out.println(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
                 }
             });
