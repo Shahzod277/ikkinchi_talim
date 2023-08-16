@@ -66,46 +66,46 @@ public class ApplicationService {
     }
 
 
-    @Transactional
-    public Result updateApplication(String token, Integer kvotaId) {
-        try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer id = (Integer) result.getObject();
-            User user = userRepository.findById(id).get();
-            Application application = user.getApplication();
-            Kvota kvota = kvotaRepository.findById(kvotaId).get();
-            application.setUser(user);
-            application.setKvota(kvota);
-            application.setModifiedDate(LocalDateTime.now());
-            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-            application.setApplicationStatus("Diplom " + diploma.getStatusName());
-            application.setKvota(kvota);
-            application.setApplicationMessage(null);
-            application.setDiplomaMessage(null);
-            Application save = applicationRepository.save(application);
-            Thread thread = new Thread(() -> {
-                try {
-                    String encode = userService.encode(user.getPinfl());
-                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-                    request.setExternalId(application.getId().toString());
-                    request.setStatus(application.getApplicationStatus());
-                    request.setData(kvota);
-                    myEduApiService.updateApp(encode, request);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.start();
-            thread.join(5000);
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, application.getId());
-        } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-        }
-    }
+//    @Transactional
+//    public Result updateApplication(String token, Integer kvotaId) {
+//        try {
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer id = (Integer) result.getObject();
+//            User user = userRepository.findById(id).get();
+//            Application application = user.getApplication();
+//            Kvota kvota = kvotaRepository.findById(kvotaId).get();
+//            application.setUser(user);
+//            application.setKvota(kvota);
+//            application.setModifiedDate(LocalDateTime.now());
+//            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
+//            application.setApplicationStatus("Diplom " + diploma.getStatusName());
+//            application.setKvota(kvota);
+//            application.setApplicationMessage(null);
+//            application.setDiplomaMessage(null);
+//            Application save = applicationRepository.save(application);
+//            Thread thread = new Thread(() -> {
+//                try {
+//                    String encode = userService.encode(user.getPinfl());
+//                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+//                    request.setExternalId(application.getId().toString());
+//                    request.setStatus(application.getApplicationStatus());
+//                    request.setData(kvota);
+//                    myEduApiService.updateApp(encode, request);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            thread.start();
+//            thread.join(5000);
+//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, application.getId());
+//        } catch (Exception ex) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+//        }
+//    }
 
     @Transactional(readOnly = true)
     public Result getApplicationByPrincipal(String token) throws Exception {

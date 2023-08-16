@@ -1,5 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -53,6 +54,7 @@ public class PublicController {
     public ResponseEntity<?> getEduForm(@PathVariable String otmCode) {
         return ResponseEntity.ok(classificatorService.getEduForm(otmCode));
     }
+
     @GetMapping("getLanguageApp/{eduFormCode}/{otmCode}")
     public ResponseEntity<?> getLanguageByOtmCodeAndEduFormCode(@PathVariable String eduFormCode,
                                                                 @PathVariable String otmCode) {
@@ -63,7 +65,7 @@ public class PublicController {
     public ResponseEntity<?> getSpeciality(@PathVariable String eduFormCode,
                                            @PathVariable String otmCode,
                                            @PathVariable String languageCode) {
-        return ResponseEntity.ok(classificatorService.getSpeciality(languageCode,eduFormCode, otmCode));
+        return ResponseEntity.ok(classificatorService.getSpeciality(languageCode, eduFormCode, otmCode));
     }
 
     @GetMapping("allDiplomaInstitutions")
@@ -75,7 +77,6 @@ public class PublicController {
     public ResponseEntity<?> getAllEduFormDiploma() {
         return ResponseEntity.ok(classificatorService.getAllEduFormResponses());
     }
-
 
 
     @GetMapping("allDuration")
@@ -109,6 +110,7 @@ public class PublicController {
             return ResponseEntity.ok(new Result(ResponseMessage.ERROR.getMessage(), false));
         }
     }
+
 
 
 }
