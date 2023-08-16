@@ -124,13 +124,22 @@ public class UserService {
         PinflRequest request = new PinflRequest();
         request.setPinfls(list);
         List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
+
         response.forEach(pinflResponse1 -> {
-            User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
-            if (pinflResponse1.getPassportSerial().isEmpty()) {
-                user.setPassportSerial(pinflResponse1.getPassportSerial());
-                user.setPassportSerial(pinflResponse1.getPassportNumber());
-                user.setModifiedDate(LocalDateTime.now());
-                userRepository.save(user);
+            Thread thread = new Thread(() -> {
+                User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
+                if (pinflResponse1.getPassportSerial().isEmpty()) {
+                    user.setPassportSerial(pinflResponse1.getPassportSerial());
+                    user.setPassportSerial(pinflResponse1.getPassportNumber());
+                    user.setModifiedDate(LocalDateTime.now());
+                    userRepository.save(user);
+                }
+            });
+            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         });
     }
