@@ -118,7 +118,6 @@ public class UserService {
     }
 
 
-    @Transactional
     public void test() {
         List<User> all = userRepository.findAllByRoleIsNull();
         List<String> list = all.stream().map(User::getPinfl).toList();
