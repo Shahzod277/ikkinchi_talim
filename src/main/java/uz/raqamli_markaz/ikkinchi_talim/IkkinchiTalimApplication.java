@@ -43,7 +43,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //utils.saveInstitution();
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
-		userService.test();
+//		userService.test();
 	}
 
 //	public void generateKeys() throws NoSuchAlgorithmException {
