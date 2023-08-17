@@ -1,5 +1,7 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -7,16 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
-import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.Passport;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.PinflRequest;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.PinflResponse1;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.TestResponse;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.TestResponseItem;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
 import javax.crypto.Cipher;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -29,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -119,31 +121,50 @@ public class UserService {
         return encodedMessage;
     }
 
-@Transactional
-    public void test() {
+    public void test() throws IOException {
         List<String> all = userRepository.findAllByRoleIsNull();
-        PinflRequest request = new PinflRequest();
-        request.setPinfls(all);
-        List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
+            PinflRequest request = new PinflRequest();
+            request.setPinfls(all);
+            List<TestResponseItem> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber(request);
+            if (pasportSerialAndNumber.size() != 0) {
+               pasportSerialAndNumber.forEach(testResponseItem -> {
+                   User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
+                   user.setPassportSerial(testResponseItem.getPassportSerial());
+                   user.setPassportNumber(testResponseItem.getPassportNumber());
+                   user.setModifiedDate(LocalDateTime.now());
+                   userRepository.save(user);
+               });
 
-        response.forEach(pinflResponse1 -> {
-            log.info(pinflResponse1.getPinfl());
-            Thread thread = new Thread(() -> {
-                User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
-                if (!pinflResponse1.getPassportSerial().isEmpty()) {
-                    user.setPassportSerial(pinflResponse1.getPassportSerial());
-                    user.setPassportNumber(pinflResponse1.getPassportNumber());
-                    user.setModifiedDate(LocalDateTime.now());
-                    userRepository.save(user);
-                    log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
-                }
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
             }
-        });
+
+//        });
+
+
+//    Object o = response7777.getPinfRequest7777();
+//    ObjectMapper objectMapper=new ObjectMapper();
+//    PinfResponse7777Item pinfResponse7777Item = objectMapper.convertValue(o, PinfResponse7777Item.class);
+//    List<PinfResponse7777Item> list = response7777.getPinfRequest7777();
+//    list.forEach(pinflResponse1->{
+//        log.info(pinflResponse1.getPinfl());
+//        Thread thread = new Thread(() -> {
+//            User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
+//            if (!pinflResponse1.getPassportSerial().isEmpty()) {
+//                user.setPassportSerial(pinflResponse1.getPassportSerial());
+//                user.setPassportNumber(pinflResponse1.getPassportNumber());
+//                user.setModifiedDate(LocalDateTime.now());
+//                userRepository.save(user);
+//                log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
+//            }
+//        });
+//        thread.start();
+//        try {
+//            thread.join();
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//    });
+
+
     }
 }
