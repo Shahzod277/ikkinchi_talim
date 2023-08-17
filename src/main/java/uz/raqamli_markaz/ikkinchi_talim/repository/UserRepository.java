@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "select u from User u where u.role.id=1")
     List<User> findAllByUadmin();
 
-    @Query(nativeQuery = true, value = "select u.pinfl from users u where u.my_edu_id is not  null limit  10")
+    @Query(nativeQuery = true, value = "select u.pinfl from users u where u.my_edu_id is not null and u.passport_serial is null limit 10")
     List<String> findAllByRoleIsNull();
 
 }
