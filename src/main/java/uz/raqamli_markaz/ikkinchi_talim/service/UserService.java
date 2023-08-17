@@ -1,6 +1,7 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
 
@@ -132,8 +134,7 @@ public class UserService {
                     user.setPassportNumber(pinflResponse1.getPassportNumber());
                     user.setModifiedDate(LocalDateTime.now());
                     userRepository.save(user);
-
-                    System.out.println(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
+                    log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
                 }
             });
             thread.start();
