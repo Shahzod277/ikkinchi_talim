@@ -35,7 +35,7 @@ public class ExcelHelper {
     static String SHEET = "Report";
 
     @Transactional
-    public ByteArrayInputStream loadReportsToExcel(Principal principal, String status, String key) {
+    public ByteArrayInputStream loadReportsToExcel(Principal principal, String status, String key) throws IOException {
 
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         if (!user.getRole().getName().equals("ROLE_ADMIN")) {
@@ -93,10 +93,10 @@ public class ExcelHelper {
         }
     }
 
-    private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) {
-
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+    private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        try () {
             Sheet sheet = workbook.createSheet(SHEET);
             // Header
             Row headerRow = sheet.createRow(0);
@@ -117,9 +117,9 @@ public class ExcelHelper {
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
-        }
+//        } catch (IOException e) {
+//            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
+//        }
     }
 
     private ByteArrayInputStream reportsAppsToExcel(List<AppResponseProjection> appResponseProjections) {

@@ -15,6 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.request.*;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.service.*;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -136,7 +137,7 @@ public class AdminController {
     @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<Resource> reportToExcel(Principal principal,
                                                   @RequestParam(value = "status", defaultValue = "null") String status,
-                                                  @RequestParam(value = "key") String key) {
+                                                  @RequestParam(value = "key") String key) throws IOException {
         String filename = "report.xlsx";
         InputStreamResource file = new InputStreamResource(excelHelper.loadReportsToExcel(principal, status, key));
         return ResponseEntity.ok()
