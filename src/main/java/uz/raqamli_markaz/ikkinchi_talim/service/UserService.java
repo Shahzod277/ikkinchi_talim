@@ -120,29 +120,59 @@ public class UserService {
     }
 
 
+//    public void test() {
+//        List<String> all = userRepository.findAllByRoleIsNull();
+//        PinflRequest request = new PinflRequest();
+//        request.setPinfls(all);
+//        List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
+//
+//        response.forEach(pinflResponse1 -> {
+//            Thread thread = new Thread(() -> {
+//                User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
+//                if (pinflResponse1.getPassportSerial().isEmpty()) {
+//                    user.setPassportSerial(pinflResponse1.getPassportSerial());
+//                    user.setPassportNumber(pinflResponse1.getPassportNumber());
+//                    user.setModifiedDate(LocalDateTime.now());
+//                    userRepository.save(user);
+//                    log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
+//                }
+//            });
+//            try {
+//                thread.start();
+//                thread.join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//    }
+
+    @Transactional
     public void test() {
         List<String> all = userRepository.findAllByRoleIsNull();
         PinflRequest request = new PinflRequest();
-        request.setPinfls(all);
+        request.getPinfls().addAll(all);
         List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
-
         response.forEach(pinflResponse1 -> {
-            Thread thread = new Thread(() -> {
-                User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
-                if (pinflResponse1.getPassportSerial().isEmpty()) {
-                    user.setPassportSerial(pinflResponse1.getPassportSerial());
-                    user.setPassportNumber(pinflResponse1.getPassportNumber());
-                    user.setModifiedDate(LocalDateTime.now());
-                    userRepository.save(user);
-                    log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
-                }
-            });
-            thread.start();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            saveTestData(pinflResponse1);
+        });
+    }
+
+    private void saveTestData(PinflResponse1 pinflResponse1) {
+        Thread thread = new Thread(() -> {
+            User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
+            if (!pinflResponse1.getPassportSerial().isEmpty()) {
+                user.setPassportSerial(pinflResponse1.getPassportSerial());
+                user.setPassportNumber(pinflResponse1.getPassportNumber());
+                user.setModifiedDate(LocalDateTime.now());
+                userRepository.save(user);
+                log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
             }
         });
+        try {
+            thread.start();
+            thread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
