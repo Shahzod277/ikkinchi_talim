@@ -1,6 +1,7 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,24 +15,26 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection
 import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ExcelHelper {
-
     private final DiplomaRepository diplomaRepository;
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] DIPLOMA_HEADERS = { "Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name" };
-    static String[] APP_HEADERS = { "Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date","edu form","edu language" };
+    static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
+    static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language"};
     static String SHEET = "Report";
 
     @Transactional
@@ -97,36 +100,37 @@ public class ExcelHelper {
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 //        try () {
-            Sheet sheet = workbook.createSheet(SHEET);
-            // Header
-            Row headerRow = sheet.createRow(0);
-            for (int col = 0; col < DIPLOMA_HEADERS.length; col++) {
-                Cell cell = headerRow.createCell(col);
-                cell.setCellValue(DIPLOMA_HEADERS[col]);
-            }
-            int rowIdx = 1;
-            for (DiplomaResponseProjection responses : responseProjections) {
-                Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(responses.getId() == null? 0 : responses.getId());
-                row.createCell(1).setCellValue(responses.getSpeciality());
-                row.createCell(2).setCellValue(responses.getTalimShakli());
-                row.createCell(3).setCellValue(responses.getDiplomaAndSerial());
-                row.createCell(4).setCellValue(responses.getFullName());
-                row.createCell(5).setCellValue(responses.getPhoneNumber());
-                row.createCell(6).setCellValue(responses.getInstitutionName());
-            }
-            workbook.write(out);
-            return new ByteArrayInputStream(out.toByteArray());
+        Sheet sheet = workbook.createSheet(SHEET);
+        // Header
+        Row headerRow = sheet.createRow(0);
+        for (int col = 0; col < DIPLOMA_HEADERS.length; col++) {
+            Cell cell = headerRow.createCell(col);
+            cell.setCellValue(DIPLOMA_HEADERS[col]);
+        }
+        int rowIdx = 1;
+        for (DiplomaResponseProjection responses : responseProjections) {
+            Row row = sheet.createRow(rowIdx++);
+            row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
+            row.createCell(1).setCellValue(responses.getSpeciality());
+            row.createCell(2).setCellValue(responses.getTalimShakli());
+            row.createCell(3).setCellValue(responses.getDiplomaAndSerial());
+            row.createCell(4).setCellValue(responses.getFullName());
+            row.createCell(5).setCellValue(responses.getPhoneNumber());
+            row.createCell(6).setCellValue(responses.getInstitutionName());
+        }
+        workbook.write(out);
+        return new ByteArrayInputStream(out.toByteArray());
 //        } catch (IOException e) {
 //            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
 //        }
     }
 
-    private ByteArrayInputStream reportsAppsToExcel(List<AppResponseProjection> appResponseProjections) {
+    private ByteArrayInputStream reportsAppsToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+        Workbook workbook = new XSSFWorkbook();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        try () {
             Sheet sheet = workbook.createSheet(SHEET);
             // Header
             Row headerRow = sheet.createRow(0);
@@ -137,19 +141,20 @@ public class ExcelHelper {
             int rowIdx = 1;
             for (AppResponseProjection responses : appResponseProjections) {
                 Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(responses.getId() == null? 0 : responses.getId());
+                row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getFullName());
                 row.createCell(3).setCellValue(responses.getPhoneNumber());
                 row.createCell(4).setCellValue(responses.getUniversity());
                 row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
-                row.createCell(6).setCellValue(responses.getEduForm());;
-                row.createCell(7).setCellValue(responses.getLang());;
+                row.createCell(6).setCellValue(responses.getEduForm());
+                row.createCell(7).setCellValue(responses.getLang());
+                ;
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
-        }
+//        } catch (IOException e) {
+//            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
+//        }
     }
 }
