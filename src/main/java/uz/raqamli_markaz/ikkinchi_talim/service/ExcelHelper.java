@@ -131,28 +131,32 @@ public class ExcelHelper {
         Workbook workbook = new XSSFWorkbook();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 //        try () {
-            Sheet sheet = workbook.createSheet(SHEET);
-            // Header
-            Row headerRow = sheet.createRow(0);
-            for (int col = 0; col < APP_HEADERS.length; col++) {
-                Cell cell = headerRow.createCell(col);
-                cell.setCellValue(APP_HEADERS[col]);
-            }
-            int rowIdx = 1;
-            for (AppResponseProjection responses : appResponseProjections) {
-                Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
-                row.createCell(1).setCellValue(responses.getSpeciality());
-                row.createCell(2).setCellValue(responses.getFullName());
-                row.createCell(3).setCellValue(responses.getPhoneNumber());
-                row.createCell(4).setCellValue(responses.getUniversity());
-                row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+        Sheet sheet = workbook.createSheet(SHEET);
+        // Header
+        Row headerRow = sheet.createRow(0);
+        for (int col = 0; col < APP_HEADERS.length; col++) {
+            Cell cell = headerRow.createCell(col);
+            cell.setCellValue(APP_HEADERS[col]);
+        }
+        int rowIdx = 1;
+        for (AppResponseProjection responses : appResponseProjections) {
+            Row row = sheet.createRow(rowIdx++);
+            row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
+            row.createCell(1).setCellValue(responses.getSpeciality());
+            row.createCell(2).setCellValue(responses.getFullName());
+            row.createCell(3).setCellValue(responses.getPhoneNumber());
+            row.createCell(4).setCellValue(responses.getUniversity());
+            row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+            if (responses.getEduForm() != null) {
                 row.createCell(6).setCellValue(responses.getEduForm());
-                row.createCell(7).setCellValue(responses.getLang());
-                ;
             }
-            workbook.write(out);
-            return new ByteArrayInputStream(out.toByteArray());
+            if (responses.getLang() != null) {
+                row.createCell(7).setCellValue(responses.getLang());
+            }
+            ;
+        }
+        workbook.write(out);
+        return new ByteArrayInputStream(out.toByteArray());
 //        } catch (IOException e) {
 //            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
 //        }
