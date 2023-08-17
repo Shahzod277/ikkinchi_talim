@@ -127,6 +127,7 @@ public class UserService {
         List<PinflResponse1> response = iibServiceApi.getPasportSerialAndNumber(request);
 
         response.forEach(pinflResponse1 -> {
+            log.info(pinflResponse1.getPinfl());
             Thread thread = new Thread(() -> {
                 User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
                 if (!pinflResponse1.getPassportSerial().isEmpty()) {
