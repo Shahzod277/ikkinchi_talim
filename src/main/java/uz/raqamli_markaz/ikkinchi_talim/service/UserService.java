@@ -119,7 +119,7 @@ public class UserService {
         return encodedMessage;
     }
 
-
+@Transactional
     public void test() {
         List<String> all = userRepository.findAllByRoleIsNull();
         PinflRequest request = new PinflRequest();
