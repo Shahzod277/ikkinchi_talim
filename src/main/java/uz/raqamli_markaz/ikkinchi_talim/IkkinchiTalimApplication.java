@@ -43,7 +43,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //utils.saveInstitution();
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
-		userService.test();
+//		userService.test();
 	}
 
 //	public void generateKeys() throws NoSuchAlgorithmException {
@@ -69,7 +69,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //		}
 //	}
 
-	String secretMessage = "My secret message";
+	String secretMessage = "31409894200062";
 	String encodeMessage = "gTlr0/ZHN9fmQoUDAqlcwVAMdbiJiQp70rwJQV4S67raUrVTEq3geXoT3tgcaCTdmdT3g2tPZxyD69xtU9MVrqg6zWmfUMM3Ik4afFKLZ2LxtxT8yvS77FoSAbYealuw0hYGgIH5G/89vhOUkLc3fPOPDZUbFisH/t1JMpkzlOA=";
 	String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEn4Lh15Wadgc1a1Gk/vG5Sz3qY4cY6MzgpPASbuk7XjAcp0zk+xAAuR9NIeTGcE+04EZCJsG5NhXBXgHhkI70g7FU1G2ZWpAv8AdQAOFKnFJtziZQu+6Ov/6U2/cAR/pSpbAL2Pj6wIgCsADEwxxbOkPwAmO+GWyBS2NzuDBTXwIDAQAB";
 	String publicKeyTest = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCe6PeC7/ufFdTfIr00axHB+vGAJxlH8X0HG6pMixXQgDL95AcBZO/e6wFkfZ/oh0J9WD7am1v1ASUtocx3XeGLelxZfAaiOInQ+Qn/EcjSlKqO+uckxcFKac6iBcoahrymFWQVvcbN6p5xdcOBdj6nO1onRvsWkk2sxcRAlzrUHwIDAQAB";
