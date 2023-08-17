@@ -129,7 +129,7 @@ public class UserService {
         response.forEach(pinflResponse1 -> {
             Thread thread = new Thread(() -> {
                 User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
-                if (pinflResponse1.getPassportSerial().isEmpty()) {
+                if (!pinflResponse1.getPassportSerial().isEmpty()) {
                     user.setPassportSerial(pinflResponse1.getPassportSerial());
                     user.setPassportNumber(pinflResponse1.getPassportNumber());
                     user.setModifiedDate(LocalDateTime.now());
