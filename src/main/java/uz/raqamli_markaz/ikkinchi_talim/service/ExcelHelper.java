@@ -97,68 +97,68 @@ public class ExcelHelper {
     }
 
     private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        try () {
-        Sheet sheet = workbook.createSheet(SHEET);
-        // Header
-        Row headerRow = sheet.createRow(0);
-        for (int col = 0; col < DIPLOMA_HEADERS.length; col++) {
-            Cell cell = headerRow.createCell(col);
-            cell.setCellValue(DIPLOMA_HEADERS[col]);
+
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet(SHEET);
+            // Header
+            Row headerRow = sheet.createRow(0);
+            for (int col = 0; col < DIPLOMA_HEADERS.length; col++) {
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(DIPLOMA_HEADERS[col]);
+            }
+            int rowIdx = 1;
+            for (DiplomaResponseProjection responses : responseProjections) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
+                row.createCell(1).setCellValue(responses.getSpeciality());
+                row.createCell(2).setCellValue(responses.getTalimShakli());
+                row.createCell(3).setCellValue(responses.getDiplomaAndSerial());
+                row.createCell(4).setCellValue(responses.getFullName());
+                row.createCell(5).setCellValue(responses.getPhoneNumber());
+                row.createCell(6).setCellValue(responses.getInstitutionName());
+            }
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
-        int rowIdx = 1;
-        for (DiplomaResponseProjection responses : responseProjections) {
-            Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
-            row.createCell(1).setCellValue(responses.getSpeciality());
-            row.createCell(2).setCellValue(responses.getTalimShakli());
-            row.createCell(3).setCellValue(responses.getDiplomaAndSerial());
-            row.createCell(4).setCellValue(responses.getFullName());
-            row.createCell(5).setCellValue(responses.getPhoneNumber());
-            row.createCell(6).setCellValue(responses.getInstitutionName());
-        }
-        workbook.write(out);
-        return new ByteArrayInputStream(out.toByteArray());
-//        } catch (IOException e) {
-//            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
-//        }
     }
 
     private ByteArrayInputStream reportsAppsToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        Workbook workbook = new XSSFWorkbook();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        try () {
-        Sheet sheet = workbook.createSheet(SHEET);
-        // Header
-        Row headerRow = sheet.createRow(0);
-        for (int col = 0; col < APP_HEADERS.length; col++) {
-            Cell cell = headerRow.createCell(col);
-            cell.setCellValue(APP_HEADERS[col]);
-        }
-        int rowIdx = 1;
-        for (AppResponseProjection responses : appResponseProjections) {
-            Row row = sheet.createRow(rowIdx++);
-            row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
-            row.createCell(1).setCellValue(responses.getSpeciality());
-            row.createCell(2).setCellValue(responses.getFullName());
-            row.createCell(3).setCellValue(responses.getPhoneNumber());
-            row.createCell(4).setCellValue(responses.getUniversity());
-            row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
-            if (responses.getEduForm() != null) {
-                row.createCell(6).setCellValue(responses.getEduForm());
+
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet(SHEET);
+            // Header
+            Row headerRow = sheet.createRow(0);
+            for (int col = 0; col < APP_HEADERS.length; col++) {
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(APP_HEADERS[col]);
             }
-            if (responses.getLang() != null) {
-                row.createCell(7).setCellValue(responses.getLang());
+            int rowIdx = 1;
+            for (AppResponseProjection responses : appResponseProjections) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
+                row.createCell(1).setCellValue(responses.getSpeciality());
+                row.createCell(2).setCellValue(responses.getFullName());
+                row.createCell(3).setCellValue(responses.getPhoneNumber());
+                row.createCell(4).setCellValue(responses.getUniversity());
+                row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+                if (responses.getEduForm() != null) {
+                    row.createCell(6).setCellValue(responses.getEduForm());
+                }
+                if (responses.getEduForm() != null) {
+                    row.createCell(7).setCellValue(responses.getLang());
+                }
+                ;
             }
-            ;
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
-        workbook.write(out);
-        return new ByteArrayInputStream(out.toByteArray());
-//        } catch (IOException e) {
-//            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
-//        }
     }
 }
