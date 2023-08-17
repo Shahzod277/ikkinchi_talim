@@ -115,7 +115,7 @@ public class UserService {
         byte[] secretMessageBytes = pinfl.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
         String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
-        System.out.println(encodedMessage);
+//        System.out.println(encodedMessage);
         return encodedMessage;
     }
 
