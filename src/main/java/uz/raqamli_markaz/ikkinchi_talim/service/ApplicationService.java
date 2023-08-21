@@ -14,6 +14,7 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -134,4 +135,20 @@ public class ApplicationService {
         return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, applicationResponse);
     }
 
+    @Transactional
+    public void updateAllStatus() {
+        List<Application> applications = applicationRepository.editStatusAll();
+        applications.forEach(application -> {
+            try {
+                String encode = userService.encode(application.getUser().getPinfl());
+                CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                requestMyEdu.setExternalId(application.getId().toString());
+                requestMyEdu.setStatus(application.getApplicationStatus());
+                requestMyEdu.setData(application.getKvota());
+                myEduApiService.updateApp(encode, requestMyEdu);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
 }
