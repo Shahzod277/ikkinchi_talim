@@ -243,9 +243,14 @@ public class AdminService {
                         diplomaRepository.save(diploma.get());
                         application.setApplicationStatus("Diplom Rad etildi");
                         application.setApplicationMessage(request.getMessage());
-                        applicationRepository.save(application);
+                        Application save = applicationRepository.save(application);
+                        String encode = userService.encode(save.getUser().getPinfl());
+                        CreateAppRequestMyEdu requestMyEdu = new CreateAppRequestMyEdu();
+                        requestMyEdu.setExternalId(save.getId().toString());
+                        requestMyEdu.setStatus(save.getApplicationStatus());
+                        requestMyEdu.setData(save.getKvota());
+                        myEduApiService.updateApp(encode, requestMyEdu);
                         return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
-
                     }
                 }
                 return new Result("Diplom tasdiqlanmagan ", false);
