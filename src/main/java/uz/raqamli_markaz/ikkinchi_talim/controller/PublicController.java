@@ -120,8 +120,6 @@ public class PublicController {
     }
 
     @GetMapping("reportToExcel")
-    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
-    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
     public ResponseEntity<Resource> reportToExcel(@RequestParam(value = "universityCode") String universityCode) throws IOException {
         String filename = "report.xlsx";
         InputStreamResource file = new InputStreamResource(excelHelper.getFullApp(universityCode));
