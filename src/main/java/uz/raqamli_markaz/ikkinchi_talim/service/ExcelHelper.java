@@ -10,10 +10,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
+import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
+import uz.raqamli_markaz.ikkinchi_talim.repository.UniversityRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
 import java.io.ByteArrayInputStream;
@@ -28,6 +30,7 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 @Slf4j
 public class ExcelHelper {
+    private final UniversityRepository universityRepository;
     private final DiplomaRepository diplomaRepository;
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
@@ -35,6 +38,7 @@ public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
     static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language"};
+    static String[] APP_LAST = { "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","pinfl","passport_serial","passport_number"};
     static String SHEET = "Report";
 
     @Transactional
@@ -63,11 +67,13 @@ public class ExcelHelper {
                     }
                     return reportsAppsToExcel(applicationRepository.applicationToExcelByStatus(user.getUniversityCode(), status));
                 }
+
                 default -> {
                     return null;
                 }
             }
         }
+
         // ADMIN ////////////////
         switch (key) {
             case "nationalDiploma" -> {
@@ -96,6 +102,9 @@ public class ExcelHelper {
         }
     }
 
+    public ByteArrayInputStream getFullApp(String code) throws IOException {
+        return reportsAppsFullToExcel(applicationRepository.applicationToExcelLast(code));
+    }
     private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -154,6 +163,45 @@ public class ExcelHelper {
                     row.createCell(7).setCellValue(responses.getLang());
                 }
                 ;
+            }
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
+        }
+    }
+
+    private ByteArrayInputStream reportsAppsFullToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try (Workbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet(SHEET);
+            // Header
+            Row headerRow = sheet.createRow(0);
+            for (int col = 0; col < APP_HEADERS.length; col++) {
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(APP_HEADERS[col]);
+            }
+            int rowIdx = 1;
+            for (AppResponseProjection responses : appResponseProjections) {
+                Row row = sheet.createRow(rowIdx++);
+                row.createCell(0).setCellValue(responses.getSpeciality());
+                row.createCell(1).setCellValue(responses.getFullName());
+                row.createCell(2).setCellValue(responses.getPhoneNumber());
+                row.createCell(3).setCellValue(responses.getUniversity());
+                row.createCell(4).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+
+                if (responses.getEduForm() != null) {
+                    row.createCell(5).setCellValue(responses.getEduForm());
+                }
+                if (responses.getEduForm() != null) {
+                    row.createCell(6).setCellValue(responses.getLang());
+                }
+                row.createCell(7).setCellValue(responses.getPinfl());
+                row.createCell(8).setCellValue(responses.getPassportSerial());
+                row.createCell(9).setCellValue(responses.getPassportNumber());
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());

@@ -6,6 +6,9 @@ public interface AppResponseProjection {
 Integer getId();
 String getFullName();
 String getPhoneNumber();
+String getPinfl();
+String getPassportSerial();
+String getPassportNumber();
 String getSpeciality();
 String getEduForm();
 String getLang();

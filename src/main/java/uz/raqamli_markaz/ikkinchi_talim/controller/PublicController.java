@@ -1,11 +1,15 @@
 package uz.raqamli_markaz.ikkinchi_talim.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
@@ -14,8 +18,11 @@ import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialityProjection;
 import uz.raqamli_markaz.ikkinchi_talim.service.ClassificatorService;
+import uz.raqamli_markaz.ikkinchi_talim.service.ExcelHelper;
 import uz.raqamli_markaz.ikkinchi_talim.service.FileServiceImpl;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +33,7 @@ public class PublicController {
 
     private final FileServiceImpl fileService;
     private final ClassificatorService classificatorService;
+    private final ExcelHelper excelHelper;
 
     @GetMapping("allDiplomaSerials")
     public ResponseEntity<?> getAllDiplomaSerials() {
@@ -111,6 +119,16 @@ public class PublicController {
         }
     }
 
+    @GetMapping("reportToExcel")
+    @Operation(security = {@SecurityRequirement(name = "bearer-key")})
+    @PreAuthorize("hasAnyRole('UADMIN','ADMIN')")
+    public ResponseEntity<Resource> reportToExcel(@RequestParam(value = "universityCode") String universityCode) throws IOException {
+        String filename = "report.xlsx";
+        InputStreamResource file = new InputStreamResource(excelHelper.getFullApp(universityCode));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);
+    }
 
 
 }
