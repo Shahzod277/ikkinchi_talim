@@ -180,9 +180,9 @@ public class ExcelHelper {
             Sheet sheet = workbook.createSheet(SHEET);
             // Header
             Row headerRow = sheet.createRow(0);
-            for (int col = 0; col < APP_HEADERS.length; col++) {
+            for (int col = 0; col < APP_LAST.length; col++) {
                 Cell cell = headerRow.createCell(col);
-                cell.setCellValue(APP_HEADERS[col]);
+                cell.setCellValue(APP_LAST[col]);
             }
             int rowIdx = 1;
             for (AppResponseProjection responses : appResponseProjections) {
