@@ -131,6 +131,7 @@ public class UserService {
                    User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
                    user.setPassportSerial(testResponseItem.getPassportSerial());
                    user.setPassportNumber(testResponseItem.getPassportNumber());
+                   user.setPassportGivenDate(testResponseItem.getPassport_given_date());
                    user.setModifiedDate(LocalDateTime.now());
                    userRepository.save(user);
                });

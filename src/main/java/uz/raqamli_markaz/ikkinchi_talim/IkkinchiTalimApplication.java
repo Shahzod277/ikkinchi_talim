@@ -32,7 +32,7 @@ import java.util.Base64;
 public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Autowired
-	private ApplicationService applicationService;
+	private UserService userService;
 
 
 	public static void main(String[] args) {
@@ -41,6 +41,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		userService.test();
 //utils.saveInstitution();
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
