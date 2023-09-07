@@ -41,7 +41,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		userService.test();
+//		userService.test();
 //utils.saveInstitution();
 //utils.saveOldInstitution();
 //		utils.saveSpecialities();
