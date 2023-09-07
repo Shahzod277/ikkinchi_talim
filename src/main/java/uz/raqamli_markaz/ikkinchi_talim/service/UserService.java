@@ -122,9 +122,9 @@ public class UserService {
     }
 
     public void test() throws IOException {
-        List<String> all = userRepository.findAllByRoleIsNull();
+//        List<String> all = userRepository.findAllByRoleIsNull();
             PinflRequest request = new PinflRequest();
-            request.setPinfls(all);
+            request.setPinfls(List.of("32205911470013"));
             List<TestResponseItem> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber(request);
             if (pasportSerialAndNumber.size() != 0) {
                pasportSerialAndNumber.forEach(testResponseItem -> {
