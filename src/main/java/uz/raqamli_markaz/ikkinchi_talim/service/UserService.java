@@ -12,10 +12,7 @@ import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.model.request.PinflRequest;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.TestResponse;
-import uz.raqamli_markaz.ikkinchi_talim.model.response.TestResponseItem;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.*;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UserRepository;
 
 import javax.crypto.Cipher;
@@ -125,7 +122,7 @@ public class UserService {
 //        List<String> all = userRepository.findAllByRoleIsNull();
             PinflRequest request = new PinflRequest();
             request.setPinfls(List.of("32205911470013"));
-            List<TestResponseItem> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber(request);
+            List<PinflResponse1> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber1(request);
             if (pasportSerialAndNumber.size() != 0) {
                pasportSerialAndNumber.forEach(testResponseItem -> {
                    User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
