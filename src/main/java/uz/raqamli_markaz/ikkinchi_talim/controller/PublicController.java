@@ -124,7 +124,7 @@ public class PublicController {
     public ResponseEntity<Resource> reportToExcel(@RequestParam(value = "universityCode") String universityCode) throws IOException {
 
         ReportsAppsFullExcel fullApp = excelHelper.getFullApp(universityCode);
-        String filename = fullApp.getUniverName() + ".xlsx";
+        String filename = universityCode + ".xlsx";
         InputStreamResource file = new InputStreamResource(fullApp.getByteArrayInputStream());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
