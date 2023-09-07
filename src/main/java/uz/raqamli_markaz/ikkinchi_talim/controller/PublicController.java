@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSerial;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.DiplomaSpeciality;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ReportsAppsFullExcel;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ResponseMessage;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.Result;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.SpecialityProjection;
@@ -121,8 +122,10 @@ public class PublicController {
 
     @GetMapping("reportToExcel")
     public ResponseEntity<Resource> reportToExcel(@RequestParam(value = "universityCode") String universityCode) throws IOException {
-        String filename =universityCode +".xlsx";
-        InputStreamResource file = new InputStreamResource(excelHelper.getFullApp(universityCode));
+
+        ReportsAppsFullExcel fullApp = excelHelper.getFullApp(universityCode);
+        String filename = fullApp.getUniverName() + ".xlsx";
+        InputStreamResource file = new InputStreamResource(fullApp.getByteArrayInputStream());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(file);

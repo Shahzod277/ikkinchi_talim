@@ -13,6 +13,7 @@ import uz.raqamli_markaz.ikkinchi_talim.domain.User;
 import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection;
+import uz.raqamli_markaz.ikkinchi_talim.model.response.ReportsAppsFullExcel;
 import uz.raqamli_markaz.ikkinchi_talim.repository.ApplicationRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.DiplomaRepository;
 import uz.raqamli_markaz.ikkinchi_talim.repository.UniversityRepository;
@@ -38,7 +39,7 @@ public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
     static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language"};
-    static String[] APP_LAST = { "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","pinfl","passport_serial","passport_number"};
+    static String[] APP_LAST = {"Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number"};
     static String SHEET = "Report";
 
     @Transactional
@@ -102,9 +103,10 @@ public class ExcelHelper {
         }
     }
 
-    public ByteArrayInputStream getFullApp(String code) throws IOException {
+    public ReportsAppsFullExcel getFullApp(String code) throws IOException {
         return reportsAppsFullToExcel(applicationRepository.applicationToExcelLast(code));
     }
+
     private ByteArrayInputStream reportsDiplomasToExcel(List<DiplomaResponseProjection> responseProjections) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook();
@@ -171,10 +173,10 @@ public class ExcelHelper {
         }
     }
 
-    private ByteArrayInputStream reportsAppsFullToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
+    private ReportsAppsFullExcel reportsAppsFullToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+        String univerName = null;
         try (Workbook workbook = new XSSFWorkbook();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet(SHEET);
@@ -187,6 +189,7 @@ public class ExcelHelper {
             int rowIdx = 1;
             for (AppResponseProjection responses : appResponseProjections) {
                 Row row = sheet.createRow(rowIdx++);
+                univerName = responses.getUniversity();
                 row.createCell(0).setCellValue(responses.getSpeciality());
                 row.createCell(1).setCellValue(responses.getFullName());
                 row.createCell(2).setCellValue(responses.getPhoneNumber());
@@ -204,7 +207,8 @@ public class ExcelHelper {
                 row.createCell(9).setCellValue(responses.getPassportNumber());
             }
             workbook.write(out);
-            return new ByteArrayInputStream(out.toByteArray());
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(out.toByteArray());
+            return new ReportsAppsFullExcel(byteArrayInputStream, univerName);
         } catch (IOException e) {
             throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
         }
