@@ -16,7 +16,7 @@ server:
 spring:
   datasource:
     username: postgres
-    password: 963
+    password: 2030306
     url: jdbc:postgresql://localhost:5432/second_education2023
     driver-class-name: org.postgresql.Driver
   jpa:
