@@ -120,21 +120,24 @@ public class UserService {
 
     public void test() throws IOException {
 //        List<String> all = userRepository.findAllByRoleIsNull();
-            PinflRequest request = new PinflRequest();
-            request.setPinfls(List.of("32205911470013"));
-            List<PinflResponse1> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber1(request);
-            if (pasportSerialAndNumber.size() != 0) {
-               pasportSerialAndNumber.forEach(testResponseItem -> {
-                   User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
-                   user.setPassportSerial(testResponseItem.getPassportSerial());
-                   user.setPassportNumber(testResponseItem.getPassportNumber());
-                   user.setPassportGivenDate(testResponseItem.getPassport_given_date());
-                   user.setModifiedDate(LocalDateTime.now());
-                   userRepository.save(user);
-               });
+        PinflRequest request = new PinflRequest();
+        request.setPinfls(List.of("32205911470013"));
+        log.info("1");
+        List<PinflResponse1> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber1(request);
+        PinflResponse1 pinflResponse1 = pasportSerialAndNumber.get(0);
+        log.info(pinflResponse1.getPassport_given_date());
+        if (pasportSerialAndNumber.size() != 0) {
+            pasportSerialAndNumber.forEach(testResponseItem -> {
+                User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
+                user.setPassportSerial(testResponseItem.getPassportSerial());
+                user.setPassportNumber(testResponseItem.getPassportNumber());
+                user.setPassportGivenDate(testResponseItem.getPassport_given_date());
+                user.setModifiedDate(LocalDateTime.now());
+                userRepository.save(user);
+            });
 
 
-            }
+        }
 
 //        });
 
