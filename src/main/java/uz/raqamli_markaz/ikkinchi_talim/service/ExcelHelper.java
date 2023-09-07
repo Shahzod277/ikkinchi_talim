@@ -164,9 +164,6 @@ public class ExcelHelper {
                 if (responses.getEduForm() != null) {
                     row.createCell(7).setCellValue(responses.getLang());
                 }
-                if (responses.getGivenDate() != null) {
-                    row.createCell(8).setCellValue(responses.getGivenDate());
-                }
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
@@ -207,6 +204,9 @@ public class ExcelHelper {
                 row.createCell(7).setCellValue(responses.getPinfl());
                 row.createCell(8).setCellValue(responses.getPassportSerial());
                 row.createCell(9).setCellValue(responses.getPassportNumber());
+                if (responses.getGivenDate() != null) {
+                    row.createCell(10).setCellValue(responses.getGivenDate());
+                }
             }
             workbook.write(out);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(out.toByteArray());
