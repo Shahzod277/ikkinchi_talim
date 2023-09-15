@@ -167,13 +167,13 @@ public class ExcelHelper {
                     row.createCell(7).setCellValue(responses.getLang());
                 }
                 if (responses.getDiplomaEduForm() != null) {
-                    row.createCell(8).setCellValue(responses.getDiplomaEduForm());
+                    row.createCell(8).setCellValue(responses.getDiplomaSerialNumber());
                 }
                 if (responses.getDiplomaSpeciality() != null) {
                     row.createCell(9).setCellValue(responses.getDiplomaSpeciality());
                 }
                 if (responses.getDiplomaSerialNumber() != null) {
-                    row.createCell(10).setCellValue(responses.getDiplomaSerialNumber());
+                    row.createCell(10).setCellValue(responses.getDiplomaEduForm());
                 }
             }
             workbook.write(out);
