@@ -20,4 +20,6 @@ String getDiplomaSerialNumber();
 String getDiplomaEduForm();
 String getDiplomaDegree();
 String getDiplomaGivenDate();
+String getInstName();
+String getInstOldName();
 }

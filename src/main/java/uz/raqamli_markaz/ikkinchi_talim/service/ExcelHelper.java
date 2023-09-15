@@ -38,7 +38,7 @@ public class ExcelHelper {
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
-    static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","diploma serial number","diploma speciality","diploma edu form","diploma degree","diploma given date"};
+    static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","diploma activity university","diploma old university","diploma serial number","diploma speciality","diploma edu form","diploma degree","diploma given date"};
     static String[] APP_LAST = {"Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number","given_date"};
 
     static String SHEET = "Report";
@@ -166,20 +166,26 @@ public class ExcelHelper {
                 if (responses.getLang() != null) {
                     row.createCell(7).setCellValue(responses.getLang());
                 }
+                if (responses.getInstName() != null) {
+                    row.createCell(8).setCellValue(responses.getInstName());
+                }
+                if (responses.getInstOldName() != null) {
+                    row.createCell(9).setCellValue(responses.getInstOldName());
+                }
                 if (responses.getDiplomaEduForm() != null) {
-                    row.createCell(8).setCellValue(responses.getDiplomaSerialNumber());
+                    row.createCell(10).setCellValue(responses.getDiplomaSerialNumber());
                 }
                 if (responses.getDiplomaSpeciality() != null) {
-                    row.createCell(9).setCellValue(responses.getDiplomaSpeciality());
+                    row.createCell(11).setCellValue(responses.getDiplomaSpeciality());
                 }
                 if (responses.getDiplomaSerialNumber() != null) {
-                    row.createCell(10).setCellValue(responses.getDiplomaEduForm());
+                    row.createCell(12).setCellValue(responses.getDiplomaEduForm());
                 }
                 if (responses.getDiplomaDegree() != null) {
-                    row.createCell(11).setCellValue(responses.getDiplomaDegree());
+                    row.createCell(13).setCellValue(responses.getDiplomaDegree());
                 }
                 if (responses.getDiplomaGivenDate() != null) {
-                    row.createCell(12).setCellValue(responses.getDiplomaGivenDate());
+                    row.createCell(14).setCellValue(responses.getDiplomaGivenDate());
                 }
             }
             workbook.write(out);
