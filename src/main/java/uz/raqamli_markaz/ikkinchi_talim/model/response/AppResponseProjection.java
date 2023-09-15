@@ -18,4 +18,6 @@ LocalDate getCreateDate();
 String getDiplomaSpeciality();
 String getDiplomaSerialNumber();
 String getDiplomaEduForm();
+String getDiplomaDegree();
+String getDiplomaGivenDate();
 }
