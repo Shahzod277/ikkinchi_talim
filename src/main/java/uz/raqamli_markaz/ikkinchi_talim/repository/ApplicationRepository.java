@@ -31,8 +31,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
             " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
-            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
-            " where k.university_code=?1 and a.application_status=?2 ", nativeQuery = true)
+            " a.created_date createDate , concat(d.diploma_serial,d.diploma_number) diplomaSerialNumber,d.edu_form_name diplomaEduForm,\n" +
+            " d.speciality_name diplomaSpeciality from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where k.university_code=?1 and a.application_status=?2 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatus(String universityCode, String status);
     @Query(value = " select u.full_name fullName,u.pinfl pinfl,u.passport_given_date givenDate,u.passport_serial passportSerial,u.passport_number passportNumber , k.speciality_name speciality,k.edu_form_name eduForm,\n" +
             "             k.language_name lang, k.university_name university, u.phone_number phoneNumber,\n" +
@@ -46,15 +47,19 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
             " where a.application_status=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatusAdmin(String status);
 
-    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm," +
-            " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
-            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
-            " where k.university_code=?1 ", nativeQuery = true)
+    @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm,\n" +
+            "             k.language_name lang, k.university_name university, u.phone_number phoneNumber,\n" +
+            "             a.created_date createDate,concat(d.diploma_serial,d.diploma_number) diplomaSerialNumber,d.edu_form_name diplomaEduForm, " +
+            "             d.speciality_name diplomaSpeciality from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id\n" +
+            "           inner join diploma d on u.id = d.user_id " +
+            "             where k.university_code=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcel(String universityCode);
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
             " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
-            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id ", nativeQuery = true)
+            " a.created_date createDate, concat(d.diploma_serial,d.diploma_number) diplomaSerialNumber,d.edu_form_name diplomaEduForm, " +
+            " d.speciality_name diplomaSpeciality from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelAdmin();
 
     @Query(value = " select a.id id ,u.full_name fullName,k.speciality_name speciality,k.university_name university, u.phone_number phoneNumber, " +
