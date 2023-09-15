@@ -141,8 +141,9 @@ public class ExcelHelper {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+//        try () {
+            Workbook workbook = new XSSFWorkbook();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
             Sheet sheet = workbook.createSheet(SHEET);
             // Header
             Row headerRow = sheet.createRow(0);
@@ -177,9 +178,9 @@ public class ExcelHelper {
             }
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
-        } catch (IOException e) {
-            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
-        }
+//        } catch (IOException e) {
+//            throw new RuntimeException("fail to import data to Excel file: " + e.getMessage());
+//        }
     }
 
     private ReportsAppsFullExcel reportsAppsFullToExcel(List<AppResponseProjection> appResponseProjections) throws IOException {
