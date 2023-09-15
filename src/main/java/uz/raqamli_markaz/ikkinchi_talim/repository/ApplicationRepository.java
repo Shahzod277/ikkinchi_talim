@@ -43,8 +43,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm, " +
             " k.language_name lang, k.university_name university, u.phone_number phoneNumber, " +
-            " a.created_date createDate from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
-            " where a.application_status=?1 ", nativeQuery = true)
+            " a.created_date createDate, concat(d.diploma_serial,d.diploma_number) diplomaSerialNumber,d.edu_form_name diplomaEduForm, " +
+            " d.speciality_name diplomaSpeciality from application a inner join kvota k on k.id = a.kvota_id inner join users u on u.id = a.user_id " +
+            " inner join diploma d on u.id = d.user_id where a.application_status=?1 ", nativeQuery = true)
     List<AppResponseProjection> applicationToExcelByStatusAdmin(String status);
 
     @Query(value = " select a.id id, u.full_name fullName, k.speciality_name speciality,k.edu_form_name eduForm,\n" +
