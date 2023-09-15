@@ -15,7 +15,7 @@ String getEduForm();
 String getLang();
 String getUniversity();
 LocalDate getCreateDate();
-LocalDate getDiplomaSpeciality();
-LocalDate getDiplomaSerialNumber();
-LocalDate getDiplomaEduForm();
+String getDiplomaSpeciality();
+String getDiplomaSerialNumber();
+String getDiplomaEduForm();
 }
