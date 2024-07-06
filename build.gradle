@@ -35,9 +35,14 @@ dependencies {
 	implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.3'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.projectlombok:lombok'
+// https://mvnrepository.com/artifact/org.projectlombok/lombok
+//	compileOnly group: 'org.projectlombok', name: 'lombok', version: '0.11.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
+}
+dependencies {
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 tasks.named('test') {

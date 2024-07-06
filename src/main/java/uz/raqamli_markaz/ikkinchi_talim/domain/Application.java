@@ -14,6 +14,7 @@ import lombok.Setter;
 public class Application extends AbstractEntity {
 
     private String applicationStatus;
+    @Column(columnDefinition = "TEXT")
     private String applicationMessage;
     private String diplomaMessage;
 

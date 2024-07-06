@@ -16,7 +16,7 @@ public class CreateAppRequestMyEdu {
     private Object data;
 
     @JsonProperty("service")
-    private String service = "18ffa877-987f-4d3d-871f-03cb7e0f4638";
+    private String service = "8c04bc53-78cf-4c82-b75f-34b5f72a0d5d";
 
     @JsonProperty("external_id")
     private String externalId;

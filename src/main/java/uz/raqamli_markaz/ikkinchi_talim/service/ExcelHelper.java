@@ -1,5 +1,6 @@
 package uz.raqamli_markaz.ikkinchi_talim.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -7,10 +8,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
-import uz.raqamli_markaz.ikkinchi_talim.domain.diploma.University;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.AppResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.DiplomaResponseProjection;
 import uz.raqamli_markaz.ikkinchi_talim.model.response.ReportsAppsFullExcel;
@@ -25,11 +24,10 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.logging.Logger;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
+@Service
 public class ExcelHelper {
     private final UniversityRepository universityRepository;
     private final DiplomaRepository diplomaRepository;

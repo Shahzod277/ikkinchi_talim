@@ -25,10 +25,10 @@ public class Citizen{
 	@JsonProperty("given_date")
 	private String givenDate;
 
-	public Citizen(User user) {
-		this.pinfl = Long.parseLong(user.getPinfl());
-//		this.passportNumber = user.getPassportNumber();
-		this.passportSerial = user.getPassportSerial();
-		this.givenDate = user.getPassportGivenDate();
-	}
+//	public Citizen(User user) {
+//		this.pinfl = Long.parseLong(user.getPinfl());
+////		this.passportNumber = user.getPassportNumber();
+//		this.passportSerial = user.getPassportSerial();
+//		this.givenDate = user.getPassportGivenDate();
+//	}
 }

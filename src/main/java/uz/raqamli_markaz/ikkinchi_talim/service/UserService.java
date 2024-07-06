@@ -97,9 +97,8 @@ public class UserService {
         decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
 
         byte[] decryptedMessageBytes = decryptCipher.doFinal(decode);
-        String decryptedMessage = new String(decryptedMessageBytes, StandardCharsets.UTF_8);
-//        System.out.println(decryptedMessage);
-        return decryptedMessage;
+        //        System.out.println(decryptedMessage);
+        return new String(decryptedMessageBytes, StandardCharsets.UTF_8);
     }
 
     public String encode(String pinfl) throws Exception {
@@ -113,9 +112,8 @@ public class UserService {
         encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] secretMessageBytes = pinfl.getBytes(StandardCharsets.UTF_8);
         byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessageBytes);
-        String encodedMessage = Base64.getEncoder().encodeToString(encryptedMessageBytes);
-//        System.out.println(encodedMessage);
-        return encodedMessage;
+        //        System.out.println(encodedMessage);
+        return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 
     public void test() throws IOException {
@@ -125,7 +123,7 @@ public class UserService {
         List<PinflResponse1> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber1(request);
         PinflResponse1 pinflResponse1 = pasportSerialAndNumber.get(0);
         log.info(pinflResponse1.getPassport_given_date());
-        if (pasportSerialAndNumber.size() != 0) {
+        if (!pasportSerialAndNumber.isEmpty()) {
             pasportSerialAndNumber.forEach(testResponseItem -> {
                 User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
                 user.setPassportSerial(testResponseItem.getPassportSerial());
