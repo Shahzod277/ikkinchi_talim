@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateAppRequestMyEdu {
-
     @JsonProperty("data")
     private Object data;
 
