@@ -38,7 +38,7 @@ public class DiplomaService {
 
     @Transactional
     public Result saveAndGetDiplomaByDiplomaApi(String token) throws Exception {
-//        try {
+        try {
             Result result = userService.checkUser(token);
             if (!result.isSuccess()) {
                 return result;
@@ -46,9 +46,9 @@ public class DiplomaService {
             Integer id = (Integer) result.getObject();
             User user = userRepository.findById(id).get();
             List<Diploma> diplomaByUser = diplomaRepository.findAllDiplomaByUser(id);
-            if (diplomaByUser.size() == 0) {
+            if (diplomaByUser.isEmpty()) {
                 List<DiplomaResponseApi> diplomas = diplomaApi.getDiploma(user.getPinfl());
-                if (diplomas.size() == 0) {
+                if (diplomas.isEmpty()) {
                     return new Result("Sizning diplom malumotlaringiz d-arxiv.edu.uz tizimidan topilmadi", false);
                 }
                 List<DiplomaResponse> diplomaResponses = new ArrayList<>();
@@ -75,10 +75,10 @@ public class DiplomaService {
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaResponses);
             }
             return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, diplomaByUser.stream().map(DiplomaResponse::new).toList());
-//            } catch (Exception e) {
-//                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-//                return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-//            }
+            } catch (Exception e) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
+            }
     }
 
     @Transactional
@@ -91,7 +91,9 @@ public class DiplomaService {
             Integer id = (Integer) result.getObject();
             User user = userRepository.findById(id).get();
             List<Diploma> diplomaList = diplomaRepository.findAllDiplomaByUser(id);
-            if (diplomaList.size() == 0) {
+            if (!diplomaList.isEmpty()) {
+                return new Result("Sizda diplom mavjud", false);
+            }
                 Country country = countryRepository.findById(request.getCountryId()).get();
                 Duration duration = durationRepository.findById(request.getEduDurationId()).get();
                 if (request.getCountryId() == 1) {
@@ -161,8 +163,6 @@ public class DiplomaService {
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
                 Diploma save = diplomaRepository.save(diplomaNew);
                 return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true,save.getId());
-            }
-            return new Result("Sizda diplom mavjud", false);
         } catch (Exception exception) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
