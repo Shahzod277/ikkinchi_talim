@@ -33,6 +33,10 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Utils utils;
+	@Autowired
+	private ApplicationService applicationService;
 
 
 	public static void main(String[] args) {
@@ -44,7 +48,8 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //		userService.test();
 //utils.saveInstitution();
 //utils.saveOldInstitution();
-//		utils.saveSpecialities();
+//utils.saveSpecialities();
+//		utils.saveDiplomaSerial();
 //		applicationService.updateAllStatus();
 	}
 

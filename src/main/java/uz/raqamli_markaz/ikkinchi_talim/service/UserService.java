@@ -73,7 +73,6 @@ public class UserService {
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, userNew.getId());
                 }
                 return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true, user.get().getId());
-
             }
             return new Result("token is null", false);
         } catch (Exception e) {
