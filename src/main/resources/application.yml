@@ -17,7 +17,7 @@ spring:
   datasource:
     username: postgres
     password: 2030306
-    url: jdbc:postgresql://localhost:5432/second_education2023
+    url: jdbc:postgresql://172.18.10.37:5432/second_education2023
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false
@@ -46,4 +46,4 @@ jwt:
   secret: '[0-9.a-zA-z_]^+$TutorAcademy9891212skidU3Akj9dfd6kfd5fdASQrFbsMrXh^56409nPgGfd528482'
 file:
   storage:
-    location: /home/software/fileStorage
+    location: /home/software/fileStorage2024
