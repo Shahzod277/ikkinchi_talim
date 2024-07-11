@@ -111,6 +111,42 @@ public class Utils {
     }
 
     @Transactional
+    public void saveOldInstitutionTest() {
+        try {
+            List<DiplomaInstitution> all = diplomaInstitutionRepository.findAll();
+            InstitutionOldNamesResponse institutionOldNamesResponse = diplomaApi.getInstitutionsOldNames();
+            InstitutionOldNames institutionOldNames = institutionOldNamesResponse.getInstitutionOldNamesData().getInstitutionOldNames();
+            List<InstitutionOldDataItem> dataItems = institutionOldNames.getData();
+            all.forEach(d -> {
+                Boolean diplomaOldInstitutionByClassificatorId = diplomaOldInstitutionRepository.findDiplomaOldInstitutionByClassificatorId(d.getClassificatorId());
+                if (!diplomaOldInstitutionByClassificatorId) {
+                    List<DiplomaOldInstitution> diplomaOldInstitutions = new ArrayList<>();
+                    dataItems.forEach(odlDiploma -> {
+                        if (Objects.equals(odlDiploma.getInstitutionId(), d.getClassificatorId())) {
+                            DiplomaOldInstitution diplomaOldInstitution = new DiplomaOldInstitution();
+                            diplomaOldInstitution.setClassificatorId(d.getClassificatorId());
+                            diplomaOldInstitution.setInstitutionName(odlDiploma.getInstitutionName());
+                            diplomaOldInstitution.setInstitutionOldId(odlDiploma.getId());
+                            diplomaOldInstitution.setInstitutionOldNameUz(odlDiploma.getNameUz());
+                            diplomaOldInstitution.setInstitutionOldNameOz(odlDiploma.getNameOz());
+                            diplomaOldInstitution.setInstitutionOldNameRu(odlDiploma.getNameRu());
+                            diplomaOldInstitution.setInstitutionOldNameEn(odlDiploma.getNameEn());
+                            diplomaOldInstitutions.add(diplomaOldInstitution);
+                            diplomaOldInstitutionRepository.saveAll(diplomaOldInstitutions);
+
+                        }
+
+
+                    });
+                }
+            });
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
     public void saveSpecialities() {
         try {
             SpecialitiesResponseApi specialitiesResponseApi = diplomaApi.getSpecialities();
@@ -133,6 +169,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
 
     @Transactional
     public void saveDiplomaSerial() {

@@ -15,6 +15,7 @@ import uz.raqamli_markaz.ikkinchi_talim.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,21 @@ public class ApplicationService {
             }
             Integer id = (Integer) result.getObject();
             User user = userRepository.findById(id).get();
+            Optional<Application> applicationOptional = applicationRepository.findByUserId(user.getId());
             Kvota kvota = kvotaRepository.findById(kvotaId).get();
+
+            if (applicationOptional.isPresent()) {
+                Application application = applicationOptional.get();
+                application.setKvota(kvota);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+                request.setExternalId(save.getId().toString());
+                request.setStatus(save.getApplicationStatus());
+                request.setData(kvota);
+                myEduApiService.createApp(encode, request);
+            }
+
             Application application = new Application();
             application.setUser(user);
             application.setKvota(kvota);

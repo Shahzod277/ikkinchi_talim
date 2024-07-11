@@ -48,7 +48,7 @@ public class IkkinchiTalimApplication implements CommandLineRunner {
 //		userService.test();
 //utils.saveInstitution();
 //utils.saveOldInstitution();
-//utils.saveSpecialities();
+//utils.saveOldInstitutionTest();
 //		utils.saveDiplomaSerial();
 //		applicationService.updateAllStatus();
 	}
