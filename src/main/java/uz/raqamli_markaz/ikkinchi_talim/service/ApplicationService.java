@@ -50,6 +50,8 @@ public class ApplicationService {
                 request.setStatus(save.getApplicationStatus());
                 request.setData(kvota);
                 myEduApiService.createApp(encode, request);
+                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
+
             }
 
             Application application = new Application();
