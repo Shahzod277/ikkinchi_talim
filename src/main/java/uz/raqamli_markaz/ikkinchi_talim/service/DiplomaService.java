@@ -230,7 +230,9 @@ public class DiplomaService {
                 diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
                 diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
                 diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
-
+                if (request.getSpecialityId()!=null) {
+                    diplomaNew.setSpecialityCustomName(null);
+                }
                 diplomaNew.setCountryId(country.getId());
                 diplomaNew.setCountryName(country.getName());
                 diplomaNew.setIlovaUrl(request.getIlovaUrl());
