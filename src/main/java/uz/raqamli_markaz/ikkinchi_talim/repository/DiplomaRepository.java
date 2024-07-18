@@ -35,17 +35,17 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
             " (?3 is null or concat(cast(d.id as varchar), u.full_name,d.diploma_serial,d.diploma_number) ilike concat('%', ?3, '%')) ")
 
     Page<DiplomaResponseProjection> getAllDiplomaSearch(Integer instId, String status, String search, Pageable pageable);
-    @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
-            " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025) and d.status_name=?2 and " +
-            " (?3 is null or concat(cast(d.id as varchar), u.full_name,d.diploma_serial,d.diploma_number) ilike concat('%', ?3, '%')) ")
+        @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
+                " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
+                " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025) and d.status_name=?2 and " +
+                " (?3 is null or concat(cast(d.id as varchar), u.full_name,d.diploma_serial,d.diploma_number) ilike concat('%', ?3, '%')) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearchQoqon(Integer instId, String status, String search, Pageable pageable);
 //(?3 is null or concat(cast(d.id as varchar), u.full_name,d.diploma_serial,d.diploma_number) ilike concat('%', ?3, '%'))
 
 
     @Query(nativeQuery = true, value = "select  d.id id ,d.speciality_name speciality, concat(d.diploma_serial,d.diploma_number) diplomaAndSerial ," +
             " u.full_name fullName, u.phone_number phoneNumber, d.institution_old_name institutionName from application a inner join users u on u.id = a.user_id " +
-            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id in (171,116,172)) and d.status_name=?2 and " +
+            " inner join diploma d on u.id = d.user_id where d.country_id=1 and d.is_active=true and (d.institution_id=?1 or d.institution_id=1025) and d.status_name=?2 and " +
             " (?3 is null or concat(cast(d.id as varchar), u.full_name,d.diploma_serial,d.diploma_number) ilike concat('%', ?3, '%')) ")
     Page<DiplomaResponseProjection> getAllDiplomaSearchTransport(Integer instId, String status, String search, Pageable pageable);
 

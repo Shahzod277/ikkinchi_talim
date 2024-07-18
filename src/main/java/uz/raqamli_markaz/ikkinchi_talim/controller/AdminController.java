@@ -42,7 +42,7 @@ public class AdminController {
                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                    @RequestParam(value = "size", defaultValue = "20") int size,
                                                    @RequestParam(value = "status") String status,
-                                                   @RequestParam(value = "search", defaultValue = "null") String search) {
+                                                   @RequestParam(value = "search",required = false) String search) {
         Page<DiplomaResponseProjection> responses = adminService.getAllDiplomaByUAdmin(principal, page, size, status, search);
         return ResponseEntity.ok(responses);
     }
