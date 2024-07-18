@@ -43,9 +43,14 @@ public class AdminService {
 
                 if (!user.getRole().getName().equals("ROLE_ADMIN")) {
 
-                    Optional<Diploma> optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId());
-                    if (optionalDiploma.isEmpty()) {
+
+                    Optional<Diploma> optionalDiploma;
+                    if (user.getDiplomaInstitutionId() == 72) {
                         optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(1025, request.getDiplomaId());
+                    } else if (user.getDiplomaInstitutionId() == 116) {
+                        optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndIdTransport(request.getDiplomaId());
+                    } else {
+                        optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(user.getDiplomaInstitutionId(), request.getDiplomaId());
                     }
                     Diploma diploma = optionalDiploma.get();
                     Integer userId = diploma.getUser().getId();

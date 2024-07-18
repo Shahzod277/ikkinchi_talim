@@ -129,6 +129,10 @@ public interface DiplomaRepository extends JpaRepository<Diploma, Integer> {
     @Query("select d from Diploma d where d.institutionId = ?1 and d.id= ?2 and d.isActive=true ")
     Optional<Diploma> findDiplomaByInstitutionAndId(Integer institutionId, Integer diplomaId);
 
+
+    @Query("select d from Diploma d where d.institutionId in (171,116,172) and d.id= ?1 and d.isActive=true ")
+    Optional<Diploma> findDiplomaByInstitutionAndIdTransport( Integer diplomaId);
+
     @Query("select d from Diploma d inner  join User u  on d.user.id=u.id " +
             "inner join Application a on a.user.id=u.id inner join Kvota k on a.kvota.id=k.id" +
             " where k.universityCode = ?1 and d.id= ?2 ")
