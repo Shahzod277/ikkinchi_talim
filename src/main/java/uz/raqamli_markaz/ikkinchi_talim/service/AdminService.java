@@ -155,17 +155,10 @@ public class AdminService {
         User user = userRepository.findUserByPinfl(principal.getName()).get();
         if (!user.getRole().getName().equals("ROLE_ADMIN")) {
             if (user.getDiplomaInstitutionId() == 72) {
-                if (search.equals("null")) {
-                    return diplomaRepository.getAllDiplomaByStatusQoqon(user.getDiplomaInstitutionId(), status, pageable);
-                }
                 return diplomaRepository.getAllDiplomaSearchQoqon(user.getDiplomaInstitutionId(), status, search, pageable);
-            }
-            if (search.equals("null")) {
-                return diplomaRepository.getAllDiplomaByStatus(user.getDiplomaInstitutionId(), status, pageable);
             }
             return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
         }
-
         if (search.equals("null")) {
             return diplomaRepository.getAllDiplomaByStatusAdmin(status, pageable);
         }
