@@ -156,8 +156,11 @@ public class AdminService {
         if (!user.getRole().getName().equals("ROLE_ADMIN")) {
             if (user.getDiplomaInstitutionId() == 72) {
                 return diplomaRepository.getAllDiplomaSearchQoqon(user.getDiplomaInstitutionId(), status, search, pageable);
+            } else if (user.getDiplomaInstitutionId() == 116) {
+                return diplomaRepository.getAllDiplomaSearchTransport(user.getDiplomaInstitutionId(), status, search, pageable);
             }
             return diplomaRepository.getAllDiplomaSearch(user.getDiplomaInstitutionId(), status, search, pageable);
+
         }
         if (search.equals("null")) {
             return diplomaRepository.getAllDiplomaByStatusAdmin(status, pageable);
