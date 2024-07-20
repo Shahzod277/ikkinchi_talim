@@ -46,7 +46,7 @@ public class AdminService {
 
                     Optional<Diploma> optionalDiploma;
                     if (user.getDiplomaInstitutionId() == 72) {
-                        optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndId(1025, request.getDiplomaId());
+                        optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndIdQoqon(request.getDiplomaId());
                     } else if (user.getDiplomaInstitutionId() == 116) {
                         optionalDiploma = diplomaRepository.findDiplomaByInstitutionAndIdTransport(request.getDiplomaId());
                     } else {
