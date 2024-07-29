@@ -23,7 +23,7 @@ public class OneIdServiceApi {
     public URI redirectOneIdUrl() {
         String state = "testState";
         String response_type = "one_code";
-        String oneIdUrl = "https://sso.egov.uz/sso/oauth/Authorization.do?" +
+        String oneIdUrl = "https://sso-cloud.egov.uz/sso/oauth/Authorization.do?" +
                 "state=" + state +
                 "&response_type=" + response_type +
                 "&client_id=" + client_id +
@@ -35,7 +35,7 @@ public class OneIdServiceApi {
     public OneIdResponseToken getAccessAndRefreshToken(String code) {
         String grant_type = "one_authorization_code";
         return webClient.post()
-                .uri("https://sso.egov.uz/sso/oauth/Authorization.do?" +
+                .uri("https://sso-cloud.egov.uz/sso/oauth/Authorization.do?" +
                         "grant_type=" + grant_type +
                         "&client_id=" + client_id +
                         "&client_secret=" + client_secret +
@@ -50,7 +50,7 @@ public class OneIdServiceApi {
     public OneIdResponseUserInfo getUserInfo(String accessToken) {
         String grant_type = "one_access_token_identify";
         return webClient.post()
-                .uri("https://sso.egov.uz/sso/oauth/Authorization.do?" +
+                .uri("https://sso-cloud.egov.uz/sso/oauth/Authorization.do?" +
                         "grant_type=" + grant_type +
                         "&client_id=" + client_id +
                         "&client_secret=" + client_secret +
