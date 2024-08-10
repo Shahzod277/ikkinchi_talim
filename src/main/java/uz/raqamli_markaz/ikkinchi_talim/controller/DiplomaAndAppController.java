@@ -20,19 +20,19 @@ public class DiplomaAndAppController {
     private final DiplomaService diplomaService;
     private final ApplicationService applicationService;
 
-    @PostMapping("createApplication")
-    public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
-                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
-        Result result = applicationService.createApplication(token, kvotaId);
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
+//    @PostMapping("createApplication")
+//    public ResponseEntity<?> createApplication(@RequestParam(value = "token") String token,
+//                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
+//        Result result = applicationService.createApplication(token, kvotaId);
+//        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+//    }
 
-    @PostMapping("createDiploma")
-    public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
-                                           @RequestBody DiplomaRequest request) {
-            Result result = diplomaService.createDiploma(token, request);
-        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
-    }
+//    @PostMapping("createDiploma")
+//    public ResponseEntity<?> createDiploma(@RequestParam(value = "token") String token,
+//                                           @RequestBody DiplomaRequest request) {
+//            Result result = diplomaService.createDiploma(token, request);
+//        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
+//    }
 
     @PutMapping("updateApplication")
     public ResponseEntity<?> updateApplication(@RequestParam(value = "token") String token,
