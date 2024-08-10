@@ -219,7 +219,10 @@ public class AdminService {
                     requestMyEdu.setExternalId(save.getId().toString());
                     requestMyEdu.setStatus(save.getApplicationStatus());
                     requestMyEdu.setData(save.getKvota());
-                    myEduApiService.updateApp(encode, requestMyEdu);
+                    CreateAppRequestMyEdu updateMyEduResponse = myEduApiService.updateApp(encode, requestMyEdu);
+                    if (updateMyEduResponse.getStatus() == null || updateMyEduResponse.getData() == null) {
+                        myEduApiService.createApp(encode, requestMyEdu);
+                    }
                     return new Result(ResponseMessage.SUCCESSFULLY.getMessage(), true);
                 } else if (request.getIsConfirm() == 0) {
                     application.setApplicationStatus("Ariza rad etildi");
