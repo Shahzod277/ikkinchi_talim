@@ -36,8 +36,8 @@ public class ExcelHelper {
 
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
-    static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","diploma activity university","diploma old university","diploma serial number","diploma speciality","diploma edu form","diploma degree","diploma given date"};
-    static String[] APP_LAST = {"Speciality", "Full Name","Pinfl","PassportSerial", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number","given_date"};
+    static String[] APP_HEADERS = {"Id", "Speciality", "Full Name","Pinfl","PassportSerial", "Phone Number", "University", "Create Date", "edu form", "edu language","diploma activity university","diploma old university","diploma serial number","diploma speciality","diploma edu form","diploma degree","diploma given date"};
+    static String[] APP_LAST = {"Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number","given_date"};
 
     static String SHEET = "Report";
 
@@ -155,7 +155,7 @@ public class ExcelHelper {
                 row.createCell(0).setCellValue(responses.getId() == null ? 0 : responses.getId());
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getFullName());
-                row.createCell(3).setCellValue(responses.getPhoneNumber());
+                row.createCell(3).setCellValue(responses.getPinfl());
                 row.createCell(4).setCellValue(responses.getPassportSerial());
                 row.createCell(5).setCellValue(responses.getPhoneNumber());
                 row.createCell(6).setCellValue(responses.getUniversity());
