@@ -34,34 +34,34 @@ public class DiplomaAndAppController {
 //        return ResponseEntity.status(result.isSuccess() ? 201 : 400).body(result);
 //    }
 
-    @PutMapping("updateApplication")
-    public ResponseEntity<?> updateApplication(@RequestParam(value = "token") String token,
-                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
-        Result result = applicationService.updateApplication(token, kvotaId);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
-
-    @PutMapping("addDiplomaAndIlova")
-    public ResponseEntity<?> addDiplomaAndIlova(@RequestParam(value = "token") String token,
-                                               @RequestBody DiplomaAndIlovaRequest request) {
-        Result result = diplomaService.addDiplomaAndIlova(token, request);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
-
-    @PutMapping("updateDiploma")
-    public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
-                                           @RequestParam(value = "id") Integer id,
-                                           @RequestBody DiplomaRequest request) {
-        Result result = diplomaService.updateDiploma(token, id, request);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
-
-    @DeleteMapping("deleteDiploma/{id}")
-    public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
-                                           @RequestParam(value = "token") String token) {
-        Result result = diplomaService.deleteDiploma(id, token);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
+//    @PutMapping("updateApplication")
+//    public ResponseEntity<?> updateApplication(@RequestParam(value = "token") String token,
+//                                               @RequestParam(value = "kvotaId") Integer kvotaId) {
+//        Result result = applicationService.updateApplication(token, kvotaId);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
+//
+//    @PutMapping("addDiplomaAndIlova")
+//    public ResponseEntity<?> addDiplomaAndIlova(@RequestParam(value = "token") String token,
+//                                               @RequestBody DiplomaAndIlovaRequest request) {
+//        Result result = diplomaService.addDiplomaAndIlova(token, request);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
+//
+//    @PutMapping("updateDiploma")
+//    public ResponseEntity<?> updateDiploma(@RequestParam(value = "token") String token,
+//                                           @RequestParam(value = "id") Integer id,
+//                                           @RequestBody DiplomaRequest request) {
+//        Result result = diplomaService.updateDiploma(token, id, request);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
+//
+//    @DeleteMapping("deleteDiploma/{id}")
+//    public ResponseEntity<?> deleteDiploma(@PathVariable Integer id,
+//                                           @RequestParam(value = "token") String token) {
+//        Result result = diplomaService.deleteDiploma(id, token);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
 
     @PatchMapping("diplomaIsActive/{diplomaId}")
     public ResponseEntity<?> diplomaIsActive(@PathVariable Integer diplomaId,
@@ -70,11 +70,11 @@ public class DiplomaAndAppController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-    @GetMapping("getDiplomaApi")
-    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) throws Exception {
-        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
-        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-    }
+//    @GetMapping("getDiplomaApi")
+//    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) throws Exception {
+//        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
+//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+//    }
 
     @GetMapping("applicationDetails")
     public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) throws Exception {
