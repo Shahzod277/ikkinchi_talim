@@ -70,11 +70,11 @@ public class DiplomaAndAppController {
         return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
     }
 
-//    @GetMapping("getDiplomaApi")
-//    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) throws Exception {
-//        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
-//        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
-//    }
+    @GetMapping("getDiplomaApi")
+    public ResponseEntity<?> saveDiplomaApi(@RequestParam(value = "token") String token) throws Exception {
+        Result result = diplomaService.saveAndGetDiplomaByDiplomaApi(token);
+        return ResponseEntity.status(result.isSuccess() ? 200 : 400).body(result);
+    }
 
     @GetMapping("applicationDetails")
     public ResponseEntity<?> getApplicationByPrincipal(@RequestParam(value = "token") String token) throws Exception {

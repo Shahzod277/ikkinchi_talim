@@ -37,7 +37,7 @@ public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] DIPLOMA_HEADERS = {"Id", "Speciality", "EduForm", "Diploma Number and Serial", "Full Name", "Phone Number", "Institution Name"};
     static String[] APP_HEADERS = {"Id", "Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language","diploma activity university","diploma old university","diploma serial number","diploma speciality","diploma edu form","diploma degree","diploma given date"};
-    static String[] APP_LAST = {"Speciality", "Full Name", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number","given_date"};
+    static String[] APP_LAST = {"Speciality", "Full Name","Pinfl","PassportSerial", "Phone Number", "University", "Create Date", "edu form", "edu language", "pinfl", "passport_serial", "passport_number","given_date"};
 
     static String SHEET = "Report";
 
@@ -156,34 +156,36 @@ public class ExcelHelper {
                 row.createCell(1).setCellValue(responses.getSpeciality());
                 row.createCell(2).setCellValue(responses.getFullName());
                 row.createCell(3).setCellValue(responses.getPhoneNumber());
-                row.createCell(4).setCellValue(responses.getUniversity());
-                row.createCell(5).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
+                row.createCell(4).setCellValue(responses.getPassportSerial());
+                row.createCell(5).setCellValue(responses.getPhoneNumber());
+                row.createCell(6).setCellValue(responses.getUniversity());
+                row.createCell(7).setCellValue(responses.getCreateDate().format(dateTimeFormatter));
                 if (responses.getEduForm() != null) {
-                    row.createCell(6).setCellValue(responses.getEduForm());
+                    row.createCell(8).setCellValue(responses.getEduForm());
                 }
                 if (responses.getLang() != null) {
-                    row.createCell(7).setCellValue(responses.getLang());
+                    row.createCell(9).setCellValue(responses.getLang());
                 }
                 if (responses.getInstName() != null) {
-                    row.createCell(8).setCellValue(responses.getInstName());
+                    row.createCell(10).setCellValue(responses.getInstName());
                 }
                 if (responses.getInstOldName() != null) {
-                    row.createCell(9).setCellValue(responses.getInstOldName());
+                    row.createCell(11).setCellValue(responses.getInstOldName());
                 }
                 if (responses.getDiplomaEduForm() != null) {
-                    row.createCell(10).setCellValue(responses.getDiplomaSerialNumber());
+                    row.createCell(12).setCellValue(responses.getDiplomaSerialNumber());
                 }
                 if (responses.getDiplomaSpeciality() != null) {
-                    row.createCell(11).setCellValue(responses.getDiplomaSpeciality());
+                    row.createCell(13).setCellValue(responses.getDiplomaSpeciality());
                 }
                 if (responses.getDiplomaSerialNumber() != null) {
-                    row.createCell(12).setCellValue(responses.getDiplomaEduForm());
+                    row.createCell(14).setCellValue(responses.getDiplomaEduForm());
                 }
                 if (responses.getDiplomaDegree() != null) {
-                    row.createCell(13).setCellValue(responses.getDiplomaDegree());
+                    row.createCell(15).setCellValue(responses.getDiplomaDegree());
                 }
                 if (responses.getDiplomaGivenDate() != null) {
-                    row.createCell(14).setCellValue(responses.getDiplomaGivenDate());
+                    row.createCell(16).setCellValue(responses.getDiplomaGivenDate());
                 }
             }
             workbook.write(out);
