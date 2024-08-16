@@ -171,108 +171,110 @@ public class DiplomaService {
 
     @Transactional
     public Result addDiplomaAndIlova(String token, DiplomaAndIlovaRequest request) {
-        try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer userId = (Integer) result.getObject();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), userId).get();
-            diplomaNew.setIlovaUrl(request.getIlova());
-            diplomaNew.setDiplomaUrl(request.getDiploma());
-            diplomaRepository.save(diplomaNew);
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-        } catch (Exception exception) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-        }
+//        try {
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer userId = (Integer) result.getObject();
+//            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), userId).get();
+//            diplomaNew.setIlovaUrl(request.getIlova());
+//            diplomaNew.setDiplomaUrl(request.getDiploma());
+//            diplomaRepository.save(diplomaNew);
+//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+//        } catch (Exception exception) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+//        }
+        return new Result("Ikkinchi oliy ta'limga ariza tahrirlash  muddati 16-avgust 18:00 gacha belgilangan", false);
     }
 
     @Transactional
     public Result updateDiploma(String token, Integer id, DiplomaRequest request) {
-        try {
-
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer userId = (Integer) result.getObject();
-            User user = userRepository.findById(userId).get();
-            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
-            Country country = countryRepository.findById(request.getCountryId()).get();
-            Duration duration = durationRepository.findById(request.getEduDurationId()).get();
-            if (request.getCountryId() == 1) {
-                EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
-                if (request.getSpecialityId() != null) {
-                    DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
-                    diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
-                    diplomaNew.setSpecialityId(diplomaSpeciality.getSpecialitiesId());
-                    diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
-                }
-                DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
-                DiplomaSerial diplomaSerial = diplomaSerialRepository.findDiplomaSerialBySerialId(request.getDiplomaSerialId()).get();
-                diplomaNew.setUser(user);
-                diplomaNew.setDiplomaSerialId(diplomaSerial.getSerialId());
-                diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-                diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
-                diplomaNew.setDegreeId(2);
-                diplomaNew.setModifiedDate(LocalDateTime.now());
-                diplomaNew.setEduDurationId(duration.getDurationId());
-                diplomaNew.setEduDurationName(duration.getNameOz());
-                diplomaNew.setDegreeName("Bakalavr");
-                diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
-                diplomaNew.setEduFormId(request.getEduFormId());
-                diplomaNew.setEduFormName(eduForm.getNameOz());
-                diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
-                diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
-                diplomaNew.setEduStartingDate(request.getEduStartingDate());
-                diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
-                diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
-                diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
-                diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
-                if (request.getSpecialityId()!=null) {
-                    diplomaNew.setSpecialityCustomName(null);
-                }
-                diplomaNew.setCountryId(country.getId());
-                diplomaNew.setCountryName(country.getName());
-                diplomaNew.setIlovaUrl(request.getIlovaUrl());
-                diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
-
-                diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
-                if (request.getSpeciality_custom_name() != null) {
-                    diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
-                }
-                Diploma save = diplomaRepository.save(diplomaNew);
-                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
-            }
-            diplomaNew.setUser(user);
-            diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
-            diplomaNew.setCountryId(country.getId());
-            diplomaNew.setCountryName(country.getName());
-            diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
-            diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
-            diplomaNew.setDegreeId(2);
-            diplomaNew.setDegreeName("Bakalavr");
-            diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
-//            diplomaNew.setEduFormId(eduForm.getId());
-            diplomaNew.setEduFormName(request.getEduFormName());
-            diplomaNew.setEduDurationId(duration.getDurationId());
-            diplomaNew.setEduDurationName(duration.getNameOz());
-            diplomaNew.setEduStartingDate(request.getEduStartingDate());
-            diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
-            diplomaNew.setInstitutionName(request.getForeignOtmName());
-            diplomaNew.setInstitutionOldName(request.getForeignOtmName());
-            diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
-            diplomaNew.setIlovaUrl(request.getIlovaUrl());
-            diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
-            diplomaNew.setCountryName(country.getName());
-            Diploma save = diplomaRepository.save(diplomaNew);
-
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
-        } catch (Exception exception) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-        }
+//        try {
+//
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer userId = (Integer) result.getObject();
+//            User user = userRepository.findById(userId).get();
+//            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
+//            Country country = countryRepository.findById(request.getCountryId()).get();
+//            Duration duration = durationRepository.findById(request.getEduDurationId()).get();
+//            if (request.getCountryId() == 1) {
+//                EduForm eduForm = eduFormRepository.findById(request.getEduFormId()).get();
+//                if (request.getSpecialityId() != null) {
+//                    DiplomaSpeciality diplomaSpeciality = diplomaSpecialityRepository.findById(request.getSpecialityId()).get();
+//                    diplomaNew.setSpecialityIdDb(diplomaSpeciality.getId());
+//                    diplomaNew.setSpecialityId(diplomaSpeciality.getSpecialitiesId());
+//                    diplomaNew.setSpecialityName(diplomaSpeciality.getNameOz());
+//                }
+//                DiplomaOldInstitution diplomaOldInstitution = diplomaOldInstitutionRepository.findById(request.getInstitutionId()).get();
+//                DiplomaSerial diplomaSerial = diplomaSerialRepository.findDiplomaSerialBySerialId(request.getDiplomaSerialId()).get();
+//                diplomaNew.setUser(user);
+//                diplomaNew.setDiplomaSerialId(diplomaSerial.getSerialId());
+//                diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
+//                diplomaNew.setDiplomaSerial(diplomaSerial.getSerial());
+//                diplomaNew.setDegreeId(2);
+//                diplomaNew.setModifiedDate(LocalDateTime.now());
+//                diplomaNew.setEduDurationId(duration.getDurationId());
+//                diplomaNew.setEduDurationName(duration.getNameOz());
+//                diplomaNew.setDegreeName("Bakalavr");
+//                diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
+//                diplomaNew.setEduFormId(request.getEduFormId());
+//                diplomaNew.setEduFormName(eduForm.getNameOz());
+//                diplomaNew.setInstitutionId(diplomaOldInstitution.getClassificatorId());
+//                diplomaNew.setInstitutionIdDb(diplomaOldInstitution.getId());
+//                diplomaNew.setEduStartingDate(request.getEduStartingDate());
+//                diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+//                diplomaNew.setInstitutionName(diplomaOldInstitution.getInstitutionName());
+//                diplomaNew.setInstitutionOldId(diplomaOldInstitution.getInstitutionOldId());
+//                diplomaNew.setInstitutionOldName(diplomaOldInstitution.getInstitutionOldNameOz());
+//                if (request.getSpecialityId()!=null) {
+//                    diplomaNew.setSpecialityCustomName(null);
+//                }
+//                diplomaNew.setCountryId(country.getId());
+//                diplomaNew.setCountryName(country.getName());
+//                diplomaNew.setIlovaUrl(request.getIlovaUrl());
+//                diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
+//
+//                diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
+//                if (request.getSpeciality_custom_name() != null) {
+//                    diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+//                }
+//                Diploma save = diplomaRepository.save(diplomaNew);
+//                return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
+//            }
+//            diplomaNew.setUser(user);
+//            diplomaNew.setDiplomaNumber(request.getDiplomaNumber());
+//            diplomaNew.setCountryId(country.getId());
+//            diplomaNew.setCountryName(country.getName());
+//            diplomaNew.setDiplomaSerial(request.getDiplomaSerial());
+//            diplomaNew.setStatusName("Haqiqiyligi tekshirilmoqda");
+//            diplomaNew.setDegreeId(2);
+//            diplomaNew.setDegreeName("Bakalavr");
+//            diplomaNew.setDiplomaGivenDate(request.getDiplomaGivenDate());
+////            diplomaNew.setEduFormId(eduForm.getId());
+//            diplomaNew.setEduFormName(request.getEduFormName());
+//            diplomaNew.setEduDurationId(duration.getDurationId());
+//            diplomaNew.setEduDurationName(duration.getNameOz());
+//            diplomaNew.setEduStartingDate(request.getEduStartingDate());
+//            diplomaNew.setEduFinishingDate(request.getEduFinishingDate());
+//            diplomaNew.setInstitutionName(request.getForeignOtmName());
+//            diplomaNew.setInstitutionOldName(request.getForeignOtmName());
+//            diplomaNew.setSpecialityCustomName(request.getSpeciality_custom_name());
+//            diplomaNew.setIlovaUrl(request.getIlovaUrl());
+//            diplomaNew.setDiplomaUrl(request.getDiplomaUrl());
+//            diplomaNew.setCountryName(country.getName());
+//            Diploma save = diplomaRepository.save(diplomaNew);
+//
+//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true,save.getId());
+//        } catch (Exception exception) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+//        }
+        return new Result("Ikkinchi oliy ta'limga ariza tahrirlash  muddati 16-avgust 18:00 gacha belgilangan", false);
     }
 
 
@@ -336,20 +338,22 @@ public class DiplomaService {
 
     @Transactional
     public Result deleteDiploma(Integer id, String token) {
-        try {
-
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer userId = (Integer) result.getObject();
-            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
-            diplomaRepository.delete(diploma);
-            return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
-        } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
-        }
+//        try {
+//
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer userId = (Integer) result.getObject();
+//            Diploma diploma = diplomaRepository.findDiplomaByDiplomaIdAndUser(id, userId).get();
+//            diplomaRepository.delete(diploma);
+//            return new Result(ResponseMessage.SUCCESSFULLY_DELETED.getMessage(), true);
+//        } catch (Exception ex) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_DELETED.getMessage(), false);
+//        }
+//
+        return new Result("Ikkinchi oliy ta'limga ariza tahrirlash  muddati 16-avgust 18:00 gacha belgilangan", false);
     }
 
 }

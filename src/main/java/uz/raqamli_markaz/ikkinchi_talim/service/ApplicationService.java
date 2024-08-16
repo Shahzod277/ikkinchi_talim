@@ -30,99 +30,100 @@ public class ApplicationService {
 
     @Transactional
     public Result createApplication(String token, Integer kvotaId) {
-        try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer id = (Integer) result.getObject();
-            User user = userRepository.findById(id).get();
-            Optional<Application> applicationOptional = applicationRepository.findByUserId(user.getId());
-            Kvota kvota = kvotaRepository.findById(kvotaId).get();
-
-            if (applicationOptional.isPresent()) {
-                Application application = applicationOptional.get();
-                application.setKvota(kvota);
-                Application save = applicationRepository.save(application);
-                String encode = userService.encode(user.getPinfl());
-                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-                request.setExternalId(save.getId().toString());
-                request.setStatus(save.getApplicationStatus());
-                request.setData(kvota);
-                myEduApiService.createApp(encode, request);
-                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
-
-            }
-
-            Application application = new Application();
-            application.setUser(user);
-            application.setKvota(kvota);
-            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-            application.setApplicationStatus("Diplom " + diploma.getStatusName());
-            application.setKvota(kvota);
-            Application save = applicationRepository.save(application);
-            Thread thread = new Thread(() -> {
-                try {
-                    String encode = userService.encode(user.getPinfl());
-                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-                    request.setExternalId(save.getId().toString());
-                    request.setStatus(save.getApplicationStatus());
-                    request.setData(kvota);
-                    myEduApiService.createApp(encode, request);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.start();
-            thread.join(5000);
-            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
-        } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-        }
-//        return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
+//        try {
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer id = (Integer) result.getObject();
+//            User user = userRepository.findById(id).get();
+//            Optional<Application> applicationOptional = applicationRepository.findByUserId(user.getId());
+//            Kvota kvota = kvotaRepository.findById(kvotaId).get();
+//
+//            if (applicationOptional.isPresent()) {
+//                Application application = applicationOptional.get();
+//                application.setKvota(kvota);
+//                Application save = applicationRepository.save(application);
+//                String encode = userService.encode(user.getPinfl());
+//                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+//                request.setExternalId(save.getId().toString());
+//                request.setStatus(save.getApplicationStatus());
+//                request.setData(kvota);
+//                myEduApiService.createApp(encode, request);
+//                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
+//
+//            }
+//
+//            Application application = new Application();
+//            application.setUser(user);
+//            application.setKvota(kvota);
+//            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
+//            application.setApplicationStatus("Diplom " + diploma.getStatusName());
+//            application.setKvota(kvota);
+//            Application save = applicationRepository.save(application);
+//            Thread thread = new Thread(() -> {
+//                try {
+//                    String encode = userService.encode(user.getPinfl());
+//                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+//                    request.setExternalId(save.getId().toString());
+//                    request.setStatus(save.getApplicationStatus());
+//                    request.setData(kvota);
+//                    myEduApiService.createApp(encode, request);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            thread.start();
+//            thread.join(5000);
+//            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
+//        } catch (Exception ex) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
+//        }
+        return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
     }
 
 
     @Transactional
     public Result updateApplication(String token, Integer kvotaId) {
-        try {
-            Result result = userService.checkUser(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
-            Integer id = (Integer) result.getObject();
-            User user = userRepository.findById(id).get();
-            Application application = user.getApplication();
-            Kvota kvota = kvotaRepository.findById(kvotaId).get();
-            application.setUser(user);
-            application.setKvota(kvota);
-            application.setModifiedDate(LocalDateTime.now());
-            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-            application.setApplicationStatus("Diplom " + diploma.getStatusName());
-            application.setKvota(kvota);
-            application.setApplicationMessage(null);
-            application.setDiplomaMessage(null);
-            Application save = applicationRepository.save(application);
-            Thread thread = new Thread(() -> {
-                try {
-                    String encode = userService.encode(user.getPinfl());
-                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-                    request.setExternalId(application.getId().toString());
-                    request.setStatus(application.getApplicationStatus());
-                    request.setData(kvota);
-                    myEduApiService.updateApp(encode, request);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.start();
-            thread.join(5000);
-            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, application.getId());
-        } catch (Exception ex) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-        }
+//        try {
+//            Result result = userService.checkUser(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
+//            Integer id = (Integer) result.getObject();
+//            User user = userRepository.findById(id).get();
+//            Application application = user.getApplication();
+//            Kvota kvota = kvotaRepository.findById(kvotaId).get();
+//            application.setUser(user);
+//            application.setKvota(kvota);
+//            application.setModifiedDate(LocalDateTime.now());
+//            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
+//            application.setApplicationStatus("Diplom " + diploma.getStatusName());
+//            application.setKvota(kvota);
+//            application.setApplicationMessage(null);
+//            application.setDiplomaMessage(null);
+//            Application save = applicationRepository.save(application);
+//            Thread thread = new Thread(() -> {
+//                try {
+//                    String encode = userService.encode(user.getPinfl());
+//                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+//                    request.setExternalId(application.getId().toString());
+//                    request.setStatus(application.getApplicationStatus());
+//                    request.setData(kvota);
+//                    myEduApiService.updateApp(encode, request);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            thread.start();
+//            thread.join(5000);
+//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true, application.getId());
+//        } catch (Exception ex) {
+//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+//        }
+        return new Result("Ikkinchi oliy ta'limga ariza tahrirlash  muddati 16-avgust 18:00 gacha belgilangan", false);
     }
 
     @Transactional(readOnly = true)
