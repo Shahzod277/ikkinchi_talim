@@ -10,7 +10,7 @@ public class ApiConstant {
     public static final String ONE_ID_PASSWORD = "pmQgROZaRRaNHqdY";
 
     //IIB API
-    public static final String IIB_API_LOGIN = "ikkinchitalim";
+    public static final String IIB_API_LOGIN = "grand";
     public static final String IIB_API_PASSWORD = "pmQgROZaRRaNHqdY";
 
     //Hemis token api

@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.IIBServiceApi;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.docrest.CheckUserRequest;
+import uz.raqamli_markaz.ikkinchi_talim.api.iib_api.docrest.IIBResponseNew;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.MyEduApiService;
 import uz.raqamli_markaz.ikkinchi_talim.api.my_edu.user_response.UserResponseMyEdu;
 import uz.raqamli_markaz.ikkinchi_talim.domain.User;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -114,53 +118,40 @@ public class UserService {
         return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 
-    public void test() throws IOException {
-        List<String> all = userRepository.findAllByRoleIsNull();
-        PinflRequest request = new PinflRequest();
-        request.setPinfls(all);
-        List<PinflResponse1> pasportSerialAndNumber = iibServiceApi.getPasportSerialAndNumber1(request);
-        PinflResponse1 pinflResponse1 = pasportSerialAndNumber.get(0);
-        log.info(pinflResponse1.getPassport_given_date());
-        if (!pasportSerialAndNumber.isEmpty()) {
-            pasportSerialAndNumber.forEach(testResponseItem -> {
-                User user = userRepository.findUserByPinfl(testResponseItem.getPinfl()).get();
-                user.setPassportSerial(testResponseItem.getPassportSerial());
-                user.setPassportNumber(testResponseItem.getPassportNumber());
-                user.setPassportGivenDate(testResponseItem.getPassport_given_date());
-                user.setModifiedDate(LocalDateTime.now());
-                userRepository.save(user);
-            });
+//    @Scheduled(fixedDelay = 1, timeUnit = TimeUnit.MINUTES)
+    public void test() {
+        List<User> all = userRepository.findAllByRoleIsNull();
+        all.forEach(s -> {
+            System.out.println(s.getPinfl());
+            String pinfl = s.getPinfl();
+            String day = pinfl.substring(1, 3);
+            String month = pinfl.substring(3, 5);
+            String year = pinfl.substring(5, 7);
+            if (Integer.parseInt(year) > 20) {
+                year = 19 + year;
+            } else {
+                year = 20 + year;
+            }
+
+            CheckUserRequest request = new CheckUserRequest();
+
+            request.setPinfl(pinfl);
+            request.setBirthDate(year + "-" + month + "-" + day);
+            System.out.println(year + "-" + month + "-" + day);
+            IIBResponseNew iibUser = iibServiceApi.getIibUser(request);
+            if (iibUser.getData() != null) {
+                String currentDocument = iibUser.getData().get(0).getCurrentDocument();
+                if (currentDocument != null) {
+                    s.setPassportSerial(currentDocument.substring(0, 2));
+                    s.setPassportNumber(currentDocument.substring(2));
+                    userRepository.save(s);
+                    System.out.println(pinfl);
+                }
+            }
 
 
-        }
-
-//        });
-
-
-//    Object o = response7777.getPinfRequest7777();
-//    ObjectMapper objectMapper=new ObjectMapper();
-//    PinfResponse7777Item pinfResponse7777Item = objectMapper.convertValue(o, PinfResponse7777Item.class);
-//    List<PinfResponse7777Item> list = response7777.getPinfRequest7777();
-//    list.forEach(pinflResponse1->{
-//        log.info(pinflResponse1.getPinfl());
-//        Thread thread = new Thread(() -> {
-//            User user = userRepository.findUserByPinfl(pinflResponse1.getPinfl()).get();
-//            if (!pinflResponse1.getPassportSerial().isEmpty()) {
-//                user.setPassportSerial(pinflResponse1.getPassportSerial());
-//                user.setPassportNumber(pinflResponse1.getPassportNumber());
-//                user.setModifiedDate(LocalDateTime.now());
-//                userRepository.save(user);
-//                log.info(pinflResponse1.getPassportNumber()+pinflResponse1.getPassportSerial());
-//            }
-//        });
-//        thread.start();
-//        try {
-//            thread.join();
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//    });
-
+        });
+        System.out.println("the end");
 
     }
 }
