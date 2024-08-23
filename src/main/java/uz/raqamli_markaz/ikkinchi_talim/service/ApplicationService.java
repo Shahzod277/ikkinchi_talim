@@ -30,57 +30,61 @@ public class ApplicationService {
 
     @Transactional
     public Result createApplication(String token, Integer kvotaId) {
-//        try {
-//            Result result = userService.checkUser(token);
-//            if (!result.isSuccess()) {
-//                return result;
-//            }
-//            Integer id = (Integer) result.getObject();
-//            User user = userRepository.findById(id).get();
-//            Optional<Application> applicationOptional = applicationRepository.findByUserId(user.getId());
-//            Kvota kvota = kvotaRepository.findById(kvotaId).get();
-//
-//            if (applicationOptional.isPresent()) {
-//                Application application = applicationOptional.get();
-//                application.setKvota(kvota);
-//                Application save = applicationRepository.save(application);
-//                String encode = userService.encode(user.getPinfl());
-//                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-//                request.setExternalId(save.getId().toString());
-//                request.setStatus(save.getApplicationStatus());
-//                request.setData(kvota);
-//                myEduApiService.createApp(encode, request);
-//                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
-//
-//            }
-//
-//            Application application = new Application();
-//            application.setUser(user);
-//            application.setKvota(kvota);
-//            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
-//            application.setApplicationStatus("Diplom " + diploma.getStatusName());
-//            application.setKvota(kvota);
-//            Application save = applicationRepository.save(application);
-//            Thread thread = new Thread(() -> {
-//                try {
-//                    String encode = userService.encode(user.getPinfl());
-//                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
-//                    request.setExternalId(save.getId().toString());
-//                    request.setStatus(save.getApplicationStatus());
-//                    request.setData(kvota);
-//                    myEduApiService.createApp(encode, request);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            thread.start();
-//            thread.join(5000);
-//            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
-//        } catch (Exception ex) {
-//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-//            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
-//        }
-        return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
+        try {
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer id = (Integer) result.getObject();
+            User user = userRepository.findById(id).get();
+            List<String> list = List.of("30201940220085", "32506580220014", "31012840630062", "32507920172420");
+            boolean contain = list.contains(user.getPinfl());
+            if (!contain) {
+                return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
+            }
+            Optional<Application> applicationOptional = applicationRepository.findByUserId(user.getId());
+            Kvota kvota = kvotaRepository.findById(kvotaId).get();
+
+            if (applicationOptional.isPresent()) {
+                Application application = applicationOptional.get();
+                application.setKvota(kvota);
+                Application save = applicationRepository.save(application);
+                String encode = userService.encode(user.getPinfl());
+                CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+                request.setExternalId(save.getId().toString());
+                request.setStatus(save.getApplicationStatus());
+                request.setData(kvota);
+                myEduApiService.createApp(encode, request);
+                return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
+
+            }
+
+            Application application = new Application();
+            application.setUser(user);
+            application.setKvota(kvota);
+            Diploma diploma = diplomaRepository.findActiveDiplomaByUser(id).get();
+            application.setApplicationStatus("Diplom " + diploma.getStatusName());
+            application.setKvota(kvota);
+            Application save = applicationRepository.save(application);
+            Thread thread = new Thread(() -> {
+                try {
+                    String encode = userService.encode(user.getPinfl());
+                    CreateAppRequestMyEdu request = new CreateAppRequestMyEdu();
+                    request.setExternalId(save.getId().toString());
+                    request.setStatus(save.getApplicationStatus());
+                    request.setData(kvota);
+                    myEduApiService.createApp(encode, request);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            thread.start();
+            thread.join(5000);
+            return new Result(ResponseMessage.SUCCESSFULLY_SAVED.getMessage(), true, save.getId());
+        } catch (Exception ex) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR_SAVED.getMessage(), false);
+        }
     }
 
 

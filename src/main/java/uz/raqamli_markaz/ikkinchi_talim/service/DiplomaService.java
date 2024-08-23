@@ -171,22 +171,21 @@ public class DiplomaService {
 
     @Transactional
     public Result addDiplomaAndIlova(String token, DiplomaAndIlovaRequest request) {
-//        try {
-//            Result result = userService.checkUser(token);
-//            if (!result.isSuccess()) {
-//                return result;
-//            }
-//            Integer userId = (Integer) result.getObject();
-//            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), userId).get();
-//            diplomaNew.setIlovaUrl(request.getIlova());
-//            diplomaNew.setDiplomaUrl(request.getDiploma());
-//            diplomaRepository.save(diplomaNew);
-//            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
-//        } catch (Exception exception) {
-//            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-//            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
-//        }
-        return new Result("Ikkinchi oliy ta'limga ariza tahrirlash  muddati 16-avgust 18:00 gacha belgilangan", false);
+        try {
+            Result result = userService.checkUser(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
+            Integer userId = (Integer) result.getObject();
+            Diploma diplomaNew = diplomaRepository.findDiplomaByDiplomaIdAndUser(request.getId(), userId).get();
+            diplomaNew.setIlovaUrl(request.getIlova());
+            diplomaNew.setDiplomaUrl(request.getDiploma());
+            diplomaRepository.save(diplomaNew);
+            return new Result(ResponseMessage.SUCCESSFULLY_UPDATE.getMessage(), true);
+        } catch (Exception exception) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new Result(ResponseMessage.ERROR_UPDATE.getMessage(), false);
+        }
     }
 
     @Transactional
