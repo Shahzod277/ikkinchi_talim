@@ -37,7 +37,7 @@ public class ApplicationService {
             }
             Integer id = (Integer) result.getObject();
             User user = userRepository.findById(id).get();
-            List<String> list = List.of("30201940220085", "32506580220014", "31012840630062", "32507920172420");
+            List<String> list = List.of("31207807020024","30201940220085", "32506580220014", "31012840630062", "32507920172420");
             boolean contain = list.contains(user.getPinfl());
             if (!contain) {
                 return new Result("Ikkinchi oliy ta'limga ariza topshirish muddati 10-avgustgacha belgilangan", false);
